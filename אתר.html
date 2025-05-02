@@ -2,7 +2,7 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>שישה כפתורים מגניבים</title>
+  <title>אתר עם 11 כפתורים!</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -30,33 +30,71 @@
 </head>
 <body>
 
-  <h1>ברוך הבא לאתר עם שישה כפתורים!</h1>
+  <h1>ברוך הבא לאתר עם 11 כפתורים!</h1>
 
-  <!-- כפתורים מקוריים -->
+  <!-- 6 כפתורים מקוריים -->
   <button onclick="window.open('https://www.youtube.com/@simalevycohen9868', '_blank')">
-    גש לערוץ סימה לוי כהן 🎥
+    ערוץ סימה לוי כהן 🎥
   </button>
 
   <button onclick="window.open('https://www.youtube.com/@Rotmans0258', '_blank')">
-    גש לערוץ רוטמן 🖥️
+    ערוץ רוטמן 🖥️
   </button>
 
   <button onclick="window.open('https://www.youtube.com/watch?v=lbet_caLDGY&list=PL51YAgTlfPj5rxPUU3h4aJD2kByTbgn9w', '_blank')">
-    צפה ברשימת ההשמעה ביוטיוב 📺
+    רשימת השמעה 📺
   </button>
 
-  <!-- כפתורים חדשים -->
   <button onclick="window.open('https://orteil.dashnet.org/cookieclicker/', '_blank')">
     שחק Cookie Clicker 🍪
   </button>
 
   <button onclick="window.open('https://www.youtube.com/watch?v=8HqP-lCTYtQ', '_blank')">
-    צפה בסרטון מגניב 🎬
+    סרטון מגניב 🎬
   </button>
 
   <button onclick="window.open('https://www.youtube.com/@dotanccohen', '_blank')">
-    גש לערוץ דותן כהן 🎙️
+    ערוץ דותן כהן 🎙️
   </button>
+
+  <!-- 5 כפתורים חדשים -->
+
+  <button onclick="playSound()">
+    נגן צליל 🔊
+  </button>
+
+  <button onclick="window.open('https://www.google.com/search?q=מיינקראפט&tbm=isch', '_blank')">
+    חפש מיינקראפט בגוגל 🧱
+  </button>
+
+  <button onclick="window.open('https://benco12345.github.io/site/ben.html', '_blank')">
+    אתר של בן 🌐
+  </button>
+
+  <button onclick="window.open('https://www.youtube.com/watch?v=8HqP-lCTYtQ', '_blank')">
+    סרטון חוזר 🎞️
+  </button>
+
+  <button onclick="window.open('https://www.friv.com/', '_blank')">
+    אתר Friv 🎮
+  </button>
+
+  <!-- נגן צליל מוסתר -->
+  <audio id="sound" preload="auto">
+    <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
+    הדפדפן שלך לא תומך בקבצי שמע.
+  </audio>
+
+  <script>
+    function playSound() {
+      const audio = document.getElementById("sound");
+      audio.currentTime = 0;
+      audio.play().catch((err) => {
+        alert("לא ניתן לנגן את הצליל 😢");
+        console.error(err);
+      });
+    }
+  </script>
 
 </body>
 </html>
