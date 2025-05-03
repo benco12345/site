@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>טיימר</title>
+    <title>טיימר עם צלצול</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -32,6 +32,14 @@
             font-size: 60px;
             font-weight: bold;
             margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80px;
+            text-align: center;
+            margin: 10px;
         }
 
         button {
@@ -56,30 +64,52 @@
 </head>
 <body>
     <div class="container">
-        <h1>טיימר</h1>
+        <h1>טיימר עם צלצול</h1>
+        <div>
+            <input id="inputMinutes" type="number" placeholder="דקות" min="0">
+            <span>דקות</span>
+        </div>
+        <div>
+            <input id="inputSeconds" type="number" placeholder="שניות" min="0" max="59">
+            <span>שניות</span>
+        </div>
         <div id="timer">00:00</div>
-        <button id="startStop" onclick="startStop()">התחל</button>
+        <button id="startStop" onclick="startTimer()">התחל</button>
         <button id="reset" onclick="resetTimer()">אפס</button>
     </div>
 
     <script>
         let timer;
         let isRunning = false;
-        let seconds = 0;
-        let minutes = 0;
+        let timeInSeconds = 0;
 
-        function startStop() {
+        function startTimer() {
+            const minutes = parseInt(document.getElementById("inputMinutes").value) || 0;
+            const seconds = parseInt(document.getElementById("inputSeconds").value) || 0;
+
+            if (minutes <= 0 && seconds <= 0) {
+                alert("הכנס זמן תקין.");
+                return;
+            }
+
+            timeInSeconds = (minutes * 60) + seconds; // Convert minutes and seconds to total seconds
+
             if (isRunning) {
                 clearInterval(timer);
                 document.getElementById("startStop").textContent = "התחל";
             } else {
                 timer = setInterval(function() {
-                    seconds++;
-                    if (seconds === 60) {
-                        seconds = 0;
-                        minutes++;
+                    if (timeInSeconds <= 0) {
+                        clearInterval(timer);
+                        document.getElementById("startStop").textContent = "התחל";
+                        alert("הזמן הסתיים!");
+                        playSound();
+                    } else {
+                        timeInSeconds--;
+                        const mins = Math.floor(timeInSeconds / 60);
+                        const secs = timeInSeconds % 60;
+                        document.getElementById("timer").textContent = formatTime(mins, secs);
                     }
-                    document.getElementById("timer").textContent = formatTime(minutes, seconds);
                 }, 1000);
                 document.getElementById("startStop").textContent = "עצור";
             }
@@ -88,8 +118,8 @@
 
         function resetTimer() {
             clearInterval(timer);
-            minutes = 0;
-            seconds = 0;
+            document.getElementById("inputMinutes").value = "";
+            document.getElementById("inputSeconds").value = "";
             document.getElementById("timer").textContent = "00:00";
             document.getElementById("startStop").textContent = "התחל";
             isRunning = false;
@@ -97,6 +127,11 @@
 
         function formatTime(mins, secs) {
             return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function playSound() {
+            let audio = new Audio('https://www.soundjay.com/button/beep-07.wav');  // You can change the sound URL if you want
+            audio.play();
         }
     </script>
 </body>
