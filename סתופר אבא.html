@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>סטופר אבא</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4CAF50 50%, #2196F3 50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      direction: rtl;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    #stopwatch {
+      font-size: 50px;
+      font-weight: bold;
+      margin: 20px 0;
+      direction: ltr;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>סטופר אבא</h1>
+    <div id="stopwatch">00:00:00.000</div>
+    <button onclick="toggleStopwatch(this)">התחל</button>
+    <button onclick="resetStopwatch()">איפוס</button>
+  </div>
+
+  <script>
+    let startTime;
+    let elapsed = 0;
+    let timerInterval = null;
+
+    function updateDisplay(time) {
+      const hours = Math.floor(time / 3600000);
+      const minutes = Math.floor((time % 3600000) / 60000);
+      const seconds = Math.floor((time % 60000) / 1000);
+      const milliseconds = time % 1000;
+
+      const formattedTime = 
+        `${String(hours).padStart(2, '0')}:` +
+        `${String(minutes).padStart(2, '0')}:` +
+        `${String(seconds).padStart(2, '0')}.` +
+        `${String(milliseconds).padStart(3, '0')}`;
+
+      document.getElementById('stopwatch').textContent = formattedTime;
+    }
+
+    function toggleStopwatch(button) {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        elapsed += Date.now() - startTime;
+        button.textContent = "התחל";
+      } else {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          updateDisplay(elapsed + Date.now() - startTime);
+        }, 50);
+        button.textContent = "עצור";
+      }
+    }
+
+    function resetStopwatch() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      elapsed = 0;
+      updateDisplay(0);
+      document.querySelector('button').textContent = "התחל";
+    }
+
+    updateDisplay(0);
+  </script>
+</body>
+</html>
