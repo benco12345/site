@@ -196,6 +196,9 @@
 
         let currentCircles = 0;
         let gameInterval;
+        
+        // משתנה חדש ששומר את העיגול שהעכבר נמצא עליו כרגע
+        let hoveredCircle = null;
 
         const scoreDisplay = document.getElementById('scoreDisplay');
         const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
@@ -216,20 +219,16 @@
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
 
         // ==========================================
-        // NEW: Spacebar to Click
+        // UPDATE: Spacebar clicks ONLY the hovered circle
         // ==========================================
         document.addEventListener('keydown', function(event) {
-            // בודק אם המקש שנלחץ הוא רווח
             if (event.code === 'Space' || event.key === ' ') {
-                // מונע מהדף לגלול למטה
-                event.preventDefault();
+                event.preventDefault(); // מונע מהדף לגלול למטה
                 
-                // מוצא את כל העיגולים שכרגע על המסך
-                const circles = document.querySelectorAll('.circle');
-                
-                // אם יש עיגולים, נלחץ על הראשון שנמצא
-                if (circles.length > 0) {
-                    circles[0].click();
+                // בודק אם העכבר נמצא כרגע על עיגול
+                if (hoveredCircle) {
+                    hoveredCircle.click(); // לוחץ עליו
+                    hoveredCircle = null;  // מאפס את המשתנה אחרי הלחיצה
                 }
             }
         });
@@ -314,10 +313,24 @@
             circle.style.left = Math.floor(Math.random() * maxX) + 'px';
             circle.style.top = Math.floor(Math.random() * maxY) + 'px';
 
+            // עוקב אחרי כניסת העכבר לעיגול
+            circle.onmouseenter = function() {
+                hoveredCircle = this;
+            };
+
+            // עוקב אחרי יציאת העכבר מהעיגול
+            circle.onmouseleave = function() {
+                if (hoveredCircle === this) {
+                    hoveredCircle = null;
+                }
+            };
+
+            // אירוע הלחיצה (עובד גם עם עכבר וגם דרך פקודת הרווח)
             circle.onclick = function() {
                 state.score += state.pointsPerClick;
                 currentCircles--;
                 this.remove();
+                hoveredCircle = null; // מנקה את משתנה המעקב
                 updateUI();
             };
 
