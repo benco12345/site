@@ -18,7 +18,7 @@
         #devCodeInput {
             position: absolute;
             top: 10px;
-            right: 10px;
+            right: 10px; /* נשאר בצד פיזי קבוע */
             z-index: 100;
             color: black;
             background: rgba(255, 255, 255, 0.9);
@@ -45,7 +45,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        /* Menu Button - Bottom Left */
+        /* Menu Button - Bottom Left (using inset-inline for RTL support) */
         #menu-toggle-btn {
             position: absolute;
             bottom: 20px;
@@ -65,6 +65,26 @@
             animation: rainbowColors 3s ease infinite;
         }
 
+        /* Settings Button - Bottom Center */
+        #settings-toggle-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: #9C27B0;
+            border: 3px solid white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: background 0.3s;
+        }
+        #settings-toggle-btn:hover { background: #7B1FA2; }
+
         /* Stats Button - Bottom Right */
         #stats-toggle-btn {
             position: absolute;
@@ -82,7 +102,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.6);
             transition: background 0.3s;
         }
-
         #stats-toggle-btn:hover { background: #455A64; }
 
         @keyframes rainbowColors {
@@ -91,31 +110,11 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Hidden Menu Panel */
-        #menu-panel {
+        /* Panels Base */
+        .panel {
             position: absolute;
             bottom: 80px;
-            left: 20px;
             z-index: 999;
-            width: 300px;
-            max-height: 75vh;
-            overflow-y: auto;
-            background: rgba(50, 50, 50, 0.95);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            display: none; 
-            border: 2px solid #555;
-        }
-
-        /* Hidden Stats Panel */
-        #stats-panel {
-            position: absolute;
-            bottom: 80px;
-            right: 20px;
-            z-index: 999;
-            width: 300px;
             background: rgba(40, 40, 60, 0.95);
             color: white;
             padding: 20px;
@@ -123,10 +122,17 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
             display: none; 
             border: 2px solid #555;
+            max-height: 75vh;
+            overflow-y: auto;
         }
+
+        #menu-panel { left: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 250px; }
+        #stats-panel { right: 20px; width: 300px; }
 
         h3 { margin-top: 0; color: #4CAF50; }
         #stats-panel h3 { color: #03A9F4; }
+        #settings-panel h3 { color: #E040FB; }
 
         .stat-row {
             display: flex;
@@ -136,8 +142,7 @@
             font-size: 15px;
         }
 
-        /* Styling for the editable inputs in Stats */
-        .stat-input {
+        .stat-input, select {
             width: 80px;
             padding: 5px;
             border-radius: 5px;
@@ -147,14 +152,15 @@
             font-weight: bold;
             text-align: center;
         }
+        
+        select { width: 100px; cursor: pointer; }
 
-        /* When disabled (normal mode), look like normal text */
         .stat-input:disabled {
             background: transparent;
             border: none;
             color: #FFEB3B;
             font-size: 16px;
-            text-align: right;
+            text-align: center;
             appearance: none;
             -moz-appearance: textfield;
         }
@@ -176,7 +182,6 @@
             transform: scale(0);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        
         @keyframes popIn { to { transform: scale(1); } }
 
         button.menu-btn {
@@ -205,83 +210,135 @@
 </head>
 <body>
 
+    <!-- Secret dev input box -->
     <input type="text" id="devCodeInput" placeholder="Code...">
 
-    <div id="score-hud">Score: <span id="scoreDisplay">0</span></div>
+    <!-- Score Display -->
+    <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
+    <!-- Toggle Buttons -->
     <button id="menu-toggle-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+    <button id="settings-toggle-btn" onclick="toggleSettings()">Settings ⚙️</button>
     <button id="stats-toggle-btn" onclick="toggleStats()">Stats 📊</button>
 
-    <div id="stats-panel">
-        <h3>Live Stats</h3>
-        
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="panel">
+        <h3 id="lblSettingsTitle">Settings ⚙️</h3>
         <div class="stat-row">
-            <span>Current Score:</span>
+            <span id="lblLanguage">Language / שפה:</span>
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="he">עברית</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div id="stats-panel" class="panel">
+        <h3 id="lblLiveStats">Live Stats</h3>
+        <div class="stat-row">
+            <span id="lblCurrentScore">Current Score:</span>
             <input type="number" id="editCurrentScore" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
         <div class="stat-row">
-            <span>Lifetime Score:</span>
+            <span id="lblLifetimeScore">Lifetime Score:</span>
             <input type="number" id="editTotalScore" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
-        
         <div class="stat-row">
-            <span>Circles on Screen:</span>
+            <span id="lblCirclesOnScreen">Circles on Screen:</span>
             <input type="number" id="editCurrentCircles" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
-        
         <hr>
-        <h3>Game Variables</h3>
+        <h3 id="lblGameVars">Game Variables</h3>
         <div class="stat-row">
-            <span>Max Circles:</span>
+            <span id="lblStatMaxCircles">Max Circles:</span>
             <input type="number" id="editMaxCircles" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
         <div class="stat-row">
-            <span>Points / Catch:</span>
+            <span id="lblStatPoints">Points / Catch:</span>
             <input type="number" id="editPoints" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
         <div class="stat-row">
-            <span>Min Size (px):</span>
+            <span id="lblStatMinSize">Min Size (px):</span>
             <input type="number" id="editMinSize" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
         <div class="stat-row">
-            <span>Spawn Rate (ms):</span>
+            <span id="lblStatSpawnRate">Spawn Rate (ms):</span>
             <input type="number" id="editSpawnRate" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
     </div>
 
-    <div id="menu-panel">
-        <h3>Save & Load 💾</h3>
-        <button class="menu-btn save-load-btn" onclick="saveGame()">Download Save File (.txt)</button>
-        <button class="menu-btn save-load-btn" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
+    <!-- Hidden Menu Panel -->
+    <div id="menu-panel" class="panel">
+        <h3 id="lblSaveLoad">Save & Load 💾</h3>
+        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
+        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
         <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
 
         <hr>
-        <h3>Upgrades ⬆️</h3>
+        <h3 id="lblUpgrades">Upgrades ⬆️</h3>
         
         <div class="upgrade-box">
-            <p><strong>Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
+            <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
             <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">10</span>)</button>
         </div>
         
         <div class="upgrade-box">
-            <p><strong>Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
+            <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
             <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">20</span>)</button>
         </div>
         
         <div class="upgrade-box">
-            <p><strong>Spawn Rate:</strong> Every <span id="spawnSpeedDisplay">1.0</span>s</p>
+            <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
             <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
         </div>
 
         <div class="upgrade-box">
-            <p><strong>Minimum Size:</strong> <span id="minSizeDisplay">40</span>px</p>
+            <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
             <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">15</span>)</button>
         </div>
     </div>
 
+    <!-- Game Area -->
     <div id="game-area"></div>
 
     <script>
+        // --- Translation Dictionary ---
+        const t = {
+            en: {
+                lblScore: "Score: ",
+                btnMenuOpen: "Open Menu 🛠️", btnMenuClose: "Close Menu ❌",
+                btnStatsOpen: "Stats 📊", btnStatsClose: "Close Stats ❌",
+                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close Settings ❌",
+                lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
+                lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
+                lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
+                lblMinSize: "Minimum Size:", lblPx: "px",
+                lblLiveStats: "Live Stats", lblCurrentScore: "Current Score:", lblLifetimeScore: "Lifetime Score:",
+                lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
+                lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
+                lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
+                upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
+                alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file."
+            },
+            he: {
+                lblScore: "ניקוד: ",
+                btnMenuOpen: "תפריט ראשי 🛠️", btnMenuClose: "סגירת תפריט ❌",
+                btnStatsOpen: "סטטיסטיקות 📊", btnStatsClose: "סגירת נתונים ❌",
+                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגירת הגדרות ❌",
+                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת קובץ שמירה (.txt)", btnLoad: "טעינת קובץ שמירה (TXT)",
+                lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
+                lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
+                lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
+                lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל (Lifetime):",
+                lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
+                lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
+                lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
+                upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
+                alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין."
+            }
+        };
+
         let state = {
             score: 0,
             totalScore: 0, 
@@ -292,7 +349,8 @@
             costMaxCircles: 10,
             costPoints: 20,
             costSpeed: 30,
-            costMinSize: 15
+            costMinSize: 15,
+            language: 'en' // שפה כברירת מחדל
         };
 
         let currentCircles = 0;
@@ -305,11 +363,6 @@
         const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
         const minSizeDisplay = document.getElementById('minSizeDisplay'); 
         
-        const costMaxCirclesDisplay = document.getElementById('costMaxCircles');
-        const costPointsDisplay = document.getElementById('costPoints');
-        const costSpeedDisplay = document.getElementById('costSpeed');
-        const costMinSizeDisplay = document.getElementById('costMinSize'); 
-        
         const btnMaxCircles = document.getElementById('btnMaxCircles');
         const btnPoints = document.getElementById('btnPoints');
         const btnSpeed = document.getElementById('btnSpeed');
@@ -317,19 +370,67 @@
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
+        
         const menuPanel = document.getElementById('menu-panel');
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
-        
         const statsPanel = document.getElementById('stats-panel');
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
+        const settingsPanel = document.getElementById('settings-panel');
+        const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+        const langSelect = document.getElementById('langSelect');
         
         const editCurrentScore = document.getElementById('editCurrentScore');
         const editTotalScore = document.getElementById('editTotalScore');
-        const editCurrentCircles = document.getElementById('editCurrentCircles'); // שדה חדש
+        const editCurrentCircles = document.getElementById('editCurrentCircles'); 
         const editMaxCircles = document.getElementById('editMaxCircles');
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
+
+        // פונקציית החלפת שפה
+        function changeLanguage(lang) {
+            state.language = lang;
+            const dir = lang === 'he' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = dir;
+            langSelect.value = lang;
+
+            const text = t[lang];
+
+            // עדכון טקסטים סטטיים
+            document.getElementById('lblScore').innerText = text.lblScore;
+            document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
+            document.getElementById('btnDownload').innerText = text.btnDownload;
+            document.getElementById('btnLoad').innerText = text.btnLoad;
+            document.getElementById('lblUpgrades').innerText = text.lblUpgrades;
+            document.getElementById('lblMaxCircles').innerText = text.lblMaxCircles;
+            document.getElementById('lblPointsPerCatch').innerText = text.lblPointsPerCatch;
+            document.getElementById('lblSpawnRate').innerText = text.lblSpawnRate;
+            document.getElementById('lblEvery').innerText = text.lblEvery;
+            document.getElementById('lblSec').innerText = text.lblSec;
+            document.getElementById('lblMinSize').innerText = text.lblMinSize;
+            document.getElementById('lblPx').innerText = text.lblPx;
+            
+            document.getElementById('lblLiveStats').innerText = text.lblLiveStats;
+            document.getElementById('lblCurrentScore').innerText = text.lblCurrentScore;
+            document.getElementById('lblLifetimeScore').innerText = text.lblLifetimeScore;
+            document.getElementById('lblCirclesOnScreen').innerText = text.lblCirclesOnScreen;
+            document.getElementById('lblGameVars').innerText = text.lblGameVars;
+            document.getElementById('lblStatMaxCircles').innerText = text.lblStatMaxCircles;
+            document.getElementById('lblStatPoints').innerText = text.lblStatPoints;
+            document.getElementById('lblStatMinSize').innerText = text.lblStatMinSize;
+            document.getElementById('lblStatSpawnRate').innerText = text.lblStatSpawnRate;
+
+            document.getElementById('lblSettingsTitle').innerText = text.lblSettingsTitle;
+            document.getElementById('lblLanguage').innerText = text.lblLanguage;
+
+            // עדכון כפתורי התפריט התחתונים לפי מצב הפאנל שלהם
+            menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
+            statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
+            settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
+
+            updateUI(); // מרענן כפתורי שדרוגים שכוללים מחיר מחושב
+        }
 
         // Spacebar clicks ONLY the hovered circle
         document.addEventListener('keydown', function(event) {
@@ -343,27 +444,25 @@
         });
 
         function toggleMenu() {
-            if (menuPanel.style.display === 'none' || menuPanel.style.display === '') {
-                menuPanel.style.display = 'block';
-                menuToggleBtn.innerText = 'Close Menu ❌';
-            } else {
-                menuPanel.style.display = 'none';
-                menuToggleBtn.innerText = 'Open Menu 🛠️';
-            }
+            const isOpen = menuPanel.style.display === 'block';
+            menuPanel.style.display = isOpen ? 'none' : 'block';
+            menuToggleBtn.innerText = isOpen ? t[state.language].btnMenuOpen : t[state.language].btnMenuClose;
         }
 
         function toggleStats() {
-            if (statsPanel.style.display === 'none' || statsPanel.style.display === '') {
-                statsPanel.style.display = 'block';
-                statsToggleBtn.innerText = 'Close Stats ❌';
-            } else {
-                statsPanel.style.display = 'none';
-                statsToggleBtn.innerText = 'Stats 📊';
-            }
+            const isOpen = statsPanel.style.display === 'block';
+            statsPanel.style.display = isOpen ? 'none' : 'block';
+            statsToggleBtn.innerText = isOpen ? t[state.language].btnStatsOpen : t[state.language].btnStatsClose;
             updateStatsUI();
         }
 
-        // Cheat Codes Listener
+        function toggleSettings() {
+            const isOpen = settingsPanel.style.display === 'block';
+            settingsPanel.style.display = isOpen ? 'none' : 'block';
+            settingsToggleBtn.innerText = isOpen ? t[state.language].btnSettingsOpen : t[state.language].btnSettingsClose;
+        }
+
+        // Cheat Codes
         devCodeInput.addEventListener('input', function() {
             const val = this.value.toUpperCase();
             
@@ -391,8 +490,7 @@
                 editSpawnRate.disabled = false;
                 
                 statsPanel.style.display = 'block';
-                statsToggleBtn.innerText = 'Close Stats ❌';
-                
+                statsToggleBtn.innerText = t[state.language].btnStatsClose;
                 this.value = '';
                 this.blur();
             }
@@ -412,7 +510,6 @@
             }
         });
 
-        // פונקציה לקריאת הערכים שהקלדת והחלתם על המשחק
         function applyCheatEdits() {
             let newScore = parseInt(editCurrentScore.value);
             let newTotal = parseInt(editTotalScore.value);
@@ -436,13 +533,8 @@
                 }
             }
 
-            // הוספה או הסרה של עיגולים לפי מה שהקלדת
             if (!isNaN(newCircles) && newCircles >= 0) {
-                // יוצר עוד עיגולים (מצב force עוקף את המקסימום)
-                while (currentCircles < newCircles) {
-                    spawnCircle(true); 
-                }
-                // מוחק עיגולים אם ביקשת פחות ממה שיש
+                while (currentCircles < newCircles) { spawnCircle(true); }
                 if (currentCircles > newCircles) {
                     const circles = document.querySelectorAll('.circle');
                     let diff = currentCircles - newCircles;
@@ -454,49 +546,47 @@
                     }
                 }
             }
-
             updateUI(); 
         }
 
         function initGame() {
-            updateUI();
+            changeLanguage(state.language);
             startGameLoop();
         }
 
-        function updateUI() {
+        function updateUI(isTyping = false) {
             scoreDisplay.innerText = Math.floor(state.score);
             maxCirclesDisplay.innerText = state.maxCircles;
             pointsPerClickDisplay.innerText = state.pointsPerClick;
             spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
             minSizeDisplay.innerText = state.minCircleSize;
             
-            costMaxCirclesDisplay.innerText = state.costMaxCircles;
-            costPointsDisplay.innerText = state.costPoints;
-            costSpeedDisplay.innerText = state.costSpeed;
-            costMinSizeDisplay.innerText = state.costMinSize;
+            const text = t[state.language];
 
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
             btnPoints.disabled = state.score < state.costPoints;
             
+            btnMaxCircles.innerHTML = `${text.upgradeCost}<span id="costMaxCircles">${state.costMaxCircles}</span>)`;
+            btnPoints.innerHTML = `${text.upgradeCost}<span id="costPoints">${state.costPoints}</span>)`;
+
             btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
             if (state.spawnRateMs <= 100) {
-                btnSpeed.innerText = "Max Speed!";
+                btnSpeed.innerText = text.maxSpeed;
             } else {
-                btnSpeed.innerHTML = `Upgrade (Cost: <span id="costSpeed">${state.costSpeed}</span>)`;
+                btnSpeed.innerHTML = `${text.upgradeCost}<span id="costSpeed">${state.costSpeed}</span>)`;
             }
 
             btnMinSize.disabled = state.score < state.costMinSize || state.minCircleSize >= 150;
             if (state.minCircleSize >= 150) {
-                btnMinSize.innerText = "Max Size!";
+                btnMinSize.innerText = text.maxSize;
             } else {
-                btnMinSize.innerHTML = `Upgrade (Cost: <span id="costMinSize">${state.costMinSize}</span>)`;
+                btnMinSize.innerHTML = `${text.upgradeCost}<span id="costMinSize">${state.costMinSize}</span>)`;
             }
 
-            updateStatsUI();
+            updateStatsUI(isTyping);
         }
 
-        // עוקף את דריסת הנתונים כשאתה מקליד בזמן שנוצרים עיגולים
-        function updateStatsUI() {
+        function updateStatsUI(isTyping = false) {
             if (document.activeElement !== editCurrentScore) editCurrentScore.value = Math.floor(state.score);
             if (document.activeElement !== editTotalScore) editTotalScore.value = Math.floor(state.totalScore);
             if (document.activeElement !== editCurrentCircles) editCurrentCircles.value = currentCircles;
@@ -516,7 +606,6 @@
             return `hsl(${h}, 100%, 60%)`;
         }
 
-        // הוספתי משתנה force כדי שהצ'יט יתעלם מהמקסימום המותר
         function spawnCircle(force = false) {
             if (!force && currentCircles >= state.maxCircles) return;
 
@@ -553,8 +642,6 @@
             currentCircles++;
             updateStatsUI(); 
         }
-
-        // --- Upgrades ---
 
         function buyMaxCircles() {
             if (state.score >= state.costMaxCircles) {
@@ -593,8 +680,6 @@
             }
         }
 
-        // --- Save & Load ---
-
         function saveGame() {
             let dataString = JSON.stringify(state);
             if (devCodeInput.value !== "BEN") dataString = btoa(dataString);
@@ -627,7 +712,7 @@
                     try {
                         loadedState = JSON.parse(atob(fileContent));
                     } catch (err2) {
-                        alert("Error! The file doesn't seem to be a valid save file.");
+                        alert(t[state.language].alertLoadError);
                         event.target.value = '';
                         return;
                     }
@@ -635,13 +720,14 @@
                 
                 state = { ...state, ...loadedState }; 
                 if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
+                if (!state.language) state.language = 'en'; // הגנת שפה בקבצים ישנים
 
                 gameArea.innerHTML = '';
                 currentCircles = 0;
                 
-                updateUI();
+                changeLanguage(state.language); // מעדכן את השפה לפי השמירה
                 startGameLoop();
-                alert("Game loaded successfully from file! 🎮");
+                alert(t[state.language].alertLoadSuccess);
                 
                 event.target.value = '';
             };
