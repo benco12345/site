@@ -138,7 +138,7 @@
 
         /* Styling for the editable inputs in Stats */
         .stat-input {
-            width: 80px; /* קצת יותר רחב בשביל מספרים גדולים של ניקוד */
+            width: 80px;
             padding: 5px;
             border-radius: 5px;
             border: 1px solid #777;
@@ -226,8 +226,9 @@
         
         <div class="stat-row">
             <span>Circles on Screen:</span>
-            <span id="statCurrentCircles" style="color: #FFEB3B; font-weight: bold;">0</span>
+            <input type="number" id="editCurrentCircles" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
+        
         <hr>
         <h3>Game Variables</h3>
         <div class="stat-row">
@@ -322,8 +323,9 @@
         const statsPanel = document.getElementById('stats-panel');
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
         
-        const editCurrentScore = document.getElementById('editCurrentScore'); // שדה נקודות
-        const editTotalScore = document.getElementById('editTotalScore');     // שדה נקודות כללי
+        const editCurrentScore = document.getElementById('editCurrentScore');
+        const editTotalScore = document.getElementById('editTotalScore');
+        const editCurrentCircles = document.getElementById('editCurrentCircles'); // שדה חדש
         const editMaxCircles = document.getElementById('editMaxCircles');
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
@@ -340,7 +342,6 @@
             }
         });
 
-        // Toggle Menu
         function toggleMenu() {
             if (menuPanel.style.display === 'none' || menuPanel.style.display === '') {
                 menuPanel.style.display = 'block';
@@ -351,7 +352,6 @@
             }
         }
 
-        // Toggle Stats
         function toggleStats() {
             if (statsPanel.style.display === 'none' || statsPanel.style.display === '') {
                 statsPanel.style.display = 'block';
@@ -363,7 +363,7 @@
             updateStatsUI();
         }
 
-        // Cheat Codes Listener (CLICK, CHANGE, UNCHANGE)
+        // Cheat Codes Listener
         devCodeInput.addEventListener('input', function() {
             const val = this.value.toUpperCase();
             
@@ -384,6 +384,7 @@
             if (val === 'CHANGE') {
                 editCurrentScore.disabled = false;
                 editTotalScore.disabled = false;
+                editCurrentCircles.disabled = false;
                 editMaxCircles.disabled = false;
                 editPoints.disabled = false;
                 editMinSize.disabled = false;
@@ -399,6 +400,7 @@
             if (val === 'UNCHANGE') {
                 editCurrentScore.disabled = true;
                 editTotalScore.disabled = true;
+                editCurrentCircles.disabled = true;
                 editMaxCircles.disabled = true;
                 editPoints.disabled = true;
                 editMinSize.disabled = true;
@@ -410,15 +412,16 @@
             }
         });
 
+        // פונקציה לקריאת הערכים שהקלדת והחלתם על המשחק
         function applyCheatEdits() {
             let newScore = parseInt(editCurrentScore.value);
             let newTotal = parseInt(editTotalScore.value);
+            let newCircles = parseInt(editCurrentCircles.value);
             let newMax = parseInt(editMaxCircles.value);
             let newPoints = parseInt(editPoints.value);
             let newSize = parseInt(editMinSize.value);
             let newRate = parseInt(editSpawnRate.value);
 
-            // בדיקות כדי לוודא שהוזנו מספרים חוקיים
             if (!isNaN(newScore)) state.score = newScore;
             if (!isNaN(newTotal)) state.totalScore = newTotal;
             if (!isNaN(newMax) && newMax >= 0) state.maxCircles = newMax;
@@ -433,7 +436,26 @@
                 }
             }
 
-            updateUI(true); 
+            // הוספה או הסרה של עיגולים לפי מה שהקלדת
+            if (!isNaN(newCircles) && newCircles >= 0) {
+                // יוצר עוד עיגולים (מצב force עוקף את המקסימום)
+                while (currentCircles < newCircles) {
+                    spawnCircle(true); 
+                }
+                // מוחק עיגולים אם ביקשת פחות ממה שיש
+                if (currentCircles > newCircles) {
+                    const circles = document.querySelectorAll('.circle');
+                    let diff = currentCircles - newCircles;
+                    for (let i = 0; i < diff; i++) {
+                        if (circles[i]) {
+                            circles[i].remove();
+                            currentCircles--;
+                        }
+                    }
+                }
+            }
+
+            updateUI(); 
         }
 
         function initGame() {
@@ -441,7 +463,7 @@
             startGameLoop();
         }
 
-        function updateUI(isTyping = false) {
+        function updateUI() {
             scoreDisplay.innerText = Math.floor(state.score);
             maxCirclesDisplay.innerText = state.maxCircles;
             pointsPerClickDisplay.innerText = state.pointsPerClick;
@@ -470,25 +492,23 @@
                 btnMinSize.innerHTML = `Upgrade (Cost: <span id="costMinSize">${state.costMinSize}</span>)`;
             }
 
-            updateStatsUI(isTyping);
+            updateStatsUI();
         }
 
-        function updateStatsUI(isTyping = false) {
-            document.getElementById('statCurrentCircles').innerText = currentCircles;
-            
-            if (editMaxCircles.disabled || !isTyping) {
-                editCurrentScore.value = Math.floor(state.score);
-                editTotalScore.value = Math.floor(state.totalScore);
-                editMaxCircles.value = state.maxCircles;
-                editPoints.value = state.pointsPerClick;
-                editMinSize.value = state.minCircleSize;
-                editSpawnRate.value = state.spawnRateMs;
-            }
+        // עוקף את דריסת הנתונים כשאתה מקליד בזמן שנוצרים עיגולים
+        function updateStatsUI() {
+            if (document.activeElement !== editCurrentScore) editCurrentScore.value = Math.floor(state.score);
+            if (document.activeElement !== editTotalScore) editTotalScore.value = Math.floor(state.totalScore);
+            if (document.activeElement !== editCurrentCircles) editCurrentCircles.value = currentCircles;
+            if (document.activeElement !== editMaxCircles) editMaxCircles.value = state.maxCircles;
+            if (document.activeElement !== editPoints) editPoints.value = state.pointsPerClick;
+            if (document.activeElement !== editMinSize) editMinSize.value = state.minCircleSize;
+            if (document.activeElement !== editSpawnRate) editSpawnRate.value = state.spawnRateMs;
         }
 
         function startGameLoop() {
             clearInterval(gameInterval);
-            gameInterval = setInterval(spawnCircle, state.spawnRateMs);
+            gameInterval = setInterval(() => spawnCircle(false), state.spawnRateMs);
         }
 
         function getRandomColor() {
@@ -496,8 +516,9 @@
             return `hsl(${h}, 100%, 60%)`;
         }
 
-        function spawnCircle() {
-            if (currentCircles >= state.maxCircles) return;
+        // הוספתי משתנה force כדי שהצ'יט יתעלם מהמקסימום המותר
+        function spawnCircle(force = false) {
+            if (!force && currentCircles >= state.maxCircles) return;
 
             const circle = document.createElement('div');
             circle.classList.add('circle');
