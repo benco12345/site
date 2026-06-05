@@ -179,6 +179,11 @@
             <p><strong>Spawn Rate:</strong> Every <span id="spawnSpeedDisplay">1.0</span>s</p>
             <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
         </div>
+
+        <div class="upgrade-box">
+            <p><strong>Minimum Size:</strong> <span id="minSizeDisplay">40</span>px</p>
+            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">15</span>)</button>
+        </div>
     </div>
 
     <div id="game-area"></div>
@@ -189,46 +194,45 @@
             maxCircles: 5,
             pointsPerClick: 1,
             spawnRateMs: 1000, 
+            minCircleSize: 40, // הגודל המינימלי ההתחלתי
             costMaxCircles: 10,
             costPoints: 20,
-            costSpeed: 30
+            costSpeed: 30,
+            costMinSize: 15    // המחיר ההתחלתי לשדרוג הגודל
         };
 
         let currentCircles = 0;
         let gameInterval;
-        
-        // משתנה חדש ששומר את העיגול שהעכבר נמצא עליו כרגע
         let hoveredCircle = null;
 
         const scoreDisplay = document.getElementById('scoreDisplay');
         const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
         const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
         const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
+        const minSizeDisplay = document.getElementById('minSizeDisplay'); // תצוגת גודל חדשה
         
         const costMaxCirclesDisplay = document.getElementById('costMaxCircles');
         const costPointsDisplay = document.getElementById('costPoints');
         const costSpeedDisplay = document.getElementById('costSpeed');
+        const costMinSizeDisplay = document.getElementById('costMinSize'); // תצוגת מחיר חדשה
         
         const btnMaxCircles = document.getElementById('btnMaxCircles');
         const btnPoints = document.getElementById('btnPoints');
         const btnSpeed = document.getElementById('btnSpeed');
+        const btnMinSize = document.getElementById('btnMinSize'); // כפתור גודל חדש
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
         const menuPanel = document.getElementById('menu-panel');
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
 
-        // ==========================================
-        // UPDATE: Spacebar clicks ONLY the hovered circle
-        // ==========================================
+        // Spacebar clicks ONLY the hovered circle
         document.addEventListener('keydown', function(event) {
             if (event.code === 'Space' || event.key === ' ') {
-                event.preventDefault(); // מונע מהדף לגלול למטה
-                
-                // בודק אם העכבר נמצא כרגע על עיגול
+                event.preventDefault(); 
                 if (hoveredCircle) {
-                    hoveredCircle.click(); // לוחץ עליו
-                    hoveredCircle = null;  // מאפס את המשתנה אחרי הלחיצה
+                    hoveredCircle.click(); 
+                    hoveredCircle = null;  
                 }
             }
         });
@@ -271,19 +275,30 @@
             maxCirclesDisplay.innerText = state.maxCircles;
             pointsPerClickDisplay.innerText = state.pointsPerClick;
             spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
+            minSizeDisplay.innerText = state.minCircleSize;
             
             costMaxCirclesDisplay.innerText = state.costMaxCircles;
             costPointsDisplay.innerText = state.costPoints;
             costSpeedDisplay.innerText = state.costSpeed;
+            costMinSizeDisplay.innerText = state.costMinSize;
 
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
             btnPoints.disabled = state.score < state.costPoints;
-            btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
             
+            // עדכון כפתור המהירות
+            btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
             if (state.spawnRateMs <= 100) {
                 btnSpeed.innerText = "Max Speed!";
             } else {
                 btnSpeed.innerHTML = `Upgrade (Cost: <span id="costSpeed">${state.costSpeed}</span>)`;
+            }
+
+            // עדכון כפתור הגודל החדש (הגבלה לעד 150 פיקסלים מינימום)
+            btnMinSize.disabled = state.score < state.costMinSize || state.minCircleSize >= 150;
+            if (state.minCircleSize >= 150) {
+                btnMinSize.innerText = "Max Size!";
+            } else {
+                btnMinSize.innerHTML = `Upgrade (Cost: <span id="costMinSize">${state.costMinSize}</span>)`;
             }
         }
 
@@ -303,40 +318,45 @@
             const circle = document.createElement('div');
             circle.classList.add('circle');
             
-            const size = Math.floor(Math.random() * 50) + 40;
+            // שימוש בגודל המינימלי החדש של השחקן (תוספת אקראית של עד 50 פיקסלים מעל המינימום)
+            const size = Math.floor(Math.random() * 50) + state.minCircleSize;
             circle.style.width = size + 'px';
             circle.style.height = size + 'px';
             circle.style.backgroundColor = getRandomColor();
 
             const maxX = gameArea.clientWidth - size;
             const maxY = gameArea.clientHeight - size;
-            circle.style.left = Math.floor(Math.random() * maxX) + 'px';
-            circle.style.top = Math.floor(Math.random() * maxY) + 'px';
+            
+            // מוודא שהעיגול לא חורג מהמסך השמאלי או העליון
+            const safeX = Math.max(0, Math.floor(Math.random() * maxX));
+            const safeY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            circle.style.left = safeX + 'px';
+            circle.style.top = safeY + 'px';
 
-            // עוקב אחרי כניסת העכבר לעיגול
             circle.onmouseenter = function() {
                 hoveredCircle = this;
             };
 
-            // עוקב אחרי יציאת העכבר מהעיגול
             circle.onmouseleave = function() {
                 if (hoveredCircle === this) {
                     hoveredCircle = null;
                 }
             };
 
-            // אירוע הלחיצה (עובד גם עם עכבר וגם דרך פקודת הרווח)
             circle.onclick = function() {
                 state.score += state.pointsPerClick;
                 currentCircles--;
                 this.remove();
-                hoveredCircle = null; // מנקה את משתנה המעקב
+                hoveredCircle = null; 
                 updateUI();
             };
 
             gameArea.appendChild(circle);
             currentCircles++;
         }
+
+        // --- Upgrades ---
 
         function buyMaxCircles() {
             if (state.score >= state.costMaxCircles) {
@@ -365,6 +385,18 @@
                 startGameLoop();
             }
         }
+
+        // הפונקציה החדשה לשדרוג הגודל
+        function buyMinSize() {
+            if (state.score >= state.costMinSize && state.minCircleSize < 150) {
+                state.score -= state.costMinSize;
+                state.minCircleSize += 10; // מגדיל את המינימום ב-10 פיקסלים כל פעם
+                state.costMinSize = Math.floor(state.costMinSize * 1.5);
+                updateUI();
+            }
+        }
+
+        // --- Save & Load ---
 
         function saveGame() {
             let dataString = JSON.stringify(state);
