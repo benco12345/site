@@ -22,7 +22,7 @@
             right: 10px;
             z-index: 100;
             color: black;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid black;
             padding: 5px;
             font-weight: bold;
@@ -164,20 +164,383 @@
         const devCodeInput = document.getElementById('devCodeInput');
 
         // ==========================================
-        // NEW: Secret "CLICK" Cheat Code Listener
+        // FIX: Reliable CLICK Cheat Code
         // ==========================================
         devCodeInput.addEventListener('input', function() {
-            // Check if the typed word is "CLICK" (case insensitive)
             if (this.value.toUpperCase() === 'CLICK') {
-                
-                // Find all circles currently on the screen
                 const circles = document.querySelectorAll('.circle');
                 
-                // Click every single one of them
-                circles.forEach(circle => circle.click());
+                if (circles.length > 0) {
+                    // מוסיף ניקוד כפול מספר העיגולים שעל המסך כרגע
+                    state.score += (circles.length * state.pointsPerClick);
+                    
+                    // מוחק את כל העיגולים מהמסך
+                    circles.forEach(circle => circle.remove());
+                    
+                    // מאפס את מונה העיגולים הפעילים
+                    currentCircles = 0;
+                    
+                    // מעדכן את התצוגה של הניקוד והשדרוגים
+                    updateUI();
+                }
                 
-                // Clear the input box so it's ready to be used again
+                // מוחק מיד את מה שנכתב בתיבה כדי שיהיה מוכן לפעם הבאה
                 this.value = '';
+                
+                // מוריד את הפוקוס מהתיבה כדי שהדפדפן יתרענן נכון
+                this.blur();
+            }
+        });
+
+        // Initialize Game
+        function initGame() {
+            updateUI();
+            startGameLoop();
+        }
+
+        // Update UI based on current state
+        function updateUI() {
+            scoreDisplay.innerText = Math.floor(state.score);
+            maxCirclesDisplay.innerText = state.maxCircles;
+            pointsPerClickDisplay.innerText = state.pointsPerClick;
+            spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
+            
+            costMaxCirclesDisplay.innerText = state.costMaxCircles;
+            costPointsDisplay.innerText = state.costPoints;
+            costSpeedDisplay.innerText = state.costSpeed;
+
+            // Enable/Disable buttons based on score
+            btnMaxCircles.disabled = state.score < state.costMaxCircles;
+            btnPoints.disabled = state.score < state.costPoints;
+            btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
+            
+            if (state.spawnRateMs <= 100) {
+                btnSpeed.innerText = "Max Speed!";
+            } else {
+                btnSpeed.innerHTML = `Upgrade (Cost: <span id="costSpeed">${state.costSpeed}</span>)`;
+            }
+        }
+
+        // Game Loop
+        function startGameLoop() {
+            clearInterval(gameInterval);
+            gameInterval = setInterval(spawnCircle, state.spawnRateMs);
+        }
+
+        function getRandomColor() {
+            const h = Math.floor(Math.random() * 360);
+            return `hsl(${h}, 100%, 60%)`;
+        }
+
+        // Spawn a circle
+        function spawnCircle() {
+            if (currentCircles >= state.maxCircles) return;
+
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            
+            const size = Math.floor(Math.random() * 50) + 40;
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.backgroundColor = getRandomColor();
+
+            const maxX = gameArea.clientWidth - size;
+            const maxY = gameArea.clientHeight - size;
+            circle.style.left = Math.floor(Math.random() * maxX) + 'px';
+            circle.style.top = Math.floor(Math.random() * maxY) + 'px';
+
+            circle.onclick = function() {
+                state.score += state.pointsPerClick;
+                currentCircles--;
+                this.remove();
+                updateUI();
+            };
+
+            gameArea.appendChild(circle);
+            currentCircles++;
+        }
+
+        // --- Upgrades ---
+
+        function buyMaxCircles() {
+            if (state.score >= state.costMaxCircles) {
+                state.score -= state.costMaxCircles;
+                state.maxCircles += 3;
+                state.costMaxCircles = Math.floor(state.costMaxCircles * 1.5);
+                updateUI();
+            }
+        }
+
+        function buyPoints() {
+            if (state.score >= state.costPoints) {
+                state.score -= state.costPoints;
+                state.pointsPerClick += 1;
+                state.costPoints = Math.floor(state.costPoints * 1.8);
+                updateUI();
+            }
+        }
+
+        function buySpeed() {
+            if (state.score >= state.costSpeed && state.spawnRateMs > 100) {
+                state.score -= state.costSpeed;
+                state.spawnRateMs = Math.max(100, Math.floor(state.spawnRateMs * 0.85));
+                state.costSpeed = Math.floor(state.costSpeed * 1.6);
+                updateUI();
+                startGameLoop();
+            }
+        }
+
+        // --- Save & Load with Encryption ---
+
+        function saveGame() {
+            let dataString = JSON.stringify(state);
+            
+            if (devCodeInput.value !== "BEN") {
+                dataString = btoa(dataString);
+            }
+
+            const blob = new Blob([dataString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'CatchCircles_Save.txt';
+            document.body.appendChild(a);
+            a.click();
+            
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function loadGame(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let fileContent = e.target.result;
+                let loadedState;
+
+                try {
+                    loadedState = JSON.parse(fileContent);
+                } catch (err1) {
+                    try {
+                        loadedState = JSON.parse(atob(fileContent));
+                    } catch (err2) {
+                        alert("Error! The file doesn't seem to be a valid save file.");
+                        event.target.value = '';
+                        return;
+                    }
+                }
+                
+                state = { ...state, ...loadedState }; 
+                gameArea.innerHTML = '';
+                currentCircles = 0;
+                
+                updateUI();
+                startGameLoop();
+                alert("Game loaded successfully from file! 🎮");
+                
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // Start Game
+        initGame();
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Circles Game</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #222;
+            position: relative;
+        }
+
+        /* Secret Dev Input - Top Right, Black Text */
+        #devCodeInput {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            color: black;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid black;
+            padding: 5px;
+            font-weight: bold;
+            width: 80px;
+        }
+
+        /* Sidebar */
+        #sidebar {
+            width: 320px;
+            background: #333;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        #sidebar h2 { margin-top: 0; color: #4CAF50; }
+        
+        /* Game Area */
+        #game-area {
+            flex-grow: 1;
+            background-color: red;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Circles */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
+            transform: scale(0);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        /* Buttons & Upgrade Boxes */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #1976D2; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .save-load-btn { background: #FF9800; color: #111; }
+        .save-load-btn:hover { background: #F57C00; }
+
+        .upgrade-box {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
+        hr { border: 1px solid #555; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <input type="text" id="devCodeInput" placeholder="Code...">
+
+    <div id="sidebar">
+        <h2>Score: <span id="scoreDisplay">0</span></h2>
+        
+        <hr>
+        <h3>Save & Load 💾</h3>
+        <button class="save-load-btn" onclick="saveGame()">Download Save File (.txt)</button>
+        <button class="save-load-btn" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
+        <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
+
+        <hr>
+        <h3>Upgrades ⬆️</h3>
+        
+        <div class="upgrade-box">
+            <p><strong>Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
+            <button id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">10</span>)</button>
+        </div>
+        
+        <div class="upgrade-box">
+            <p><strong>Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
+            <button id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">20</span>)</button>
+        </div>
+        
+        <div class="upgrade-box">
+            <p><strong>Spawn Rate:</strong> Every <span id="spawnSpeedDisplay">1.0</span>s</p>
+            <button id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
+        </div>
+    </div>
+
+    <div id="game-area"></div>
+
+    <script>
+        // Game state object
+        let state = {
+            score: 0,
+            maxCircles: 5,
+            pointsPerClick: 1,
+            spawnRateMs: 1000, 
+            costMaxCircles: 10,
+            costPoints: 20,
+            costSpeed: 30
+        };
+
+        let currentCircles = 0;
+        let gameInterval;
+
+        // DOM Elements
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
+        const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
+        const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
+        
+        const costMaxCirclesDisplay = document.getElementById('costMaxCircles');
+        const costPointsDisplay = document.getElementById('costPoints');
+        const costSpeedDisplay = document.getElementById('costSpeed');
+        
+        const btnMaxCircles = document.getElementById('btnMaxCircles');
+        const btnPoints = document.getElementById('btnPoints');
+        const btnSpeed = document.getElementById('btnSpeed');
+        
+        const gameArea = document.getElementById('game-area');
+        const devCodeInput = document.getElementById('devCodeInput');
+
+        // ==========================================
+        // FIX: Reliable CLICK Cheat Code
+        // ==========================================
+        devCodeInput.addEventListener('input', function() {
+            if (this.value.toUpperCase() === 'CLICK') {
+                const circles = document.querySelectorAll('.circle');
+                
+                if (circles.length > 0) {
+                    // מוסיף ניקוד כפול מספר העיגולים שעל המסך כרגע
+                    state.score += (circles.length * state.pointsPerClick);
+                    
+                    // מוחק את כל העיגולים מהמסך
+                    circles.forEach(circle => circle.remove());
+                    
+                    // מאפס את מונה העיגולים הפעילים
+                    currentCircles = 0;
+                    
+                    // מעדכן את התצוגה של הניקוד והשדרוגים
+                    updateUI();
+                }
+                
+                // מוחק מיד את מה שנכתב בתיבה כדי שיהיה מוכן לפעם הבאה
+                this.value = '';
+                
+                // מוריד את הפוקוס מהתיבה כדי שהדפדפן יתרענן נכון
+                this.blur();
             }
         });
 
