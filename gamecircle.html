@@ -115,7 +115,7 @@
             bottom: 80px;
             right: 20px;
             z-index: 999;
-            width: 280px;
+            width: 300px;
             background: rgba(40, 40, 60, 0.95);
             color: white;
             padding: 20px;
@@ -138,7 +138,7 @@
 
         /* Styling for the editable inputs in Stats */
         .stat-input {
-            width: 65px;
+            width: 80px; /* קצת יותר רחב בשביל מספרים גדולים של ניקוד */
             padding: 5px;
             border-radius: 5px;
             border: 1px solid #777;
@@ -214,14 +214,16 @@
 
     <div id="stats-panel">
         <h3>Live Stats</h3>
+        
         <div class="stat-row">
             <span>Current Score:</span>
-            <span id="statCurrentScore" style="color: #FFEB3B; font-weight: bold;">0</span>
+            <input type="number" id="editCurrentScore" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
         <div class="stat-row">
-            <span>Total Lifetime Score:</span>
-            <span id="statTotalScore" style="color: #FFEB3B; font-weight: bold;">0</span>
+            <span>Lifetime Score:</span>
+            <input type="number" id="editTotalScore" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
+        
         <div class="stat-row">
             <span>Circles on Screen:</span>
             <span id="statCurrentCircles" style="color: #FFEB3B; font-weight: bold;">0</span>
@@ -320,6 +322,8 @@
         const statsPanel = document.getElementById('stats-panel');
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
         
+        const editCurrentScore = document.getElementById('editCurrentScore'); // שדה נקודות
+        const editTotalScore = document.getElementById('editTotalScore');     // שדה נקודות כללי
         const editMaxCircles = document.getElementById('editMaxCircles');
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
@@ -363,7 +367,6 @@
         devCodeInput.addEventListener('input', function() {
             const val = this.value.toUpperCase();
             
-            // "CLICK" Cheat
             if (val === 'CLICK') {
                 const circles = document.querySelectorAll('.circle');
                 if (circles.length > 0) {
@@ -378,8 +381,9 @@
                 this.blur();
             }
             
-            // "CHANGE" Cheat - Unlocks the Stats panel inputs
             if (val === 'CHANGE') {
+                editCurrentScore.disabled = false;
+                editTotalScore.disabled = false;
                 editMaxCircles.disabled = false;
                 editPoints.disabled = false;
                 editMinSize.disabled = false;
@@ -392,8 +396,9 @@
                 this.blur();
             }
 
-            // "UNCHANGE" Cheat - Locks the Stats panel inputs
             if (val === 'UNCHANGE') {
+                editCurrentScore.disabled = true;
+                editTotalScore.disabled = true;
                 editMaxCircles.disabled = true;
                 editPoints.disabled = true;
                 editMinSize.disabled = true;
@@ -401,27 +406,30 @@
                 
                 this.value = '';
                 this.blur();
-                updateStatsUI(); // מחזיר הכל למראה רגיל
+                updateStatsUI(); 
             }
         });
 
-        // החלת שינויים מהתיבות בסטטיסטיקות לתוך המשחק
         function applyCheatEdits() {
+            let newScore = parseInt(editCurrentScore.value);
+            let newTotal = parseInt(editTotalScore.value);
             let newMax = parseInt(editMaxCircles.value);
             let newPoints = parseInt(editPoints.value);
             let newSize = parseInt(editMinSize.value);
             let newRate = parseInt(editSpawnRate.value);
 
+            // בדיקות כדי לוודא שהוזנו מספרים חוקיים
+            if (!isNaN(newScore)) state.score = newScore;
+            if (!isNaN(newTotal)) state.totalScore = newTotal;
             if (!isNaN(newMax) && newMax >= 0) state.maxCircles = newMax;
             if (!isNaN(newPoints) && newPoints >= 1) state.pointsPerClick = newPoints;
             if (!isNaN(newSize) && newSize >= 10) state.minCircleSize = newSize;
             
-            // שינוי מהירות הצתה מהסטטיסטיקות!
             if (!isNaN(newRate) && newRate >= 10) {
                 let oldRate = state.spawnRateMs;
                 state.spawnRateMs = newRate;
                 if (oldRate !== state.spawnRateMs) {
-                    startGameLoop(); // מעדכן את לולאת המשחק למהירות החדשה
+                    startGameLoop(); 
                 }
             }
 
@@ -466,11 +474,11 @@
         }
 
         function updateStatsUI(isTyping = false) {
-            document.getElementById('statCurrentScore').innerText = Math.floor(state.score);
-            document.getElementById('statTotalScore').innerText = Math.floor(state.totalScore);
             document.getElementById('statCurrentCircles').innerText = currentCircles;
             
             if (editMaxCircles.disabled || !isTyping) {
+                editCurrentScore.value = Math.floor(state.score);
+                editTotalScore.value = Math.floor(state.totalScore);
                 editMaxCircles.value = state.maxCircles;
                 editPoints.value = state.pointsPerClick;
                 editMinSize.value = state.minCircleSize;
