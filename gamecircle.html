@@ -8,11 +8,13 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
+            /* 100dvh מתקן את הבעיה שהדפדפן בטלפון מסתיר את הלמטה של המסך */
+            height: 100vh; 
+            height: 100dvh; 
             overflow: hidden;
             background-color: red;
             position: relative;
-            touch-action: manipulation; /* מונע זום כפול מעצבן בטלפון */
+            touch-action: manipulation; 
         }
 
         /* Secret Dev Input */
@@ -48,11 +50,22 @@
             transition: all 0.3s ease;
         }
 
-        /* Toggle Buttons */
-        .bottom-btn {
+        /* סרגל כפתורים תחתון (פותר את הבעיה של המיקומים) */
+        #bottom-nav {
             position: absolute;
             bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
             z-index: 1000;
+            pointer-events: none; /* מאפשר ללחוץ על עיגולים שנמצאים ברווחים בין הכפתורים */
+        }
+
+        /* Toggle Buttons */
+        .bottom-btn {
+            pointer-events: auto; /* מחזיר את הלחיצה לכפתורים עצמם */
             padding: 12px 20px;
             font-size: 16px;
             font-weight: bold;
@@ -65,24 +78,16 @@
         }
 
         #menu-toggle-btn {
-            left: 20px;
             text-shadow: 1px 1px 2px black;
             background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
             background-size: 300% 300%;
             animation: rainbowColors 3s ease infinite;
         }
 
-        #settings-toggle-btn {
-            left: 50%;
-            transform: translateX(-50%);
-            background: #9C27B0;
-        }
+        #settings-toggle-btn { background: #9C27B0; }
         #settings-toggle-btn:hover { background: #7B1FA2; }
 
-        #stats-toggle-btn {
-            right: 20px;
-            background: #607D8B;
-        }
+        #stats-toggle-btn { background: #607D8B; }
         #stats-toggle-btn:hover { background: #455A64; }
 
         @keyframes rainbowColors {
@@ -150,7 +155,7 @@
 
         #game-area {
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             position: absolute;
             top: 0;
             left: 0;
@@ -164,7 +169,7 @@
             box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
             transform: scale(0);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            -webkit-tap-highlight-color: transparent; /* מסיר את הריבוע הכחול בלחיצה בטלפון */
+            -webkit-tap-highlight-color: transparent; 
         }
         @keyframes popIn { to { transform: scale(1); } }
 
@@ -192,22 +197,38 @@
         hr { border: 1px solid #777; margin: 20px 0; }
 
         /* ========================================= */
-        /* MOBILE MODE (מופעל אוטומטית או מההגדרות)  */
+        /* MOBILE MODE - סידור כפתורים לטלפון בלבד   */
         /* ========================================= */
+        body.mobile-mode #bottom-nav {
+            bottom: 10px; /* צמוד יותר למטה */
+            padding: 0 5px; /* מונע היצמדות לשוליים של המסך */
+            box-sizing: border-box;
+            gap: 5px; /* רווח שווה בין 3 הכפתורים */
+        }
+
+        body.mobile-mode .bottom-btn {
+            flex: 1; /* מחלק את הרוחב של המסך שווה בשווה בין כל ה-3 */
+            padding: 10px 0; /* פחות ריפוד כדי שיכנס הכל */
+            font-size: 13px; /* טקסט מעט קטן יותר */
+            border-width: 2px;
+            border-radius: 12px; /* פחות עגול כדי לחסוך מקום */
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+        }
+
         body.mobile-mode .panel {
             width: 90% !important;
             left: 5% !important;
             right: 5% !important;
-            transform: none !important; /* מבטל את המרכוז במובייל כדי לתפוס את כל הרוחב */
+            transform: none !important; 
+            bottom: 65px; /* מוריד את הפאנלים קצת למטה כדי שיהיה יותר מקום לשחק */
         }
         body.mobile-mode #score-hud {
             font-size: 20px;
             padding: 8px 20px;
             top: 10px;
-        }
-        body.mobile-mode .bottom-btn {
-            padding: 10px 12px;
-            font-size: 14px;
         }
     </style>
 </head>
@@ -217,9 +238,11 @@
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
-    <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
-    <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
-    <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    <div id="bottom-nav">
+        <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+        <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
+        <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    </div>
 
     <div id="settings-panel" class="panel">
         <h3 id="lblSettingsTitle">Settings ⚙️</h3>
@@ -312,9 +335,9 @@
         const t = {
             en: {
                 lblScore: "Score: ",
-                btnMenuOpen: "Open Menu 🛠️", btnMenuClose: "Close Menu ❌",
-                btnStatsOpen: "Stats 📊", btnStatsClose: "Close Stats ❌",
-                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close Settings ❌",
+                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Close ❌",
+                btnStatsOpen: "Stats 📊", btnStatsClose: "Close ❌",
+                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close ❌",
                 lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
                 lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
@@ -329,14 +352,14 @@
             },
             he: {
                 lblScore: "ניקוד: ",
-                btnMenuOpen: "תפריט ראשי 🛠️", btnMenuClose: "סגירת תפריט ❌",
-                btnStatsOpen: "סטטיסטיקות 📊", btnStatsClose: "סגירת נתונים ❌",
-                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגירת הגדרות ❌",
-                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת קובץ שמירה (.txt)", btnLoad: "טעינת קובץ שמירה (TXT)",
+                btnMenuOpen: "תפריט 🛠️", btnMenuClose: "סגור ❌",
+                btnStatsOpen: "סטטיסטיקה 📊", btnStatsClose: "סגור ❌",
+                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגור ❌",
+                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת שמירה (.txt)", btnLoad: "טעינת שמירה (TXT)",
                 lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
                 lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
                 lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
-                lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל (Lifetime):",
+                lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל:",
                 lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
@@ -357,8 +380,8 @@
             costPoints: 20,
             costSpeed: 30,
             costMinSize: 15,
-            language: 'he', // הגדרתי שעברית תהיה ברירת מחדל בשבילך
-            deviceMode: 'desktop' // יתעדכן אוטומטית בהפעלה
+            language: 'he', 
+            deviceMode: 'desktop' 
         };
 
         let currentCircles = 0;
@@ -397,9 +420,6 @@
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
 
-        // ==========================================
-        // מערכת שפות ומכשירים
-        // ==========================================
         function changeLanguage(lang) {
             state.language = lang;
             const dir = lang === 'he' ? 'rtl' : 'ltr';
@@ -439,17 +459,12 @@
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
 
-            menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
-            statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
-            settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
-
+            refreshPanelButtons();
             updateUI(); 
         }
 
-        // זיהוי אוטומטי של טלפון או מחשב
         function autoDetectDevice() {
-            // בדיקה האם הדפדפן הוא של טלפון נייד
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
             changeDeviceMode(isMobile ? 'mobile' : 'desktop');
         }
 
@@ -464,8 +479,6 @@
             }
         }
 
-        // ==========================================
-
         document.addEventListener('keydown', function(event) {
             if (event.code === 'Space' || event.key === ' ') {
                 event.preventDefault(); 
@@ -476,7 +489,6 @@
             }
         });
 
-        // פתיחה וסגירה של פאנלים (סוגר את האחרים כשפותחים אחד)
         function toggleMenu() {
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
@@ -509,7 +521,6 @@
             settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
         }
 
-        // Cheat Codes
         devCodeInput.addEventListener('input', function() {
             const val = this.value.toUpperCase();
             
@@ -600,7 +611,7 @@
         }
 
         function initGame() {
-            autoDetectDevice(); // זיהוי אוטומטי של טלפון או מחשב!
+            autoDetectDevice(); 
             changeLanguage(state.language);
             startGameLoop();
         }
@@ -778,7 +789,7 @@
                 currentCircles = 0;
                 
                 changeLanguage(state.language); 
-                changeDeviceMode(state.deviceMode); // מחיל את ההגדרה מהשמירה
+                changeDeviceMode(state.deviceMode); 
                 startGameLoop();
                 alert(t[state.language].alertLoadSuccess);
                 
