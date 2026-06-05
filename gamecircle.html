@@ -163,6 +163,24 @@
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
 
+        // ==========================================
+        // NEW: Secret "CLICK" Cheat Code Listener
+        // ==========================================
+        devCodeInput.addEventListener('input', function() {
+            // Check if the typed word is "CLICK" (case insensitive)
+            if (this.value.toUpperCase() === 'CLICK') {
+                
+                // Find all circles currently on the screen
+                const circles = document.querySelectorAll('.circle');
+                
+                // Click every single one of them
+                circles.forEach(circle => circle.click());
+                
+                // Clear the input box so it's ready to be used again
+                this.value = '';
+            }
+        });
+
         // Initialize Game
         function initGame() {
             updateUI();
@@ -266,9 +284,7 @@
         function saveGame() {
             let dataString = JSON.stringify(state);
             
-            // בדיקת הקוד הסודי - אם לא כתוב BEN, נצפין את הקובץ
             if (devCodeInput.value !== "BEN") {
-                // btoa - הופך את הטקסט לגיבריש בלתי קריא (Base64)
                 dataString = btoa(dataString);
             }
 
@@ -295,11 +311,9 @@
                 let loadedState;
 
                 try {
-                    // קודם מנסים לטעון קובץ קריא (כאילו נשמר עם BEN)
                     loadedState = JSON.parse(fileContent);
                 } catch (err1) {
                     try {
-                        // אם הקובץ לא קריא, ננסה לפענח אותו (atob) ואז לטעון
                         loadedState = JSON.parse(atob(fileContent));
                     } catch (err2) {
                         alert("Error! The file doesn't seem to be a valid save file.");
@@ -308,7 +322,6 @@
                     }
                 }
                 
-                // עדכון נתוני המשחק לאחר הטעינה
                 state = { ...state, ...loadedState }; 
                 gameArea.innerHTML = '';
                 currentCircles = 0;
