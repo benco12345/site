@@ -10,7 +10,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
             overflow: hidden;
-            background-color: red; /* רקע המשחק אדום */
+            background-color: red; /* Red game background */
             position: relative;
         }
 
@@ -41,7 +41,7 @@
             padding: 10px 30px;
             border-radius: 15px;
             z-index: 50;
-            pointer-events: none; /* כדי שהקליקים יעברו דרכו למשחק */
+            pointer-events: none; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
@@ -60,7 +60,7 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-            /* רקע צבעוני זז */
+            /* Rainbow animation */
             background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
             background-size: 300% 300%;
             animation: rainbowColors 3s ease infinite;
@@ -86,7 +86,7 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            display: none; /* מוסתר כברירת מחדל */
+            display: none; 
             border: 2px solid #555;
         }
 
@@ -184,7 +184,6 @@
     <div id="game-area"></div>
 
     <script>
-        // Game state object
         let state = {
             score: 0,
             maxCircles: 5,
@@ -198,7 +197,6 @@
         let currentCircles = 0;
         let gameInterval;
 
-        // DOM Elements
         const scoreDisplay = document.getElementById('scoreDisplay');
         const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
         const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
@@ -218,8 +216,25 @@
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
 
         // ==========================================
-        // Toggle Menu Function
+        // NEW: Spacebar to Click
         // ==========================================
+        document.addEventListener('keydown', function(event) {
+            // בודק אם המקש שנלחץ הוא רווח
+            if (event.code === 'Space' || event.key === ' ') {
+                // מונע מהדף לגלול למטה
+                event.preventDefault();
+                
+                // מוצא את כל העיגולים שכרגע על המסך
+                const circles = document.querySelectorAll('.circle');
+                
+                // אם יש עיגולים, נלחץ על הראשון שנמצא
+                if (circles.length > 0) {
+                    circles[0].click();
+                }
+            }
+        });
+
+        // Toggle Menu
         function toggleMenu() {
             if (menuPanel.style.display === 'none' || menuPanel.style.display === '') {
                 menuPanel.style.display = 'block';
@@ -230,9 +245,7 @@
             }
         }
 
-        // ==========================================
-        // Secret "CLICK" Cheat Code Listener
-        // ==========================================
+        // Secret "CLICK" Cheat Code
         devCodeInput.addEventListener('input', function() {
             if (this.value.toUpperCase() === 'CLICK') {
                 const circles = document.querySelectorAll('.circle');
@@ -249,13 +262,11 @@
             }
         });
 
-        // Initialize Game
         function initGame() {
             updateUI();
             startGameLoop();
         }
 
-        // Update UI based on current state
         function updateUI() {
             scoreDisplay.innerText = Math.floor(state.score);
             maxCirclesDisplay.innerText = state.maxCircles;
@@ -266,7 +277,6 @@
             costPointsDisplay.innerText = state.costPoints;
             costSpeedDisplay.innerText = state.costSpeed;
 
-            // Enable/Disable buttons based on score
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
             btnPoints.disabled = state.score < state.costPoints;
             btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
@@ -278,7 +288,6 @@
             }
         }
 
-        // Game Loop
         function startGameLoop() {
             clearInterval(gameInterval);
             gameInterval = setInterval(spawnCircle, state.spawnRateMs);
@@ -289,7 +298,6 @@
             return `hsl(${h}, 100%, 60%)`;
         }
 
-        // Spawn a circle
         function spawnCircle() {
             if (currentCircles >= state.maxCircles) return;
 
@@ -316,8 +324,6 @@
             gameArea.appendChild(circle);
             currentCircles++;
         }
-
-        // --- Upgrades ---
 
         function buyMaxCircles() {
             if (state.score >= state.costMaxCircles) {
@@ -346,8 +352,6 @@
                 startGameLoop();
             }
         }
-
-        // --- Save & Load with Encryption ---
 
         function saveGame() {
             let dataString = JSON.stringify(state);
@@ -403,7 +407,6 @@
             reader.readAsText(file);
         }
 
-        // Start Game
         initGame();
     </script>
 </body>
