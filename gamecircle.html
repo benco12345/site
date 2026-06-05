@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Catch the Circles Game</title>
     <style>
         body {
@@ -12,13 +12,14 @@
             overflow: hidden;
             background-color: red;
             position: relative;
+            touch-action: manipulation; /* מונע זום כפול מעצבן בטלפון */
         }
 
         /* Secret Dev Input */
         #devCodeInput {
             position: absolute;
             top: 10px;
-            right: 10px; /* נשאר בצד פיזי קבוע */
+            right: 10px; 
             z-index: 100;
             color: black;
             background: rgba(255, 255, 255, 0.9);
@@ -43,64 +44,44 @@
             z-index: 50;
             pointer-events: none; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            transition: all 0.3s ease;
         }
 
-        /* Menu Button - Bottom Left (using inset-inline for RTL support) */
-        #menu-toggle-btn {
+        /* Toggle Buttons */
+        .bottom-btn {
             position: absolute;
             bottom: 20px;
-            left: 20px;
             z-index: 1000;
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 12px 20px;
+            font-size: 16px;
             font-weight: bold;
             color: white;
-            text-shadow: 1px 1px 2px black;
             border: 3px solid white;
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: background 0.3s;
+        }
+
+        #menu-toggle-btn {
+            left: 20px;
+            text-shadow: 1px 1px 2px black;
             background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
             background-size: 300% 300%;
             animation: rainbowColors 3s ease infinite;
         }
 
-        /* Settings Button - Bottom Center */
         #settings-toggle-btn {
-            position: absolute;
-            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
             background: #9C27B0;
-            border: 3px solid white;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-            transition: background 0.3s;
         }
         #settings-toggle-btn:hover { background: #7B1FA2; }
 
-        /* Stats Button - Bottom Right */
         #stats-toggle-btn {
-            position: absolute;
-            bottom: 20px;
             right: 20px;
-            z-index: 1000;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
             background: #607D8B;
-            border: 3px solid white;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-            transition: background 0.3s;
         }
         #stats-toggle-btn:hover { background: #455A64; }
 
@@ -122,12 +103,14 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
             display: none; 
             border: 2px solid #555;
-            max-height: 75vh;
+            max-height: 70vh;
             overflow-y: auto;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
         #menu-panel { left: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
-        #settings-panel { left: 50%; transform: translateX(-50%); width: 250px; }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
         #stats-panel { right: 20px; width: 300px; }
 
         h3 { margin-top: 0; color: #4CAF50; }
@@ -153,7 +136,7 @@
             text-align: center;
         }
         
-        select { width: 100px; cursor: pointer; }
+        select { width: 110px; cursor: pointer; }
 
         .stat-input:disabled {
             background: transparent;
@@ -181,6 +164,7 @@
             box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
             transform: scale(0);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            -webkit-tap-highlight-color: transparent; /* מסיר את הריבוע הכחול בלחיצה בטלפון */
         }
         @keyframes popIn { to { transform: scale(1); } }
 
@@ -206,24 +190,40 @@
         .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
         hr { border: 1px solid #777; margin: 20px 0; }
+
+        /* ========================================= */
+        /* MOBILE MODE (מופעל אוטומטית או מההגדרות)  */
+        /* ========================================= */
+        body.mobile-mode .panel {
+            width: 90% !important;
+            left: 5% !important;
+            right: 5% !important;
+            transform: none !important; /* מבטל את המרכוז במובייל כדי לתפוס את כל הרוחב */
+        }
+        body.mobile-mode #score-hud {
+            font-size: 20px;
+            padding: 8px 20px;
+            top: 10px;
+        }
+        body.mobile-mode .bottom-btn {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Secret dev input box -->
     <input type="text" id="devCodeInput" placeholder="Code...">
 
-    <!-- Score Display -->
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
-    <!-- Toggle Buttons -->
-    <button id="menu-toggle-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
-    <button id="settings-toggle-btn" onclick="toggleSettings()">Settings ⚙️</button>
-    <button id="stats-toggle-btn" onclick="toggleStats()">Stats 📊</button>
+    <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+    <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
+    <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
 
-    <!-- Settings Panel -->
     <div id="settings-panel" class="panel">
         <h3 id="lblSettingsTitle">Settings ⚙️</h3>
+        
         <div class="stat-row">
             <span id="lblLanguage">Language / שפה:</span>
             <select id="langSelect" onchange="changeLanguage(this.value)">
@@ -231,9 +231,16 @@
                 <option value="he">עברית</option>
             </select>
         </div>
+
+        <div class="stat-row">
+            <span id="lblDeviceMode">Device Mode:</span>
+            <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
+                <option value="desktop" id="optDesktop">Desktop 💻</option>
+                <option value="mobile" id="optMobile">Mobile 📱</option>
+            </select>
+        </div>
     </div>
 
-    <!-- Stats Panel -->
     <div id="stats-panel" class="panel">
         <h3 id="lblLiveStats">Live Stats</h3>
         <div class="stat-row">
@@ -268,7 +275,6 @@
         </div>
     </div>
 
-    <!-- Hidden Menu Panel -->
     <div id="menu-panel" class="panel">
         <h3 id="lblSaveLoad">Save & Load 💾</h3>
         <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
@@ -299,7 +305,6 @@
         </div>
     </div>
 
-    <!-- Game Area -->
     <div id="game-area"></div>
 
     <script>
@@ -318,6 +323,7 @@
                 lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
+                lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file."
             },
@@ -334,6 +340,7 @@
                 lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
+                lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין."
             }
@@ -350,7 +357,8 @@
             costPoints: 20,
             costSpeed: 30,
             costMinSize: 15,
-            language: 'en' // שפה כברירת מחדל
+            language: 'he', // הגדרתי שעברית תהיה ברירת מחדל בשבילך
+            deviceMode: 'desktop' // יתעדכן אוטומטית בהפעלה
         };
 
         let currentCircles = 0;
@@ -377,7 +385,9 @@
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
         const settingsPanel = document.getElementById('settings-panel');
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+        
         const langSelect = document.getElementById('langSelect');
+        const deviceSelect = document.getElementById('deviceSelect');
         
         const editCurrentScore = document.getElementById('editCurrentScore');
         const editTotalScore = document.getElementById('editTotalScore');
@@ -387,7 +397,9 @@
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
 
-        // פונקציית החלפת שפה
+        // ==========================================
+        // מערכת שפות ומכשירים
+        // ==========================================
         function changeLanguage(lang) {
             state.language = lang;
             const dir = lang === 'he' ? 'rtl' : 'ltr';
@@ -397,7 +409,6 @@
 
             const text = t[lang];
 
-            // עדכון טקסטים סטטיים
             document.getElementById('lblScore').innerText = text.lblScore;
             document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
             document.getElementById('btnDownload').innerText = text.btnDownload;
@@ -423,16 +434,38 @@
 
             document.getElementById('lblSettingsTitle').innerText = text.lblSettingsTitle;
             document.getElementById('lblLanguage').innerText = text.lblLanguage;
+            
+            document.getElementById('lblDeviceMode').innerText = text.lblDeviceMode;
+            document.getElementById('optDesktop').innerText = text.optDesktop;
+            document.getElementById('optMobile').innerText = text.optMobile;
 
-            // עדכון כפתורי התפריט התחתונים לפי מצב הפאנל שלהם
             menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
             statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
             settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
 
-            updateUI(); // מרענן כפתורי שדרוגים שכוללים מחיר מחושב
+            updateUI(); 
         }
 
-        // Spacebar clicks ONLY the hovered circle
+        // זיהוי אוטומטי של טלפון או מחשב
+        function autoDetectDevice() {
+            // בדיקה האם הדפדפן הוא של טלפון נייד
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            changeDeviceMode(isMobile ? 'mobile' : 'desktop');
+        }
+
+        function changeDeviceMode(mode) {
+            state.deviceMode = mode;
+            deviceSelect.value = mode;
+            
+            if (mode === 'mobile') {
+                document.body.classList.add('mobile-mode');
+            } else {
+                document.body.classList.remove('mobile-mode');
+            }
+        }
+
+        // ==========================================
+
         document.addEventListener('keydown', function(event) {
             if (event.code === 'Space' || event.key === ' ') {
                 event.preventDefault(); 
@@ -443,23 +476,37 @@
             }
         });
 
+        // פתיחה וסגירה של פאנלים (סוגר את האחרים כשפותחים אחד)
         function toggleMenu() {
             const isOpen = menuPanel.style.display === 'block';
+            settingsPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
             menuPanel.style.display = isOpen ? 'none' : 'block';
-            menuToggleBtn.innerText = isOpen ? t[state.language].btnMenuOpen : t[state.language].btnMenuClose;
+            refreshPanelButtons();
         }
 
         function toggleStats() {
             const isOpen = statsPanel.style.display === 'block';
+            menuPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
             statsPanel.style.display = isOpen ? 'none' : 'block';
-            statsToggleBtn.innerText = isOpen ? t[state.language].btnStatsOpen : t[state.language].btnStatsClose;
             updateStatsUI();
+            refreshPanelButtons();
         }
 
         function toggleSettings() {
             const isOpen = settingsPanel.style.display === 'block';
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
             settingsPanel.style.display = isOpen ? 'none' : 'block';
-            settingsToggleBtn.innerText = isOpen ? t[state.language].btnSettingsOpen : t[state.language].btnSettingsClose;
+            refreshPanelButtons();
+        }
+
+        function refreshPanelButtons() {
+            const text = t[state.language];
+            menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
+            statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
+            settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
         }
 
         // Cheat Codes
@@ -489,8 +536,11 @@
                 editMinSize.disabled = false;
                 editSpawnRate.disabled = false;
                 
+                menuPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
                 statsPanel.style.display = 'block';
-                statsToggleBtn.innerText = t[state.language].btnStatsClose;
+                refreshPanelButtons();
+                
                 this.value = '';
                 this.blur();
             }
@@ -550,6 +600,7 @@
         }
 
         function initGame() {
+            autoDetectDevice(); // זיהוי אוטומטי של טלפון או מחשב!
             changeLanguage(state.language);
             startGameLoop();
         }
@@ -720,12 +771,14 @@
                 
                 state = { ...state, ...loadedState }; 
                 if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
-                if (!state.language) state.language = 'en'; // הגנת שפה בקבצים ישנים
+                if (!state.language) state.language = 'he'; 
+                if (!state.deviceMode) state.deviceMode = 'desktop';
 
                 gameArea.innerHTML = '';
                 currentCircles = 0;
                 
-                changeLanguage(state.language); // מעדכן את השפה לפי השמירה
+                changeLanguage(state.language); 
+                changeDeviceMode(state.deviceMode); // מחיל את ההגדרה מהשמירה
                 startGameLoop();
                 alert(t[state.language].alertLoadSuccess);
                 
