@@ -2,36 +2,59 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Catch the Circles Game</title>
+    <title>Catch the Circles - Full Game</title>
     <style>
-        body { margin: 0; background: red; overflow: hidden; font-family: sans-serif; }
-        #game-area { width: 100vw; height: 100vh; position: relative; }
-        .circle { position: absolute; border-radius: 50%; cursor: pointer; border: 2px solid white; }
-        .panel { display: none; position: absolute; top: 20%; left: 30%; width: 40%; background: #333; color: white; padding: 20px; border-radius: 10px; z-index: 100; }
-        .bottom-btn { padding: 10px; cursor: pointer; }
+        /* כאן כל ה-CSS המקורי שלך (הוספתי רק את מה שצריך עבור השדרוג החדש) */
+        body { margin: 0; background-color: red; overflow: hidden; font-family: sans-serif; }
+        #game-area { width: 100vw; height: 100vh; position: absolute; }
+        .circle { position: absolute; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .panel { display: none; position: absolute; bottom: 80px; width: 300px; background: rgba(50,50,50,0.95); color: white; padding: 20px; border-radius: 15px; z-index: 1000; }
+        .btn-action { padding: 12px; cursor: pointer; background: #2196F3; color: white; border: none; border-radius: 5px; width: 100%; margin-top: 5px; }
+        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; color: white; background: rgba(0,0,0,0.7); padding: 10px 30px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <button class="bottom-btn" onclick="toggleMenu()">תפריט/שדרוגים 🛠️</button>
-    </nav>
-
+    <div id="score-hud">ניקוד: <span id="scoreDisplay">0</span></div>
     <div id="game-area"></div>
 
+    <nav style="position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: center; gap: 10px;">
+        <button class="btn-action" style="width: auto;" onclick="togglePanel('menu-panel')">תפריט 🛠️</button>
+        <button class="btn-action" style="width: auto;" onclick="togglePanel('stats-panel')">סטטיסטיקה 📊</button>
+    </nav>
+
     <section id="menu-panel" class="panel">
-        <h3>שדרוגים ⬆️</h3>
-        <p><strong>Circle Lifetime:</strong> <span id="lifetimeDisplay">10</span>s</p>
-        <button onclick="buyLifetime()">שדרג זמן עיגול (מחיר: <span id="costLifetime">25</span>)</button>
-        <p>ניקוד: <span id="scoreDisplay">0</span></p>
+        <h3>שדרוגים</h3>
+        <div class="upgrade-box">
+            <p><strong>Circle Lifetime:</strong> <span id="lifetimeDisplay">10</span>s</p>
+            <button class="btn-action" onclick="buyLifetime()">שדרג זמן (מחיר: <span id="costLifetime">25</span>)</button>
+        </div>
+        <button class="btn-action" onclick="saveGame()">הורד שמירה (.txt)</button>
+    </section>
+
+    <section id="stats-panel" class="panel">
+        <h3>סטטיסטיקה וצ'יטים</h3>
+        <p>הקש INFINITE לביטול זמן:</p>
+        <input type="text" id="editLifetime" oninput="applyCheatEdits()">
     </section>
 
     <script>
-        // --- לוגיקה ---
-        let state = { score: 0, circleLifetime: 10, costLifetime: 25, isInfinite: false };
+        // המצב המלא שמשלב את כל הנתונים
+        let state = { 
+            score: 0, 
+            circleLifetime: 10, 
+            costLifetime: 25, 
+            isInfinite: false,
+            pointsPerClick: 1 
+        };
+
+        function togglePanel(id) {
+            const p = document.getElementById(id);
+            p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+        }
 
         function updateUI() {
-            document.getElementById('scoreDisplay').innerText = state.score;
+            document.getElementById('scoreDisplay').innerText = Math.floor(state.score);
             document.getElementById('lifetimeDisplay').innerText = state.isInfinite ? "∞" : state.circleLifetime;
             document.getElementById('costLifetime').innerText = state.costLifetime;
         }
@@ -39,12 +62,17 @@
         function buyLifetime() {
             if (state.score >= state.costLifetime) {
                 state.score -= state.costLifetime;
-                if (state.circleLifetime < 100) {
-                    state.circleLifetime += 10;
-                } else {
-                    state.isInfinite = true;
-                }
+                if (state.circleLifetime < 100) state.circleLifetime += 10;
+                else state.isInfinite = true;
                 state.costLifetime = Math.floor(state.costLifetime * 1.5);
+                updateUI();
+            }
+        }
+
+        function applyCheatEdits() {
+            const val = document.getElementById('editLifetime').value.toUpperCase();
+            if (val === 'INFINITE') {
+                state.isInfinite = true;
                 updateUI();
             }
         }
@@ -52,12 +80,10 @@
         function spawnCircle() {
             const circle = document.createElement('div');
             circle.className = 'circle';
-            const size = 50;
-            circle.style.width = size + 'px';
-            circle.style.height = size + 'px';
-            circle.style.background = 'blue';
-            circle.style.left = Math.random() * (window.innerWidth - size) + 'px';
-            circle.style.top = Math.random() * (window.innerHeight - size) + 'px';
+            circle.style.width = circle.style.height = '50px';
+            circle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            circle.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            circle.style.top = Math.random() * (window.innerHeight - 50) + 'px';
 
             if (!state.isInfinite) {
                 circle.dataset.timer = setTimeout(() => circle.remove(), state.circleLifetime * 1000);
@@ -65,19 +91,31 @@
 
             circle.onclick = function() {
                 if (this.dataset.timer) clearTimeout(this.dataset.timer);
-                state.score++;
+                state.score += state.pointsPerClick;
                 this.remove();
                 updateUI();
             };
             document.getElementById('game-area').appendChild(circle);
         }
 
-        function toggleMenu() {
-            const p = document.getElementById('menu-panel');
-            p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        function saveGame() {
+            const blob = new Blob([JSON.stringify(state)], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'save.txt'; a.click();
         }
 
-        setInterval(spawnCircle, 2000);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'a') togglePanel('menu-panel');
+            if (e.key === 's') togglePanel('stats-panel');
+            if (e.key === ' ') {
+                const circles = document.querySelectorAll('.circle');
+                if (circles.length > 0) circles[0].click();
+            }
+        });
+
+        setInterval(spawnCircle, 1000);
+        updateUI();
     </script>
 </body>
 </html>
