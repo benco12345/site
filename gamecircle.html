@@ -139,7 +139,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             bottom: auto;
-            width: 320px;
+            width: 340px;
             background: rgba(30, 30, 30, 0.98);
             border: 3px solid #2196F3;
         }
@@ -277,6 +277,7 @@
         <h3 id="lblAboutTitle">About & Controls</h3>
         <ul style="padding-inline-start: 20px; line-height: 1.8;">
             <li><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></li>
+            <li><strong id="lblKeyCode">. / / :</strong> <span id="descKeyCode">Focus cheat code box</span></li>
             <li><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></li>
             <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></li>
             <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></li>
@@ -382,7 +383,9 @@
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
-                btnAbout: "About ❓", lblAboutTitle: "About & Controls", lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
+                btnAbout: "About ❓", lblAboutTitle: "About & Controls", 
+                lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
+                lblKeyCode: ". or / :", descKeyCode: "Start typing code",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnCloseAbout: "Close"
             },
@@ -402,7 +405,9 @@
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
-                btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
+                btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", 
+                lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
+                lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
                 btnCloseAbout: "סגור"
             }
@@ -503,6 +508,11 @@
             document.getElementById('lblAboutTitle').innerText = text.lblAboutTitle;
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
             document.getElementById('descSpace').innerText = text.descSpace;
+            
+            // עדכון למקשים החדשים באודות
+            document.getElementById('lblKeyCode').innerText = text.lblKeyCode;
+            document.getElementById('descKeyCode').innerText = text.descKeyCode;
+            
             document.getElementById('descKeyA').innerText = text.descKeyA;
             document.getElementById('descKeyS').innerText = text.descKeyS;
             document.getElementById('descKeyD').innerText = text.descKeyD;
@@ -529,32 +539,37 @@
         }
 
         // ==========================================
-        // מערכת קיצורי המקלדת (תלוית שפה)
+        // מערכת קיצורי המקלדת המעודכנת
         // ==========================================
         document.addEventListener('keydown', function(event) {
-            // לא מפעיל קיצורים כשאתה מקליד בתיבות טקסט
+            // אם המשתמש כבר נמצא בתוך תיבת טקסט, אל תפריע לו להקליד
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
 
             const key = event.key.toLowerCase();
 
+            // קיצור חדש - לחיצה על נקודה או סלאש קופצת לתיבת הקודים
+            if (key === '.' || key === '/' || key === 'ץ' || key === 'ף') {
+                event.preventDefault(); // מונע את כתיבת התו הראשון בתיבה
+                devCodeInput.focus();
+            }
             // רווח
-            if (key === ' ' || event.code === 'Space') {
+            else if (key === ' ' || event.code === 'Space') {
                 event.preventDefault(); 
                 if (hoveredCircle) {
                     hoveredCircle.click(); 
                     hoveredCircle = null;  
                 }
             } 
-            // A או ש - באנגלית פותח תפריט, בעברית פותח סטטיסטיקות
+            // A או ש
             else if (key === 'a' || key === 'ש') {
                 if (state.language === 'en') toggleMenu();
                 else toggleStats();
             } 
-            // S או ד - פותח הגדרות (תמיד באמצע)
+            // S או ד
             else if (key === 's' || key === 'ד') {
                 toggleSettings();
             } 
-            // D או ג - באנגלית פותח סטטיסטיקות, בעברית פותח תפריט
+            // D או ג
             else if (key === 'd' || key === 'ג') {
                 if (state.language === 'en') toggleStats();
                 else toggleMenu();
