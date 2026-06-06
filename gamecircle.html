@@ -8,7 +8,6 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* 100dvh מתקן את הבעיה שהדפדפן בטלפון מסתיר את הלמטה של המסך */
             height: 100vh; 
             height: 100dvh; 
             overflow: hidden;
@@ -21,7 +20,7 @@
         #devCodeInput {
             position: absolute;
             top: 10px;
-            right: 10px; 
+            inset-inline-end: 10px; /* מתהפך אוטומטית לפי השפה */
             z-index: 100;
             color: black;
             background: rgba(255, 255, 255, 0.9);
@@ -50,7 +49,7 @@
             transition: all 0.3s ease;
         }
 
-        /* סרגל כפתורים תחתון (פותר את הבעיה של המיקומים) */
+        /* סרגל כפתורים תחתון */
         #bottom-nav {
             position: absolute;
             bottom: 20px;
@@ -60,12 +59,12 @@
             justify-content: space-evenly;
             align-items: center;
             z-index: 1000;
-            pointer-events: none; /* מאפשר ללחוץ על עיגולים שנמצאים ברווחים בין הכפתורים */
+            pointer-events: none; 
         }
 
         /* Toggle Buttons */
         .bottom-btn {
-            pointer-events: auto; /* מחזיר את הלחיצה לכפתורים עצמם */
+            pointer-events: auto; 
             padding: 12px 20px;
             font-size: 16px;
             font-weight: bold;
@@ -114,9 +113,10 @@
             transition: all 0.3s ease;
         }
 
-        #menu-panel { left: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
+        /* השינוי הקריטי: שימוש ב-inset-inline במקום left/right */
+        #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
         #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
-        #stats-panel { right: 20px; width: 300px; }
+        #stats-panel { inset-inline-end: 20px; width: 300px; }
 
         h3 { margin-top: 0; color: #4CAF50; }
         #stats-panel h3 { color: #03A9F4; }
@@ -197,21 +197,21 @@
         hr { border: 1px solid #777; margin: 20px 0; }
 
         /* ========================================= */
-        /* MOBILE MODE - סידור כפתורים לטלפון בלבד   */
+        /* MOBILE MODE */
         /* ========================================= */
         body.mobile-mode #bottom-nav {
-            bottom: 10px; /* צמוד יותר למטה */
-            padding: 0 5px; /* מונע היצמדות לשוליים של המסך */
+            bottom: 10px; 
+            padding: 0 5px; 
             box-sizing: border-box;
-            gap: 5px; /* רווח שווה בין 3 הכפתורים */
+            gap: 5px; 
         }
 
         body.mobile-mode .bottom-btn {
-            flex: 1; /* מחלק את הרוחב של המסך שווה בשווה בין כל ה-3 */
-            padding: 10px 0; /* פחות ריפוד כדי שיכנס הכל */
-            font-size: 13px; /* טקסט מעט קטן יותר */
+            flex: 1; 
+            padding: 10px 0; 
+            font-size: 13px; 
             border-width: 2px;
-            border-radius: 12px; /* פחות עגול כדי לחסוך מקום */
+            border-radius: 12px; 
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
@@ -220,10 +220,10 @@
 
         body.mobile-mode .panel {
             width: 90% !important;
-            left: 5% !important;
-            right: 5% !important;
+            inset-inline-start: 5% !important;
+            inset-inline-end: 5% !important;
             transform: none !important; 
-            bottom: 65px; /* מוריד את הפאנלים קצת למטה כדי שיהיה יותר מקום לשחק */
+            bottom: 65px; 
         }
         body.mobile-mode #score-hud {
             font-size: 20px;
