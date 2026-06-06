@@ -20,7 +20,7 @@
         #devCodeInput {
             position: absolute;
             top: 10px;
-            right: 10px; /* קבוע בצד ימין */
+            right: 10px; 
             z-index: 100;
             color: black;
             background: rgba(255, 255, 255, 0.9);
@@ -34,7 +34,7 @@
         #btnAbout {
             position: absolute;
             top: 10px;
-            left: 10px; /* קבוע בצד שמאל כמו שביקשת */
+            left: 10px; 
             z-index: 100;
             background: #2196F3;
             color: white;
@@ -256,7 +256,7 @@
             padding: 8px 20px;
             top: 10px;
         }
-        body.mobile-mode #devCodeInput { top: 50px; } /* זז למטה כדי לא להסתיר את הניקוד בטלפון */
+        body.mobile-mode #devCodeInput { top: 50px; } 
         body.mobile-mode #btnAbout { top: 50px; }
     </style>
 </head>
@@ -281,7 +281,6 @@
             <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Stats</span></li>
             <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Settings</span></li>
         </ul>
-        <p id="lblCheatsInfo" style="font-size: 13px; color: #FF9800; text-align: center;"><em>Tip: Enter cheat codes (CLICK, CHANGE, UNCHANGE) in the top input box!</em></p>
         <button class="menu-btn" id="btnCloseAbout" onclick="toggleAbout()">Close</button>
     </div>
 
@@ -385,7 +384,7 @@
                 alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
                 btnAbout: "About ❓", lblAboutTitle: "About & Controls", lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Stats", descKeyD: "Open/Close Settings",
-                lblCheatsInfo: "Tip: Enter cheat codes (CLICK, CHANGE, UNCHANGE) in the top input box!", btnCloseAbout: "Close"
+                btnCloseAbout: "Close"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -405,7 +404,7 @@
                 alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
                 btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 descKeyA: "פתיחה / סגירה של התפריט", descKeyS: "פתיחה / סגירה של סטטיסטיקות", descKeyD: "פתיחה / סגירה של ההגדרות",
-                lblCheatsInfo: "טיפ: ניתן להקליד קודים (CLICK, CHANGE, UNCHANGE) בתיבה למעלה!", btnCloseAbout: "סגור"
+                btnCloseAbout: "סגור"
             }
         };
 
@@ -500,7 +499,6 @@
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
 
-            // עדכון חלון ה-About
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblAboutTitle').innerText = text.lblAboutTitle;
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
@@ -508,7 +506,6 @@
             document.getElementById('descKeyA').innerText = text.descKeyA;
             document.getElementById('descKeyS').innerText = text.descKeyS;
             document.getElementById('descKeyD').innerText = text.descKeyD;
-            document.getElementById('lblCheatsInfo').innerText = text.lblCheatsInfo;
             document.getElementById('btnCloseAbout').innerText = text.btnCloseAbout;
 
             refreshPanelButtons();
@@ -531,16 +528,11 @@
             }
         }
 
-        // ==========================================
-        // מערכת קיצורי המקלדת המשודרגת (A, S, D, רווח)
-        // ==========================================
         document.addEventListener('keydown', function(event) {
-            // הגנה חשובה: אם השחקן מקליד מספרים או מילים באחת מהתיבות - המקשים לא יפעילו תפריטים!
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
 
             const key = event.key.toLowerCase();
 
-            // רווח = לחיצה על העיגול
             if (key === ' ' || event.code === 'Space') {
                 event.preventDefault(); 
                 if (hoveredCircle) {
@@ -548,21 +540,17 @@
                     hoveredCircle = null;  
                 }
             } 
-            // A או ש = תפריט
             else if (key === 'a' || key === 'ש') {
                 toggleMenu();
             } 
-            // S או ד = סטטיסטיקות
             else if (key === 's' || key === 'ד') {
                 toggleStats();
             } 
-            // D או ג = הגדרות
             else if (key === 'd' || key === 'ג') {
                 toggleSettings();
             }
         });
 
-        // פתיחה וסגירה של פאנלים (מוודא שרק אחד פתוח בכל פעם, למעט האודות)
         function toggleMenu() {
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
