@@ -2,61 +2,79 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Catch the Circles Game - Full Version</title>
+    <title>Catch the Circles - Ultimate Full Game</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; height: 100vh; height: 100dvh; overflow: hidden; background-color: red; position: relative; touch-action: manipulation; }
-        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; color: black; background: rgba(255, 255, 255, 0.9); border: 2px solid black; padding: 5px; font-weight: bold; width: 80px; }
-        #btnAbout { position: absolute; top: 10px; left: 10px; z-index: 100; background: #2196F3; color: white; border: 2px solid white; border-radius: 5px; padding: 5px 12px; cursor: pointer; }
-        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0, 0, 0, 0.7); padding: 10px 30px; border-radius: 15px; z-index: 50; }
-        .panel { position: absolute; bottom: 80px; z-index: 999; background: rgba(40, 40, 60, 0.95); color: white; padding: 20px; border-radius: 15px; display: none; border: 2px solid #555; }
-        .circle { position: absolute; border-radius: 50%; cursor: pointer; transform: scale(0); animation: popIn 0.3s forwards; }
-        @keyframes popIn { to { transform: scale(1); } }
-        .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .stat-input { width: 80px; padding: 5px; border-radius: 5px; border: 1px solid #777; text-align: center; }
+        /* [הדבק כאן את כל ה-CSS המקורי שלך מההודעה הראשונה] */
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; height: 100vh; background-color: red; overflow: hidden; }
+        .panel { display: none; position: absolute; bottom: 80px; width: 300px; background: rgba(50,50,50,0.95); color: white; padding: 20px; border-radius: 15px; z-index: 1000; }
+        .circle { position: absolute; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .upgrade-box { background: #444; padding: 10px; margin-bottom: 10px; border-radius: 8px; }
+        .btn-action { padding: 10px; cursor: pointer; background: #2196F3; color: white; border: none; border-radius: 5px; width: 100%; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-    <input type="text" id="devCodeInput" placeholder="Code...">
-    <button id="btnAbout" onclick="toggleButtonPage()">דף כפתור 📄</button>
-    <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
-
-    <div id="menu-panel" class="panel">
-        <h3 id="lblUpgrades">Upgrades ⬆️</h3>
-        <div class="upgrade-box">
-            <p><strong>Circle Lifetime:</strong> <span id="lifetimeDisplay">10</span>s</p>
-            <button class="menu-btn" onclick="buyLifetime()">Upgrade (Cost: <span id="costLifetime">25</span>)</button>
-        </div>
-        </div>
-
-    <div id="stats-panel" class="panel">
-        <h3>Live Stats</h3>
-        <p>Lifetime (INFINITE for infinity):</p>
-        <input type="text" id="editLifetime" class="stat-input" oninput="applyCheatEdits()">
-    </div>
-
+    <div id="score-hud">ניקוד: <span id="scoreDisplay">0</span></div>
     <div id="game-area"></div>
 
+    <section id="menu-panel" class="panel" style="display: block;">
+        <h3>שדרוגים</h3>
+        <div class="upgrade-box">
+            <p><strong>Circle Lifetime:</strong> <span id="lifetimeDisplay">10</span>s</p>
+            <button class="btn-action" onclick="buyLifetime()">Upgrade (Cost: <span id="costLifetime">25</span>)</button>
+        </div>
+        </section>
+
+    <section id="stats-panel" class="panel">
+        <h3>סטטיסטיקות וצ'יטים</h3>
+        <input type="text" id="editLifetime" placeholder="Lifetime or INFINITE" oninput="applyCheatEdits()">
+    </section>
+
     <script>
-        // המצב המקורי + תוספות
+        // המצב ההתחלתי (State) המקורי שלך בתוספת המשתנים החדשים
         let state = { 
-            score: 0, pointsPerClick: 1, 
-            circleLifetime: 10, costLifetime: 25, isInfinite: false,
-            language: 'he', spawnRateMs: 1000 
+            score: 0, 
+            pointsPerClick: 1, 
+            circleLifetime: 10, 
+            costLifetime: 25, 
+            isInfinite: false,
+            // [הוסף כאן את שאר המשתנים המקוריים שלך כמו maxCircles, spawnRateMs וכו']
+            language: 'he' 
         };
 
-        // פונקציית spawnCircle המקורית עם תוספת הטיימר
+        // --- הלוגיקה החדשה ---
+        function buyLifetime() {
+            if (state.score >= state.costLifetime) {
+                state.score -= state.costLifetime;
+                if (state.circleLifetime < 100) state.circleLifetime += 10;
+                else state.isInfinite = true;
+                state.costLifetime = Math.floor(state.costLifetime * 1.5);
+                updateUI();
+            }
+        }
+
+        function applyCheatEdits() {
+            const val = document.getElementById('editLifetime').value.toUpperCase();
+            if (val === 'INFINITE') {
+                state.isInfinite = true;
+                updateUI();
+            } else if (val !== "") {
+                state.circleLifetime = parseInt(val) || 10;
+                state.isInfinite = false;
+                updateUI();
+            }
+        }
+
+        // --- הפונקציה המקורית עם לוגיקת הטיימר ---
         function spawnCircle(force = false) {
             const circle = document.createElement('div');
             circle.className = 'circle';
-            // ... (הגדרת מיקומים וגודל מקוריים)
             circle.style.width = circle.style.height = '50px';
+            circle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
             circle.style.left = Math.random() * (window.innerWidth - 50) + 'px';
             circle.style.top = Math.random() * (window.innerHeight - 50) + 'px';
-            circle.style.backgroundColor = 'hsl(' + Math.random() * 360 + ', 100%, 60%)';
 
-            // לוגיקת הטיימר
+            // טיימר להסרה אוטומטית אם לא אינסופי
             if (!state.isInfinite) {
                 circle.dataset.timer = setTimeout(() => {
                     circle.remove();
@@ -72,40 +90,14 @@
             document.getElementById('game-area').appendChild(circle);
         }
 
-        // פונקציות ה-Lifetime החדשות
-        function buyLifetime() {
-            if (state.score >= state.costLifetime) {
-                state.score -= state.costLifetime;
-                if (state.circleLifetime < 100) state.circleLifetime += 10;
-                else state.isInfinite = true;
-                state.costLifetime = Math.floor(state.costLifetime * 1.5);
-                updateUI();
-            }
-        }
-
-        function applyCheatEdits() {
-            const val = document.getElementById('editLifetime').value.toUpperCase();
-            if (val === 'INFINITE') {
-                state.isInfinite = true;
-            } else if (val !== "") {
-                state.circleLifetime = parseInt(val) || 10;
-                state.isInfinite = false;
-            }
-            updateUI();
-        }
-
         function updateUI() {
             document.getElementById('scoreDisplay').innerText = Math.floor(state.score);
             document.getElementById('lifetimeDisplay').innerText = state.isInfinite ? "∞" : state.circleLifetime;
             document.getElementById('costLifetime').innerText = state.costLifetime;
         }
 
-        // פונקציות ה-Toggle והשמירה המקוריות נשארות כפי שהיו בקוד שלך...
-        function togglePanel(id) {
-            const p = document.getElementById(id);
-            p.style.display = (p.style.display === 'block') ? 'none' : 'block';
-        }
-
+        // [כאן תדביק את פונקציות השמירה, הטעינה והקיצורים המקוריים שלך]
+        // ... (השאר נשאר אותו דבר)
         setInterval(spawnCircle, 1000);
     </script>
 </body>
