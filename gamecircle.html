@@ -16,11 +16,11 @@
             touch-action: manipulation; 
         }
 
-        /* Secret Dev Input */
+        /* Secret Dev Input (Top Right) */
         #devCodeInput {
             position: absolute;
             top: 10px;
-            inset-inline-end: 10px; /* מתהפך אוטומטית לפי השפה */
+            right: 10px; /* קבוע בצד ימין */
             z-index: 100;
             color: black;
             background: rgba(255, 255, 255, 0.9);
@@ -29,6 +29,25 @@
             font-weight: bold;
             width: 80px;
         }
+
+        /* About Button (Top Left) */
+        #btnAbout {
+            position: absolute;
+            top: 10px;
+            left: 10px; /* קבוע בצד שמאל כמו שביקשת */
+            z-index: 100;
+            background: #2196F3;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnAbout:hover { background: #1976D2; }
 
         /* Score Display */
         #score-hud {
@@ -49,7 +68,7 @@
             transition: all 0.3s ease;
         }
 
-        /* סרגל כפתורים תחתון */
+        /* Bottom Navigation Bar */
         #bottom-nav {
             position: absolute;
             bottom: 20px;
@@ -62,7 +81,6 @@
             pointer-events: none; 
         }
 
-        /* Toggle Buttons */
         .bottom-btn {
             pointer-events: auto; 
             padding: 12px 20px;
@@ -82,10 +100,8 @@
             background-size: 300% 300%;
             animation: rainbowColors 3s ease infinite;
         }
-
         #settings-toggle-btn { background: #9C27B0; }
         #settings-toggle-btn:hover { background: #7B1FA2; }
-
         #stats-toggle-btn { background: #607D8B; }
         #stats-toggle-btn:hover { background: #455A64; }
 
@@ -113,14 +129,25 @@
             transition: all 0.3s ease;
         }
 
-        /* השינוי הקריטי: שימוש ב-inset-inline במקום left/right */
         #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
         #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
+        
+        /* About Modal Panel */
+        #about-panel {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            bottom: auto;
+            width: 320px;
+            background: rgba(30, 30, 30, 0.98);
+            border: 3px solid #2196F3;
+        }
 
         h3 { margin-top: 0; color: #4CAF50; }
         #stats-panel h3 { color: #03A9F4; }
         #settings-panel h3 { color: #E040FB; }
+        #about-panel h3 { color: #FFEB3B; text-align: center; }
 
         .stat-row {
             display: flex;
@@ -196,16 +223,13 @@
         .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
         hr { border: 1px solid #777; margin: 20px 0; }
 
-        /* ========================================= */
         /* MOBILE MODE */
-        /* ========================================= */
         body.mobile-mode #bottom-nav {
             bottom: 10px; 
             padding: 0 5px; 
             box-sizing: border-box;
             gap: 5px; 
         }
-
         body.mobile-mode .bottom-btn {
             flex: 1; 
             padding: 10px 0; 
@@ -217,24 +241,29 @@
             overflow: hidden;
             text-overflow: ellipsis; 
         }
-
-        body.mobile-mode .panel {
+        body.mobile-mode .panel:not(#about-panel) {
             width: 90% !important;
             inset-inline-start: 5% !important;
             inset-inline-end: 5% !important;
             transform: none !important; 
             bottom: 65px; 
         }
+        body.mobile-mode #about-panel {
+            width: 90% !important;
+        }
         body.mobile-mode #score-hud {
             font-size: 20px;
             padding: 8px 20px;
             top: 10px;
         }
+        body.mobile-mode #devCodeInput { top: 50px; } /* זז למטה כדי לא להסתיר את הניקוד בטלפון */
+        body.mobile-mode #btnAbout { top: 50px; }
     </style>
 </head>
 <body>
 
     <input type="text" id="devCodeInput" placeholder="Code...">
+    <button id="btnAbout" onclick="toggleAbout()">About ❓</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
@@ -244,9 +273,20 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
+    <div id="about-panel" class="panel">
+        <h3 id="lblAboutTitle">About & Controls</h3>
+        <ul style="padding-inline-start: 20px; line-height: 1.8;">
+            <li><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></li>
+            <li><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></li>
+            <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Stats</span></li>
+            <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Settings</span></li>
+        </ul>
+        <p id="lblCheatsInfo" style="font-size: 13px; color: #FF9800; text-align: center;"><em>Tip: Enter cheat codes (CLICK, CHANGE, UNCHANGE) in the top input box!</em></p>
+        <button class="menu-btn" id="btnCloseAbout" onclick="toggleAbout()">Close</button>
+    </div>
+
     <div id="settings-panel" class="panel">
         <h3 id="lblSettingsTitle">Settings ⚙️</h3>
-        
         <div class="stat-row">
             <span id="lblLanguage">Language / שפה:</span>
             <select id="langSelect" onchange="changeLanguage(this.value)">
@@ -254,7 +294,6 @@
                 <option value="he">עברית</option>
             </select>
         </div>
-
         <div class="stat-row">
             <span id="lblDeviceMode">Device Mode:</span>
             <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
@@ -303,25 +342,20 @@
         <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
         <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
         <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
-
         <hr>
         <h3 id="lblUpgrades">Upgrades ⬆️</h3>
-        
         <div class="upgrade-box">
             <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
             <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">10</span>)</button>
         </div>
-        
         <div class="upgrade-box">
             <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
             <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">20</span>)</button>
         </div>
-        
         <div class="upgrade-box">
             <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
             <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
         </div>
-
         <div class="upgrade-box">
             <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
             <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">15</span>)</button>
@@ -348,7 +382,10 @@
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
-                alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file."
+                alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
+                btnAbout: "About ❓", lblAboutTitle: "About & Controls", lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Stats", descKeyD: "Open/Close Settings",
+                lblCheatsInfo: "Tip: Enter cheat codes (CLICK, CHANGE, UNCHANGE) in the top input box!", btnCloseAbout: "Close"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -365,7 +402,10 @@
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
-                alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין."
+                alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
+                btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
+                descKeyA: "פתיחה / סגירה של התפריט", descKeyS: "פתיחה / סגירה של סטטיסטיקות", descKeyD: "פתיחה / סגירה של ההגדרות",
+                lblCheatsInfo: "טיפ: ניתן להקליד קודים (CLICK, CHANGE, UNCHANGE) בתיבה למעלה!", btnCloseAbout: "סגור"
             }
         };
 
@@ -408,6 +448,7 @@
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
         const settingsPanel = document.getElementById('settings-panel');
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+        const aboutPanel = document.getElementById('about-panel');
         
         const langSelect = document.getElementById('langSelect');
         const deviceSelect = document.getElementById('deviceSelect');
@@ -459,6 +500,17 @@
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
 
+            // עדכון חלון ה-About
+            document.getElementById('btnAbout').innerText = text.btnAbout;
+            document.getElementById('lblAboutTitle').innerText = text.lblAboutTitle;
+            document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
+            document.getElementById('descSpace').innerText = text.descSpace;
+            document.getElementById('descKeyA').innerText = text.descKeyA;
+            document.getElementById('descKeyS').innerText = text.descKeyS;
+            document.getElementById('descKeyD').innerText = text.descKeyD;
+            document.getElementById('lblCheatsInfo').innerText = text.lblCheatsInfo;
+            document.getElementById('btnCloseAbout').innerText = text.btnCloseAbout;
+
             refreshPanelButtons();
             updateUI(); 
         }
@@ -479,20 +531,43 @@
             }
         }
 
+        // ==========================================
+        // מערכת קיצורי המקלדת המשודרגת (A, S, D, רווח)
+        // ==========================================
         document.addEventListener('keydown', function(event) {
-            if (event.code === 'Space' || event.key === ' ') {
+            // הגנה חשובה: אם השחקן מקליד מספרים או מילים באחת מהתיבות - המקשים לא יפעילו תפריטים!
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
+
+            const key = event.key.toLowerCase();
+
+            // רווח = לחיצה על העיגול
+            if (key === ' ' || event.code === 'Space') {
                 event.preventDefault(); 
                 if (hoveredCircle) {
                     hoveredCircle.click(); 
                     hoveredCircle = null;  
                 }
+            } 
+            // A או ש = תפריט
+            else if (key === 'a' || key === 'ש') {
+                toggleMenu();
+            } 
+            // S או ד = סטטיסטיקות
+            else if (key === 's' || key === 'ד') {
+                toggleStats();
+            } 
+            // D או ג = הגדרות
+            else if (key === 'd' || key === 'ג') {
+                toggleSettings();
             }
         });
 
+        // פתיחה וסגירה של פאנלים (מוודא שרק אחד פתוח בכל פעם, למעט האודות)
         function toggleMenu() {
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
+            aboutPanel.style.display = 'none';
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -501,6 +576,7 @@
             const isOpen = statsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
+            aboutPanel.style.display = 'none';
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
             refreshPanelButtons();
@@ -510,7 +586,17 @@
             const isOpen = settingsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
+            aboutPanel.style.display = 'none';
             settingsPanel.style.display = isOpen ? 'none' : 'block';
+            refreshPanelButtons();
+        }
+
+        function toggleAbout() {
+            const isOpen = aboutPanel.style.display === 'block';
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            aboutPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
 
@@ -549,6 +635,7 @@
                 
                 menuPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
+                aboutPanel.style.display = 'none';
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
                 
