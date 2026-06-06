@@ -278,8 +278,8 @@
         <ul style="padding-inline-start: 20px; line-height: 1.8;">
             <li><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></li>
             <li><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></li>
-            <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Stats</span></li>
-            <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Settings</span></li>
+            <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></li>
+            <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></li>
         </ul>
         <button class="menu-btn" id="btnCloseAbout" onclick="toggleAbout()">Close</button>
     </div>
@@ -383,7 +383,7 @@
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
                 btnAbout: "About ❓", lblAboutTitle: "About & Controls", lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
-                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Stats", descKeyD: "Open/Close Settings",
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnCloseAbout: "Close"
             },
             he: {
@@ -403,7 +403,7 @@
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
                 btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
-                descKeyA: "פתיחה / סגירה של התפריט", descKeyS: "פתיחה / סגירה של סטטיסטיקות", descKeyD: "פתיחה / סגירה של ההגדרות",
+                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
                 btnCloseAbout: "סגור"
             }
         };
@@ -528,11 +528,16 @@
             }
         }
 
+        // ==========================================
+        // מערכת קיצורי המקלדת (תלוית שפה)
+        // ==========================================
         document.addEventListener('keydown', function(event) {
+            // לא מפעיל קיצורים כשאתה מקליד בתיבות טקסט
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
 
             const key = event.key.toLowerCase();
 
+            // רווח
             if (key === ' ' || event.code === 'Space') {
                 event.preventDefault(); 
                 if (hoveredCircle) {
@@ -540,14 +545,19 @@
                     hoveredCircle = null;  
                 }
             } 
+            // A או ש - באנגלית פותח תפריט, בעברית פותח סטטיסטיקות
             else if (key === 'a' || key === 'ש') {
-                toggleMenu();
+                if (state.language === 'en') toggleMenu();
+                else toggleStats();
             } 
+            // S או ד - פותח הגדרות (תמיד באמצע)
             else if (key === 's' || key === 'ד') {
-                toggleStats();
-            } 
-            else if (key === 'd' || key === 'ג') {
                 toggleSettings();
+            } 
+            // D או ג - באנגלית פותח סטטיסטיקות, בעברית פותח תפריט
+            else if (key === 'd' || key === 'ג') {
+                if (state.language === 'en') toggleStats();
+                else toggleMenu();
             }
         });
 
