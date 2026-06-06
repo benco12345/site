@@ -30,7 +30,7 @@
             width: 80px;
         }
 
-        /* About Button (Top Left) */
+        /* Button Page Opener (Top Left) */
         #btnAbout {
             position: absolute;
             top: 10px;
@@ -133,21 +133,70 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        /* About Modal Panel */
-        #about-panel {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            bottom: auto;
-            width: 340px;
-            background: rgba(30, 30, 30, 0.98);
-            border: 3px solid #2196F3;
+        /* ================================================== */
+        /* NEW: Button Page (Full Screen Modal) */
+        /* ================================================== */
+        #button-page-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000; /* הכי גבוה שאפשר */
+            display: none; /* הופך ל-flex כשפתוח */
+            justify-content: center;
+            align-items: center;
         }
+
+        #btnCloseButtonPage {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* תמיד למעלה ימינה */
+            font-size: 35px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        #btnCloseButtonPage:hover {
+            transform: scale(1.2);
+        }
+
+        #button-page-content {
+            background: rgba(30, 30, 40, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            border: 4px solid #2196F3;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 85%;
+            max-width: 500px;
+        }
+
+        #button-page-content h2 {
+            margin-top: 0;
+            color: #FFEB3B;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .controls-list {
+            font-size: 18px;
+            line-height: 2.2;
+        }
+        .controls-list span {
+            color: #4CAF50;
+        }
+        /* ================================================== */
 
         h3 { margin-top: 0; color: #4CAF50; }
         #stats-panel h3 { color: #03A9F4; }
         #settings-panel h3 { color: #E040FB; }
-        #about-panel h3 { color: #FFEB3B; text-align: center; }
 
         .stat-row {
             display: flex;
@@ -241,15 +290,12 @@
             overflow: hidden;
             text-overflow: ellipsis; 
         }
-        body.mobile-mode .panel:not(#about-panel) {
+        body.mobile-mode .panel {
             width: 90% !important;
             inset-inline-start: 5% !important;
             inset-inline-end: 5% !important;
             transform: none !important; 
             bottom: 65px; 
-        }
-        body.mobile-mode #about-panel {
-            width: 90% !important;
         }
         body.mobile-mode #score-hud {
             font-size: 20px;
@@ -263,7 +309,7 @@
 <body>
 
     <input type="text" id="devCodeInput" placeholder="Code...">
-    <button id="btnAbout" onclick="toggleAbout()">About ❓</button>
+    <button id="btnAbout" onclick="toggleButtonPage()">דף כפתור 📄</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
@@ -273,16 +319,18 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
-    <div id="about-panel" class="panel">
-        <h3 id="lblAboutTitle">About & Controls</h3>
-        <ul style="padding-inline-start: 20px; line-height: 1.8;">
-            <li><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></li>
-            <li><strong id="lblKeyCode">. / / :</strong> <span id="descKeyCode">Focus cheat code box</span></li>
-            <li><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></li>
-            <li><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></li>
-            <li><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></li>
-        </ul>
-        <button class="menu-btn" id="btnCloseAbout" onclick="toggleAbout()">Close</button>
+    <div id="button-page-modal">
+        <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
+        <div id="button-page-content">
+            <h2 id="lblButtonPageTitle">Button Page</h2>
+            <div class="controls-list">
+                <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
+                <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Focus cheat code box</span></div>
+                <div><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                <div><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                <div><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+            </div>
+        </div>
     </div>
 
     <div id="settings-panel" class="panel">
@@ -383,11 +431,13 @@
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
-                btnAbout: "About ❓", lblAboutTitle: "About & Controls", 
+                
+                // Button Page translations
+                btnAbout: "Button Page 📄", 
+                lblButtonPageTitle: "Button Page", 
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
-                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
-                btnCloseAbout: "Close"
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -405,11 +455,13 @@
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
-                btnAbout: "אודות ❓", lblAboutTitle: "מקשים ומידע", 
+                
+                // Button Page translations
+                btnAbout: "דף כפתור 📄", 
+                lblButtonPageTitle: "דף כפתור", 
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
-                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
-                btnCloseAbout: "סגור"
+                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט"
             }
         };
 
@@ -452,7 +504,8 @@
         const statsToggleBtn = document.getElementById('stats-toggle-btn');
         const settingsPanel = document.getElementById('settings-panel');
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
-        const aboutPanel = document.getElementById('about-panel');
+        
+        const buttonPageModal = document.getElementById('button-page-modal');
         
         const langSelect = document.getElementById('langSelect');
         const deviceSelect = document.getElementById('deviceSelect');
@@ -504,19 +557,18 @@
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
 
+            // עדכון שמות הדף כפתור
             document.getElementById('btnAbout').innerText = text.btnAbout;
-            document.getElementById('lblAboutTitle').innerText = text.lblAboutTitle;
+            document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
+            
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
             document.getElementById('descSpace').innerText = text.descSpace;
-            
-            // עדכון למקשים החדשים באודות
             document.getElementById('lblKeyCode').innerText = text.lblKeyCode;
             document.getElementById('descKeyCode').innerText = text.descKeyCode;
             
             document.getElementById('descKeyA').innerText = text.descKeyA;
             document.getElementById('descKeyS').innerText = text.descKeyS;
             document.getElementById('descKeyD').innerText = text.descKeyD;
-            document.getElementById('btnCloseAbout').innerText = text.btnCloseAbout;
 
             refreshPanelButtons();
             updateUI(); 
@@ -539,17 +591,16 @@
         }
 
         // ==========================================
-        // מערכת קיצורי המקלדת המעודכנת
+        // מערכת קיצורי המקלדת
         // ==========================================
         document.addEventListener('keydown', function(event) {
-            // אם המשתמש כבר נמצא בתוך תיבת טקסט, אל תפריע לו להקליד
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
 
             const key = event.key.toLowerCase();
 
-            // קיצור חדש - לחיצה על נקודה או סלאש קופצת לתיבת הקודים
+            // . או / לתיבת צ'יטים
             if (key === '.' || key === '/' || key === 'ץ' || key === 'ף') {
-                event.preventDefault(); // מונע את כתיבת התו הראשון בתיבה
+                event.preventDefault(); 
                 devCodeInput.focus();
             }
             // רווח
@@ -576,11 +627,24 @@
             }
         });
 
+        // פתיחת "דף כפתור"
+        function toggleButtonPage() {
+            const isOpen = buttonPageModal.style.display === 'flex';
+            if (!isOpen) {
+                // סוגר הכל לפני שפותח את הדף הגדול
+                menuPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                refreshPanelButtons();
+            }
+            buttonPageModal.style.display = isOpen ? 'none' : 'flex';
+        }
+
         function toggleMenu() {
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
-            aboutPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none'; // סוגר את דף הכפתור אם פתוח
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -589,7 +653,7 @@
             const isOpen = statsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
-            aboutPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none';
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
             refreshPanelButtons();
@@ -599,17 +663,8 @@
             const isOpen = settingsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
-            aboutPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none';
             settingsPanel.style.display = isOpen ? 'none' : 'block';
-            refreshPanelButtons();
-        }
-
-        function toggleAbout() {
-            const isOpen = aboutPanel.style.display === 'block';
-            menuPanel.style.display = 'none';
-            statsPanel.style.display = 'none';
-            settingsPanel.style.display = 'none';
-            aboutPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
 
@@ -648,7 +703,7 @@
                 
                 menuPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
-                aboutPanel.style.display = 'none';
+                buttonPageModal.style.display = 'none';
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
                 
