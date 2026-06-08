@@ -3,88 +3,958 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Catch the Circles - Clean & Functional</title>
+    <title>Catch the Circles Game</title>
     <style>
-        body { margin: 0; background-color: red; overflow: hidden; height: 100vh; font-family: sans-serif; }
-        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0,0,0,0.7); padding: 10px 30px; border-radius: 15px; pointer-events: none; z-index: 50; }
-        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; padding: 8px; border-radius: 5px; border: 2px solid black; }
-        #saveBtn { position: absolute; top: 10px; left: 10px; z-index: 100; padding: 8px; cursor: pointer; border-radius: 5px; border: none; background: #FF9800; font-weight: bold; }
-        #game-area { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
-        .circle { position: absolute; border-radius: 50%; cursor: pointer; animation: popIn 0.3s forwards; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh; 
+            height: 100dvh; 
+            overflow: hidden;
+            background-color: red;
+            position: relative;
+            touch-action: manipulation; 
+        }
+
+        /* Secret Dev Input (Top Right) */
+        #devCodeInput {
+            position: absolute;
+            top: 10px;
+            right: 10px; 
+            z-index: 100;
+            color: black;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid black;
+            padding: 5px;
+            font-weight: bold;
+            width: 80px;
+        }
+
+        /* Button Page Opener (Top Left) */
+        #btnAbout {
+            position: absolute;
+            top: 10px;
+            left: 10px; 
+            z-index: 100;
+            background: #2196F3;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnAbout:hover { background: #1976D2; }
+
+        /* Score Display */
+        #score-hud {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 15px;
+            z-index: 50;
+            pointer-events: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        /* Bottom Navigation Bar */
+        #bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: none; 
+        }
+
+        .bottom-btn {
+            pointer-events: auto; 
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: 3px solid white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: background 0.3s;
+        }
+
+        #menu-toggle-btn {
+            text-shadow: 1px 1px 2px black;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 300% 300%;
+            animation: rainbowColors 3s ease infinite;
+        }
+        #settings-toggle-btn { background: #9C27B0; }
+        #settings-toggle-btn:hover { background: #7B1FA2; }
+        #stats-toggle-btn { background: #607D8B; }
+        #stats-toggle-btn:hover { background: #455A64; }
+
+        @keyframes rainbowColors {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Panels Base */
+        .panel {
+            position: absolute;
+            bottom: 80px;
+            z-index: 999;
+            background: rgba(40, 40, 60, 0.95);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: none; 
+            border: 2px solid #555;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
+        #stats-panel { inset-inline-end: 20px; width: 300px; }
+        
+        /* ================================================== */
+        /* NEW: Button Page (Full Screen Modal) */
+        /* ================================================== */
+        #button-page-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000; /* הכי גבוה שאפשר */
+            display: none; /* הופך ל-flex כשפתוח */
+            justify-content: center;
+            align-items: center;
+        }
+
+        #btnCloseButtonPage {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* תמיד למעלה ימינה */
+            font-size: 35px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        #btnCloseButtonPage:hover {
+            transform: scale(1.2);
+        }
+
+        #button-page-content {
+            background: rgba(30, 30, 40, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            border: 4px solid #2196F3;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 85%;
+            max-width: 500px;
+        }
+
+        #button-page-content h2 {
+            margin-top: 0;
+            color: #FFEB3B;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .controls-list {
+            font-size: 18px;
+            line-height: 2.2;
+        }
+        .controls-list span {
+            color: #4CAF50;
+        }
+        /* ================================================== */
+
+        h3 { margin-top: 0; color: #4CAF50; }
+        #stats-panel h3 { color: #03A9F4; }
+        #settings-panel h3 { color: #E040FB; }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .stat-input, select {
+            width: 80px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #777;
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        select { width: 110px; cursor: pointer; }
+
+        .stat-input:disabled {
+            background: transparent;
+            border: none;
+            color: #FFEB3B;
+            font-size: 16px;
+            text-align: center;
+            appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        #game-area {
+            width: 100vw;
+            height: 100dvh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
+            transform: scale(0);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            -webkit-tap-highlight-color: transparent; 
+        }
+        @keyframes popIn { to { transform: scale(1); } }
+
+        button.menu-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button.menu-btn:hover { background: #1976D2; }
+        button.menu-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .save-load-btn { background: #FF9800 !important; color: #111 !important; }
+        .save-load-btn:hover { background: #F57C00 !important; }
+
+        .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
+        hr { border: 1px solid #777; margin: 20px 0; }
+
+        /* MOBILE MODE */
+        body.mobile-mode #bottom-nav {
+            bottom: 10px; 
+            padding: 0 5px; 
+            box-sizing: border-box;
+            gap: 5px; 
+        }
+        body.mobile-mode .bottom-btn {
+            flex: 1; 
+            padding: 10px 0; 
+            font-size: 13px; 
+            border-width: 2px;
+            border-radius: 12px; 
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+        }
+        body.mobile-mode .panel {
+            width: 90% !important;
+            inset-inline-start: 5% !important;
+            inset-inline-end: 5% !important;
+            transform: none !important; 
+            bottom: 65px; 
+        }
+        body.mobile-mode #score-hud {
+            font-size: 20px;
+            padding: 8px 20px;
+            top: 10px;
+        }
+        body.mobile-mode #devCodeInput { top: 50px; } 
+        body.mobile-mode #btnAbout { top: 50px; }
     </style>
 </head>
 <body>
 
-    <button id="saveBtn" onclick="saveGame()">Save Game</button>
-    <input type="text" id="devCodeInput" placeholder="Cheat Code...">
-    <div id="score-hud">Score: <span id="scoreDisplay">0</span></div>
+    <input type="text" id="devCodeInput" placeholder="Code...">
+    <button id="btnAbout" onclick="toggleButtonPage()">דף כפתור 📄</button>
+
+    <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
+
+    <div id="bottom-nav">
+        <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+        <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
+        <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    </div>
+
+    <div id="button-page-modal">
+        <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
+        <div id="button-page-content">
+            <h2 id="lblButtonPageTitle">Button Page</h2>
+            <div class="controls-list">
+                <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
+                <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Focus cheat code box</span></div>
+                <div><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                <div><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                <div><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-panel" class="panel">
+        <h3 id="lblSettingsTitle">Settings ⚙️</h3>
+        <div class="stat-row">
+            <span id="lblLanguage">Language / שפה:</span>
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="he">עברית</option>
+            </select>
+        </div>
+        <div class="stat-row">
+            <span id="lblDeviceMode">Device Mode:</span>
+            <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
+                <option value="desktop" id="optDesktop">Desktop 💻</option>
+                <option value="mobile" id="optMobile">Mobile 📱</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="stats-panel" class="panel">
+        <h3 id="lblLiveStats">Live Stats</h3>
+        <div class="stat-row">
+            <span id="lblCurrentScore">Current Score:</span>
+            <input type="number" id="editCurrentScore" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblLifetimeScore">Lifetime Score:</span>
+            <input type="number" id="editTotalScore" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblCirclesOnScreen">Circles on Screen:</span>
+            <input type="number" id="editCurrentCircles" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <hr>
+        <h3 id="lblGameVars">Game Variables</h3>
+        <div class="stat-row">
+            <span id="lblStatMaxCircles">Max Circles:</span>
+            <input type="number" id="editMaxCircles" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatPoints">Points / Catch:</span>
+            <input type="number" id="editPoints" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatMinSize">Min Size (px):</span>
+            <input type="number" id="editMinSize" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatSpawnRate">Spawn Rate (ms):</span>
+            <input type="number" id="editSpawnRate" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+    </div>
+
+    <div id="menu-panel" class="panel">
+        <h3 id="lblSaveLoad">Save & Load 💾</h3>
+        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
+        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
+        <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
+        <hr>
+        <h3 id="lblUpgrades">Upgrades ⬆️</h3>
+        <div class="upgrade-box">
+            <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
+            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">10</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
+            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">20</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
+            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
+            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">15</span>)</button>
+        </div>
+    </div>
+
     <div id="game-area"></div>
 
     <script>
-        let state = {
-            score: 0,
-            circleLifetime: 10000, 
-            isInfiniteLifetime: false
+        // --- Translation Dictionary ---
+        const t = {
+            en: {
+                lblScore: "Score: ",
+                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Close ❌",
+                btnStatsOpen: "Stats 📊", btnStatsClose: "Close ❌",
+                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close ❌",
+                lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
+                lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
+                lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
+                lblMinSize: "Minimum Size:", lblPx: "px",
+                lblLiveStats: "Live Stats", lblCurrentScore: "Current Score:", lblLifetimeScore: "Lifetime Score:",
+                lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
+                lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
+                lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
+                lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
+                upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
+                alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
+                
+                // Button Page translations
+                btnAbout: "Button Page 📄", 
+                lblButtonPageTitle: "Button Page", 
+                lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
+                lblKeyCode: ". or / :", descKeyCode: "Start typing code",
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats"
+            },
+            he: {
+                lblScore: "ניקוד: ",
+                btnMenuOpen: "תפריט 🛠️", btnMenuClose: "סגור ❌",
+                btnStatsOpen: "סטטיסטיקה 📊", btnStatsClose: "סגור ❌",
+                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגור ❌",
+                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת שמירה (.txt)", btnLoad: "טעינת שמירה (TXT)",
+                lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
+                lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
+                lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
+                lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל:",
+                lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
+                lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
+                lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
+                lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
+                upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
+                alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
+                
+                // Button Page translations
+                btnAbout: "דף כפתור 📄", 
+                lblButtonPageTitle: "דף כפתור", 
+                lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
+                lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
+                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט"
+            }
         };
 
-        const gameArea = document.getElementById('game-area');
-        const scoreDisplay = document.getElementById('scoreDisplay');
-        const devCodeInput = document.getElementById('devCodeInput');
+        let state = {
+            score: 0,
+            totalScore: 0, 
+            maxCircles: 5,
+            pointsPerClick: 1,
+            spawnRateMs: 1000, 
+            minCircleSize: 40,
+            costMaxCircles: 10,
+            costPoints: 20,
+            costSpeed: 30,
+            costMinSize: 15,
+            language: 'he', 
+            deviceMode: 'desktop' 
+        };
 
-        // תיבת קוד - מופעלת בלחיצת Enter
-        devCodeInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                if (this.value.toUpperCase() === 'INFINITE') {
-                    state.isInfiniteLifetime = true;
-                    alert("Infinite Lifetime Activated!");
+        let currentCircles = 0;
+        let gameInterval;
+        let hoveredCircle = null;
+
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
+        const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
+        const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
+        const minSizeDisplay = document.getElementById('minSizeDisplay'); 
+        
+        const btnMaxCircles = document.getElementById('btnMaxCircles');
+        const btnPoints = document.getElementById('btnPoints');
+        const btnSpeed = document.getElementById('btnSpeed');
+        const btnMinSize = document.getElementById('btnMinSize'); 
+        
+        const gameArea = document.getElementById('game-area');
+        const devCodeInput = document.getElementById('devCodeInput');
+        
+        const menuPanel = document.getElementById('menu-panel');
+        const menuToggleBtn = document.getElementById('menu-toggle-btn');
+        const statsPanel = document.getElementById('stats-panel');
+        const statsToggleBtn = document.getElementById('stats-toggle-btn');
+        const settingsPanel = document.getElementById('settings-panel');
+        const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+        
+        const buttonPageModal = document.getElementById('button-page-modal');
+        
+        const langSelect = document.getElementById('langSelect');
+        const deviceSelect = document.getElementById('deviceSelect');
+        
+        const editCurrentScore = document.getElementById('editCurrentScore');
+        const editTotalScore = document.getElementById('editTotalScore');
+        const editCurrentCircles = document.getElementById('editCurrentCircles'); 
+        const editMaxCircles = document.getElementById('editMaxCircles');
+        const editPoints = document.getElementById('editPoints');
+        const editMinSize = document.getElementById('editMinSize');
+        const editSpawnRate = document.getElementById('editSpawnRate');
+
+        function changeLanguage(lang) {
+            state.language = lang;
+            const dir = lang === 'he' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = dir;
+            langSelect.value = lang;
+
+            const text = t[lang];
+
+            document.getElementById('lblScore').innerText = text.lblScore;
+            document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
+            document.getElementById('btnDownload').innerText = text.btnDownload;
+            document.getElementById('btnLoad').innerText = text.btnLoad;
+            document.getElementById('lblUpgrades').innerText = text.lblUpgrades;
+            document.getElementById('lblMaxCircles').innerText = text.lblMaxCircles;
+            document.getElementById('lblPointsPerCatch').innerText = text.lblPointsPerCatch;
+            document.getElementById('lblSpawnRate').innerText = text.lblSpawnRate;
+            document.getElementById('lblEvery').innerText = text.lblEvery;
+            document.getElementById('lblSec').innerText = text.lblSec;
+            document.getElementById('lblMinSize').innerText = text.lblMinSize;
+            document.getElementById('lblPx').innerText = text.lblPx;
+            
+            document.getElementById('lblLiveStats').innerText = text.lblLiveStats;
+            document.getElementById('lblCurrentScore').innerText = text.lblCurrentScore;
+            document.getElementById('lblLifetimeScore').innerText = text.lblLifetimeScore;
+            document.getElementById('lblCirclesOnScreen').innerText = text.lblCirclesOnScreen;
+            document.getElementById('lblGameVars').innerText = text.lblGameVars;
+            document.getElementById('lblStatMaxCircles').innerText = text.lblStatMaxCircles;
+            document.getElementById('lblStatPoints').innerText = text.lblStatPoints;
+            document.getElementById('lblStatMinSize').innerText = text.lblStatMinSize;
+            document.getElementById('lblStatSpawnRate').innerText = text.lblStatSpawnRate;
+
+            document.getElementById('lblSettingsTitle').innerText = text.lblSettingsTitle;
+            document.getElementById('lblLanguage').innerText = text.lblLanguage;
+            
+            document.getElementById('lblDeviceMode').innerText = text.lblDeviceMode;
+            document.getElementById('optDesktop').innerText = text.optDesktop;
+            document.getElementById('optMobile').innerText = text.optMobile;
+
+            // עדכון שמות הדף כפתור
+            document.getElementById('btnAbout').innerText = text.btnAbout;
+            document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
+            
+            document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
+            document.getElementById('descSpace').innerText = text.descSpace;
+            document.getElementById('lblKeyCode').innerText = text.lblKeyCode;
+            document.getElementById('descKeyCode').innerText = text.descKeyCode;
+            
+            document.getElementById('descKeyA').innerText = text.descKeyA;
+            document.getElementById('descKeyS').innerText = text.descKeyS;
+            document.getElementById('descKeyD').innerText = text.descKeyD;
+
+            refreshPanelButtons();
+            updateUI(); 
+        }
+
+        function autoDetectDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+            changeDeviceMode(isMobile ? 'mobile' : 'desktop');
+        }
+
+        function changeDeviceMode(mode) {
+            state.deviceMode = mode;
+            deviceSelect.value = mode;
+            
+            if (mode === 'mobile') {
+                document.body.classList.add('mobile-mode');
+            } else {
+                document.body.classList.remove('mobile-mode');
+            }
+        }
+
+        // ==========================================
+        // מערכת קיצורי המקלדת
+        // ==========================================
+        document.addEventListener('keydown', function(event) {
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
+
+            const key = event.key.toLowerCase();
+
+            // . או / לתיבת צ'יטים
+            if (key === '.' || key === '/' || key === 'ץ' || key === 'ף') {
+                event.preventDefault(); 
+                devCodeInput.focus();
+            }
+            // רווח
+            else if (key === ' ' || event.code === 'Space') {
+                event.preventDefault(); 
+                if (hoveredCircle) {
+                    hoveredCircle.click(); 
+                    hoveredCircle = null;  
+                }
+            } 
+            // A או ש
+            else if (key === 'a' || key === 'ש') {
+                if (state.language === 'en') toggleMenu();
+                else toggleStats();
+            } 
+            // S או ד
+            else if (key === 's' || key === 'ד') {
+                toggleSettings();
+            } 
+            // D או ג
+            else if (key === 'd' || key === 'ג') {
+                if (state.language === 'en') toggleStats();
+                else toggleMenu();
+            }
+        });
+
+        // פתיחת "דף כפתור"
+        function toggleButtonPage() {
+            const isOpen = buttonPageModal.style.display === 'flex';
+            if (!isOpen) {
+                // סוגר הכל לפני שפותח את הדף הגדול
+                menuPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                refreshPanelButtons();
+            }
+            buttonPageModal.style.display = isOpen ? 'none' : 'flex';
+        }
+
+        function toggleMenu() {
+            const isOpen = menuPanel.style.display === 'block';
+            settingsPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none'; // סוגר את דף הכפתור אם פתוח
+            menuPanel.style.display = isOpen ? 'none' : 'block';
+            refreshPanelButtons();
+        }
+
+        function toggleStats() {
+            const isOpen = statsPanel.style.display === 'block';
+            menuPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none';
+            statsPanel.style.display = isOpen ? 'none' : 'block';
+            updateStatsUI();
+            refreshPanelButtons();
+        }
+
+        function toggleSettings() {
+            const isOpen = settingsPanel.style.display === 'block';
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none';
+            settingsPanel.style.display = isOpen ? 'none' : 'block';
+            refreshPanelButtons();
+        }
+
+        function refreshPanelButtons() {
+            const text = t[state.language];
+            menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
+            statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
+            settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
+        }
+
+        devCodeInput.addEventListener('input', function() {
+            const val = this.value.toUpperCase();
+            
+            if (val === 'CLICK') {
+                const circles = document.querySelectorAll('.circle');
+                if (circles.length > 0) {
+                    let earned = (circles.length * state.pointsPerClick);
+                    state.score += earned;
+                    state.totalScore += earned; 
+                    circles.forEach(circle => circle.remove());
+                    currentCircles = 0;
+                    updateUI();
                 }
                 this.value = '';
                 this.blur();
             }
-        });
-
-        function spawnCircle() {
-            const circle = document.createElement('div');
-            circle.classList.add('circle');
-            const size = 50;
-            circle.style.width = size + 'px';
-            circle.style.height = size + 'px';
-            circle.style.backgroundColor = 'white';
-            circle.style.left = Math.random() * (window.innerWidth - size) + 'px';
-            circle.style.top = Math.random() * (window.innerHeight - size) + 'px';
-
-            // טיימר לחיים של העיגול
-            let timer;
-            if (!state.isInfiniteLifetime) {
-                timer = setTimeout(() => {
-                    if (circle.parentElement) {
-                        circle.remove();
-                        state.score = Math.max(0, state.score - 5);
-                        scoreDisplay.innerText = state.score;
-                    }
-                }, state.circleLifetime);
+            
+            if (val === 'CHANGE') {
+                editCurrentScore.disabled = false;
+                editTotalScore.disabled = false;
+                editCurrentCircles.disabled = false;
+                editMaxCircles.disabled = false;
+                editPoints.disabled = false;
+                editMinSize.disabled = false;
+                editSpawnRate.disabled = false;
+                
+                menuPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                buttonPageModal.style.display = 'none';
+                statsPanel.style.display = 'block';
+                refreshPanelButtons();
+                
+                this.value = '';
+                this.blur();
             }
 
+            if (val === 'UNCHANGE') {
+                editCurrentScore.disabled = true;
+                editTotalScore.disabled = true;
+                editCurrentCircles.disabled = true;
+                editMaxCircles.disabled = true;
+                editPoints.disabled = true;
+                editMinSize.disabled = true;
+                editSpawnRate.disabled = true;
+                
+                this.value = '';
+                this.blur();
+                updateStatsUI(); 
+            }
+        });
+
+        function applyCheatEdits() {
+            let newScore = parseInt(editCurrentScore.value);
+            let newTotal = parseInt(editTotalScore.value);
+            let newCircles = parseInt(editCurrentCircles.value);
+            let newMax = parseInt(editMaxCircles.value);
+            let newPoints = parseInt(editPoints.value);
+            let newSize = parseInt(editMinSize.value);
+            let newRate = parseInt(editSpawnRate.value);
+
+            if (!isNaN(newScore)) state.score = newScore;
+            if (!isNaN(newTotal)) state.totalScore = newTotal;
+            if (!isNaN(newMax) && newMax >= 0) state.maxCircles = newMax;
+            if (!isNaN(newPoints) && newPoints >= 1) state.pointsPerClick = newPoints;
+            if (!isNaN(newSize) && newSize >= 10) state.minCircleSize = newSize;
+            
+            if (!isNaN(newRate) && newRate >= 10) {
+                let oldRate = state.spawnRateMs;
+                state.spawnRateMs = newRate;
+                if (oldRate !== state.spawnRateMs) {
+                    startGameLoop(); 
+                }
+            }
+
+            if (!isNaN(newCircles) && newCircles >= 0) {
+                while (currentCircles < newCircles) { spawnCircle(true); }
+                if (currentCircles > newCircles) {
+                    const circles = document.querySelectorAll('.circle');
+                    let diff = currentCircles - newCircles;
+                    for (let i = 0; i < diff; i++) {
+                        if (circles[i]) {
+                            circles[i].remove();
+                            currentCircles--;
+                        }
+                    }
+                }
+            }
+            updateUI(); 
+        }
+
+        function initGame() {
+            autoDetectDevice(); 
+            changeLanguage(state.language);
+            startGameLoop();
+        }
+
+        function updateUI(isTyping = false) {
+            scoreDisplay.innerText = Math.floor(state.score);
+            maxCirclesDisplay.innerText = state.maxCircles;
+            pointsPerClickDisplay.innerText = state.pointsPerClick;
+            spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
+            minSizeDisplay.innerText = state.minCircleSize;
+            
+            const text = t[state.language];
+
+            btnMaxCircles.disabled = state.score < state.costMaxCircles;
+            btnPoints.disabled = state.score < state.costPoints;
+            
+            btnMaxCircles.innerHTML = `${text.upgradeCost}<span id="costMaxCircles">${state.costMaxCircles}</span>)`;
+            btnPoints.innerHTML = `${text.upgradeCost}<span id="costPoints">${state.costPoints}</span>)`;
+
+            btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100;
+            if (state.spawnRateMs <= 100) {
+                btnSpeed.innerText = text.maxSpeed;
+            } else {
+                btnSpeed.innerHTML = `${text.upgradeCost}<span id="costSpeed">${state.costSpeed}</span>)`;
+            }
+
+            btnMinSize.disabled = state.score < state.costMinSize || state.minCircleSize >= 150;
+            if (state.minCircleSize >= 150) {
+                btnMinSize.innerText = text.maxSize;
+            } else {
+                btnMinSize.innerHTML = `${text.upgradeCost}<span id="costMinSize">${state.costMinSize}</span>)`;
+            }
+
+            updateStatsUI(isTyping);
+        }
+
+        function updateStatsUI(isTyping = false) {
+            if (document.activeElement !== editCurrentScore) editCurrentScore.value = Math.floor(state.score);
+            if (document.activeElement !== editTotalScore) editTotalScore.value = Math.floor(state.totalScore);
+            if (document.activeElement !== editCurrentCircles) editCurrentCircles.value = currentCircles;
+            if (document.activeElement !== editMaxCircles) editMaxCircles.value = state.maxCircles;
+            if (document.activeElement !== editPoints) editPoints.value = state.pointsPerClick;
+            if (document.activeElement !== editMinSize) editMinSize.value = state.minCircleSize;
+            if (document.activeElement !== editSpawnRate) editSpawnRate.value = state.spawnRateMs;
+        }
+
+        function startGameLoop() {
+            clearInterval(gameInterval);
+            gameInterval = setInterval(() => spawnCircle(false), state.spawnRateMs);
+        }
+
+        function getRandomColor() {
+            const h = Math.floor(Math.random() * 360);
+            return `hsl(${h}, 100%, 60%)`;
+        }
+
+        function spawnCircle(force = false) {
+            if (!force && currentCircles >= state.maxCircles) return;
+
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            
+            const size = Math.floor(Math.random() * 50) + state.minCircleSize;
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.backgroundColor = getRandomColor();
+
+            const maxX = gameArea.clientWidth - size;
+            const maxY = gameArea.clientHeight - size;
+            
+            const safeX = Math.max(0, Math.floor(Math.random() * maxX));
+            const safeY = Math.max(0, Math.floor(Math.random() * maxY));
+            
+            circle.style.left = safeX + 'px';
+            circle.style.top = safeY + 'px';
+
+            circle.onmouseenter = function() { hoveredCircle = this; };
+            circle.onmouseleave = function() { if (hoveredCircle === this) hoveredCircle = null; };
+
             circle.onclick = function() {
-                if (!state.isInfiniteLifetime) clearTimeout(timer);
-                state.score += 1;
+                state.score += state.pointsPerClick;
+                state.totalScore += state.pointsPerClick; 
+                currentCircles--;
                 this.remove();
-                scoreDisplay.innerText = state.score;
+                hoveredCircle = null; 
+                updateUI();
             };
 
             gameArea.appendChild(circle);
+            currentCircles++;
+            updateStatsUI(); 
+        }
+
+        function buyMaxCircles() {
+            if (state.score >= state.costMaxCircles) {
+                state.score -= state.costMaxCircles;
+                state.maxCircles += 3;
+                state.costMaxCircles = Math.floor(state.costMaxCircles * 1.5);
+                updateUI();
+            }
+        }
+
+        function buyPoints() {
+            if (state.score >= state.costPoints) {
+                state.score -= state.costPoints;
+                state.pointsPerClick += 1;
+                state.costPoints = Math.floor(state.costPoints * 1.8);
+                updateUI();
+            }
+        }
+
+        function buySpeed() {
+            if (state.score >= state.costSpeed && state.spawnRateMs > 100) {
+                state.score -= state.costSpeed;
+                state.spawnRateMs = Math.max(100, Math.floor(state.spawnRateMs * 0.85));
+                state.costSpeed = Math.floor(state.costSpeed * 1.6);
+                updateUI();
+                startGameLoop();
+            }
+        }
+
+        function buyMinSize() {
+            if (state.score >= state.costMinSize && state.minCircleSize < 150) {
+                state.score -= state.costMinSize;
+                state.minCircleSize += 10;
+                state.costMinSize = Math.floor(state.costMinSize * 1.5);
+                updateUI();
+            }
         }
 
         function saveGame() {
-            const blob = new Blob([JSON.stringify(state)], { type: "text/plain" });
+            let dataString = JSON.stringify(state);
+            if (devCodeInput.value !== "BEN") dataString = btoa(dataString);
+
+            const blob = new Blob([dataString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "save.txt";
+            a.href = url;
+            a.download = 'CatchCircles_Save.txt';
+            document.body.appendChild(a);
             a.click();
+            
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        setInterval(spawnCircle, 1000);
+        function loadGame(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let fileContent = e.target.result;
+                let loadedState;
+
+                try {
+                    loadedState = JSON.parse(fileContent);
+                } catch (err1) {
+                    try {
+                        loadedState = JSON.parse(atob(fileContent));
+                    } catch (err2) {
+                        alert(t[state.language].alertLoadError);
+                        event.target.value = '';
+                        return;
+                    }
+                }
+                
+                state = { ...state, ...loadedState }; 
+                if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
+                if (!state.language) state.language = 'he'; 
+                if (!state.deviceMode) state.deviceMode = 'desktop';
+
+                gameArea.innerHTML = '';
+                currentCircles = 0;
+                
+                changeLanguage(state.language); 
+                changeDeviceMode(state.deviceMode); 
+                startGameLoop();
+                alert(t[state.language].alertLoadSuccess);
+                
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        initGame();
     </script>
 </body>
 </html>
+
