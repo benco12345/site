@@ -3,43 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Catch the Circles - Core Engine</title>
+    <title>Catch the Circles - Clean & Functional</title>
     <style>
         body { margin: 0; background-color: red; overflow: hidden; height: 100vh; font-family: sans-serif; }
         #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0,0,0,0.7); padding: 10px 30px; border-radius: 15px; pointer-events: none; z-index: 50; }
-        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; width: 120px; padding: 8px; font-weight: bold; }
+        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; padding: 8px; border-radius: 5px; border: 2px solid black; }
+        #saveBtn { position: absolute; top: 10px; left: 10px; z-index: 100; padding: 8px; cursor: pointer; border-radius: 5px; border: none; background: #FF9800; font-weight: bold; }
         #game-area { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
         .circle { position: absolute; border-radius: 50%; cursor: pointer; animation: popIn 0.3s forwards; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-        .save-btn { position: absolute; top: 10px; left: 10px; z-index: 100; padding: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <button class="save-btn" onclick="saveGame()">Save Progress</button>
-    <input type="text" id="devCodeInput" placeholder="Enter Code...">
+    <button id="saveBtn" onclick="saveGame()">Save Game</button>
+    <input type="text" id="devCodeInput" placeholder="Cheat Code...">
     <div id="score-hud">Score: <span id="scoreDisplay">0</span></div>
     <div id="game-area"></div>
 
     <script>
         let state = {
             score: 0,
-            maxCircles: 5,
-            spawnRateMs: 1000,
-            circleLifetime: 10000, // 10 שניות
+            circleLifetime: 10000, 
             isInfiniteLifetime: false
         };
 
-        let currentCircles = 0;
         const gameArea = document.getElementById('game-area');
         const scoreDisplay = document.getElementById('scoreDisplay');
         const devCodeInput = document.getElementById('devCodeInput');
 
-        // תיבת קוד פעילה
+        // תיבת קוד - מופעלת בלחיצת Enter
         devCodeInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
-                const val = this.value.toUpperCase();
-                if (val === 'INFINITE') {
+                if (this.value.toUpperCase() === 'INFINITE') {
                     state.isInfiniteLifetime = true;
                     alert("Infinite Lifetime Activated!");
                 }
@@ -49,8 +45,6 @@
         });
 
         function spawnCircle() {
-            if (currentCircles >= state.maxCircles) return;
-
             const circle = document.createElement('div');
             circle.classList.add('circle');
             const size = 50;
@@ -60,12 +54,12 @@
             circle.style.left = Math.random() * (window.innerWidth - size) + 'px';
             circle.style.top = Math.random() * (window.innerHeight - size) + 'px';
 
+            // טיימר לחיים של העיגול
             let timer;
             if (!state.isInfiniteLifetime) {
                 timer = setTimeout(() => {
                     if (circle.parentElement) {
                         circle.remove();
-                        currentCircles--;
                         state.score = Math.max(0, state.score - 5);
                         scoreDisplay.innerText = state.score;
                     }
@@ -75,25 +69,22 @@
             circle.onclick = function() {
                 if (!state.isInfiniteLifetime) clearTimeout(timer);
                 state.score += 1;
-                currentCircles--;
                 this.remove();
                 scoreDisplay.innerText = state.score;
             };
 
             gameArea.appendChild(circle);
-            currentCircles++;
         }
 
         function saveGame() {
-            const dataStr = JSON.stringify(state);
-            const blob = new Blob([dataStr], { type: "text/plain" });
+            const blob = new Blob([JSON.stringify(state)], { type: "text/plain" });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = "save.txt";
             a.click();
         }
 
-        setInterval(spawnCircle, state.spawnRateMs);
+        setInterval(spawnCircle, 1000);
     </script>
 </body>
 </html>
