@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Catch the Circles Game</title>
+    <title>Catch the Circles - Core Engine</title>
     <style>
-        body { margin: 0; background-color: red; overflow: hidden; height: 100vh; }
-        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0,0,0,0.7); padding: 10px 30px; border-radius: 15px; pointer-events: none; }
-        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; width: 100px; padding: 5px; }
-        #game-area { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        .circle { position: absolute; border-radius: 50%; cursor: pointer; animation: popIn 0.3s forwards; }
+        body { margin: 0; background-color: red; overflow: hidden; height: 100vh; font-family: sans-serif; }
+        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0,0,0,0.7); padding: 10px 30px; border-radius: 15px; pointer-events: none; z-index: 50; }
+        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; width: 120px; padding: 8px; font-weight: bold; }
+        #game-area { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        .circle { position: absolute; border-radius: 50%; cursor: pointer; animation: popIn 0.3s forwards; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+        .save-btn { position: absolute; top: 10px; left: 10px; z-index: 100; padding: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <input type="text" id="devCodeInput" placeholder="Enter code...">
+    <button class="save-btn" onclick="saveGame()">Save Progress</button>
+    <input type="text" id="devCodeInput" placeholder="Enter Code...">
     <div id="score-hud">Score: <span id="scoreDisplay">0</span></div>
     <div id="game-area"></div>
 
@@ -33,13 +35,16 @@
         const scoreDisplay = document.getElementById('scoreDisplay');
         const devCodeInput = document.getElementById('devCodeInput');
 
-        // צ'יט אינסוף
-        devCodeInput.addEventListener('input', function() {
-            if (this.value.toUpperCase() === 'INFINITE') {
-                state.isInfiniteLifetime = true;
+        // תיבת קוד פעילה
+        devCodeInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.toUpperCase();
+                if (val === 'INFINITE') {
+                    state.isInfiniteLifetime = true;
+                    alert("Infinite Lifetime Activated!");
+                }
                 this.value = '';
                 this.blur();
-                alert("Infinite Lifetime Activated!");
             }
         });
 
@@ -77,6 +82,15 @@
 
             gameArea.appendChild(circle);
             currentCircles++;
+        }
+
+        function saveGame() {
+            const dataStr = JSON.stringify(state);
+            const blob = new Blob([dataStr], { type: "text/plain" });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "save.txt";
+            a.click();
         }
 
         setInterval(spawnCircle, state.spawnRateMs);
