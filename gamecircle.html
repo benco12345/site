@@ -1,104 +1,111 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Catch the Circles - Ultimate Full Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catch the Circles - Ultimate Build</title>
     <style>
-        /* [הדבק כאן את כל ה-CSS המקורי שלך מההודעה הראשונה] */
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; height: 100vh; background-color: red; overflow: hidden; }
-        .panel { display: none; position: absolute; bottom: 80px; width: 300px; background: rgba(50,50,50,0.95); color: white; padding: 20px; border-radius: 15px; z-index: 1000; }
-        .circle { position: absolute; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        .upgrade-box { background: #444; padding: 10px; margin-bottom: 10px; border-radius: 8px; }
-        .btn-action { padding: 10px; cursor: pointer; background: #2196F3; color: white; border: none; border-radius: 5px; width: 100%; margin-top: 5px; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; height: 100dvh; overflow: hidden; background-color: red; position: relative; touch-action: manipulation; }
+        #devCodeInput { position: absolute; top: 10px; right: 10px; z-index: 100; color: black; background: rgba(255, 255, 255, 0.9); border: 2px solid black; padding: 5px; font-weight: bold; width: 120px; }
+        #btnAbout { position: absolute; top: 10px; left: 10px; z-index: 100; background: #2196F3; color: white; border: 2px solid white; border-radius: 5px; padding: 5px 12px; font-weight: bold; cursor: pointer; }
+        #score-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 28px; font-weight: bold; color: white; background: rgba(0, 0, 0, 0.7); padding: 10px 30px; border-radius: 15px; z-index: 50; pointer-events: none; }
+        #bottom-nav { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: space-evenly; z-index: 1000; pointer-events: none; }
+        .bottom-btn { pointer-events: auto; padding: 12px 20px; font-weight: bold; color: white; border: 3px solid white; border-radius: 30px; cursor: pointer; background: #333; }
+        .panel { position: absolute; bottom: 80px; z-index: 999; background: rgba(40, 40, 60, 0.95); color: white; padding: 20px; border-radius: 15px; display: none; border: 2px solid #555; }
+        #game-area { width: 100vw; height: 100dvh; position: absolute; top: 0; left: 0; z-index: 1; }
+        .circle { position: absolute; border-radius: 50%; cursor: pointer; box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3); animation: popIn 0.3s forwards; }
+        @keyframes popIn { to { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div id="score-hud">ניקוד: <span id="scoreDisplay">0</span></div>
+    <input type="text" id="devCodeInput" placeholder="Code...">
+    <button id="btnAbout" onclick="alert('Catch the Circles - Ultimate Build 2026')">About</button>
+    <div id="score-hud">Score: <span id="scoreDisplay">0</span></div>
+
+    <div id="bottom-nav">
+        <button class="bottom-btn" onclick="document.getElementById('menu-panel').style.display = document.getElementById('menu-panel').style.display === 'block' ? 'none' : 'block'">Menu</button>
+        <button class="bottom-btn" onclick="document.getElementById('settings-panel').style.display = document.getElementById('settings-panel').style.display === 'block' ? 'none' : 'block'">Settings</button>
+        <button class="bottom-btn" onclick="document.getElementById('stats-panel').style.display = document.getElementById('stats-panel').style.display === 'block' ? 'none' : 'block'">Stats</button>
+    </div>
+
+    <div id="menu-panel" class="panel"><h3>Menu</h3><button class="bottom-btn" onclick="saveGame()">Save Game</button></div>
+    <div id="settings-panel" class="panel"><h3>Settings</h3></div>
+    <div id="stats-panel" class="panel"><h3>Stats</h3></div>
+
     <div id="game-area"></div>
 
-    <section id="menu-panel" class="panel" style="display: block;">
-        <h3>שדרוגים</h3>
-        <div class="upgrade-box">
-            <p><strong>Circle Lifetime:</strong> <span id="lifetimeDisplay">10</span>s</p>
-            <button class="btn-action" onclick="buyLifetime()">Upgrade (Cost: <span id="costLifetime">25</span>)</button>
-        </div>
-        </section>
-
-    <section id="stats-panel" class="panel">
-        <h3>סטטיסטיקות וצ'יטים</h3>
-        <input type="text" id="editLifetime" placeholder="Lifetime or INFINITE" oninput="applyCheatEdits()">
-    </section>
-
     <script>
-        // המצב ההתחלתי (State) המקורי שלך בתוספת המשתנים החדשים
-        let state = { 
-            score: 0, 
-            pointsPerClick: 1, 
-            circleLifetime: 10, 
-            costLifetime: 25, 
-            isInfinite: false,
-            // [הוסף כאן את שאר המשתנים המקוריים שלך כמו maxCircles, spawnRateMs וכו']
-            language: 'he' 
+        let state = {
+            score: 0,
+            maxCircles: 5,
+            pointsPerClick: 1,
+            spawnRateMs: 1000,
+            minCircleSize: 40,
+            circleLifetime: 10000,
+            isInfiniteLifetime: false
         };
 
-        // --- הלוגיקה החדשה ---
-        function buyLifetime() {
-            if (state.score >= state.costLifetime) {
-                state.score -= state.costLifetime;
-                if (state.circleLifetime < 100) state.circleLifetime += 10;
-                else state.isInfinite = true;
-                state.costLifetime = Math.floor(state.costLifetime * 1.5);
-                updateUI();
-            }
-        }
+        let currentCircles = 0;
+        const gameArea = document.getElementById('game-area');
+        const devCodeInput = document.getElementById('devCodeInput');
 
-        function applyCheatEdits() {
-            const val = document.getElementById('editLifetime').value.toUpperCase();
-            if (val === 'INFINITE') {
-                state.isInfinite = true;
-                updateUI();
-            } else if (val !== "") {
-                state.circleLifetime = parseInt(val) || 10;
-                state.isInfinite = false;
-                updateUI();
+        devCodeInput.addEventListener('input', function() {
+            if (this.value.toUpperCase() === 'INFINITE') {
+                state.isInfiniteLifetime = true;
+                alert("Lifetime set to Infinite!");
+                this.value = '';
             }
-        }
+        });
 
-        // --- הפונקציה המקורית עם לוגיקת הטיימר ---
-        function spawnCircle(force = false) {
+        function spawnCircle() {
+            if (currentCircles >= state.maxCircles) return;
+
             const circle = document.createElement('div');
-            circle.className = 'circle';
-            circle.style.width = circle.style.height = '50px';
-            circle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
-            circle.style.left = Math.random() * (window.innerWidth - 50) + 'px';
-            circle.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            circle.classList.add('circle');
+            const size = Math.floor(Math.random() * 50) + state.minCircleSize;
+            
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            circle.style.left = Math.random() * (window.innerWidth - size) + 'px';
+            circle.style.top = Math.random() * (window.innerHeight - size) + 'px';
 
-            // טיימר להסרה אוטומטית אם לא אינסופי
-            if (!state.isInfinite) {
-                circle.dataset.timer = setTimeout(() => {
-                    circle.remove();
-                }, state.circleLifetime * 1000);
+            let timer;
+            if (!state.isInfiniteLifetime) {
+                timer = setTimeout(() => {
+                    if (circle.parentElement) {
+                        circle.remove();
+                        currentCircles--;
+                        state.score = Math.max(0, state.score - 5);
+                        document.getElementById('scoreDisplay').innerText = state.score;
+                    }
+                }, state.circleLifetime);
             }
 
             circle.onclick = function() {
-                if (this.dataset.timer) clearTimeout(this.dataset.timer);
+                if (!state.isInfiniteLifetime) clearTimeout(timer);
                 state.score += state.pointsPerClick;
+                currentCircles--;
                 this.remove();
-                updateUI();
+                document.getElementById('scoreDisplay').innerText = state.score;
             };
-            document.getElementById('game-area').appendChild(circle);
+
+            gameArea.appendChild(circle);
+            currentCircles++;
         }
 
-        function updateUI() {
-            document.getElementById('scoreDisplay').innerText = Math.floor(state.score);
-            document.getElementById('lifetimeDisplay').innerText = state.isInfinite ? "∞" : state.circleLifetime;
-            document.getElementById('costLifetime').innerText = state.costLifetime;
+        function saveGame() {
+            const dataStr = JSON.stringify(state);
+            const blob = new Blob([dataStr], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "save.txt";
+            a.click();
         }
 
-        // [כאן תדביק את פונקציות השמירה, הטעינה והקיצורים המקוריים שלך]
-        // ... (השאר נשאר אותו דבר)
-        setInterval(spawnCircle, 1000);
+        setInterval(spawnCircle, state.spawnRateMs);
     </script>
 </body>
 </html>
