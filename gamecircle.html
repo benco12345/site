@@ -254,6 +254,35 @@
             text-align: right;
         }
 
+        .sound-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #444;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .sound-row span { font-size: 15px; font-weight: bold; }
+        
+        .shop-action-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-buy { background: #4CAF50; }
+        .btn-buy:hover { background: #388E3C; }
+        .btn-buy:disabled { background: #555; color: #888; cursor: not-allowed; }
+
+        .btn-select { background: #FF9800; }
+        .btn-select:hover { background: #F57C00; }
+        .btn-select.active { background: #9C27B0; }
+
         .text-modal {
             position: absolute;
             top: 0;
@@ -443,28 +472,43 @@
             
             <div class="category-title" id="lblCatClickSounds">סאונד לחיצה על עיגול</div>
             
-            <div class="upgrade-box">
-                <p><strong id="lblPopSound">פופ רגיל (Pop):</strong></p>
-                <button class="menu-btn" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">קנה (מחיר: <span id="costPop">30</span>)</button>
+            <div class="sound-row">
+                <span id="lblPopSound">פופ רגיל (Pop)</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">קנה (30)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectPop" onclick="selectSoundEffect('pop')" style="display:none;">בחר</button>
+                </div>
             </div>
-            <div class="upgrade-box">
-                <p><strong id="lblLaserSound">לייזר (Laser):</strong></p>
-                <button class="menu-btn" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">קנה (מחיר: <span id="costLaser">70</span>)</button>
+            <div class="sound-row">
+                <span id="lblLaserSound">לייזר (Laser)</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">קנה (70)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectLaser" onclick="selectSoundEffect('laser')" style="display:none;">בחר</button>
+                </div>
             </div>
-            <div class="upgrade-box">
-                <p><strong id="lblCoinSound">מטבע (Coin):</strong></p>
-                <button class="menu-btn" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">קנה (מחיר: <span id="costCoin">120</span>)</button>
+            <div class="sound-row">
+                <span id="lblCoinSound">מטבע (Coin)</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">קנה (120)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectCoin" onclick="selectSoundEffect('coin')" style="display:none;">בחר</button>
+                </div>
             </div>
 
             <div class="category-title" id="lblCatBgm">מוזיקת רקע</div>
             
-            <div class="upgrade-box">
-                <p><strong id="lblBgmClassic">קלאסי (Classic Loop):</strong></p>
-                <button class="menu-btn" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">קנה (מחיר: <span id="costClassicBgm">100</span>)</button>
+            <div class="sound-row">
+                <span id="lblBgmClassic">קלאסי (Classic Loop)</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">קנה (100)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectClassicBgm" onclick="selectBgmTrack('classic')" style="display:none;">בחר</button>
+                </div>
             </div>
-            <div class="upgrade-box">
-                <p><strong id="lblBgmArcade">ארקייד מהיר (Arcade Beat):</strong></p>
-                <button class="menu-btn" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">קנה (מחיר: <span id="costArcadeBgm">250</span>)</button>
+            <div class="sound-row">
+                <span id="lblBgmArcade">ארקייד מהיר (Arcade Beat)</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">קנה (250)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">בחר</button>
+                </div>
             </div>
         </div>
     </div>
@@ -605,7 +649,8 @@
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music",
                 lblPopSound: "Pop Sound:", lblLaserSound: "Laser Sound:", lblCoinSound: "Coin Sound:",
                 lblBgmClassic: "Classic Loop:", lblBgmArcade: "Arcade Beat:",
-                purchased: "Purchased! ✅", upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
+                buy: "Buy", selected: "Selected ✅", select: "Select",
+                upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
                 btnAbout: "Button Page 📄", 
@@ -637,7 +682,8 @@
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע",
                 lblPopSound: "סאונד פופ:", lblLaserSound: "סאונד לייזר:", lblCoinSound: "סאונד מטבע:",
                 lblBgmClassic: "קלאסי (Classic):", lblBgmArcade: "ארקייד (Arcade):",
-                purchased: "נרכש! ✅", upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
+                buy: "קנה", selected: "נבחר ✅", select: "בחר",
+                upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
                 btnAbout: "דף כפתור 📄", 
@@ -690,10 +736,16 @@
         const soundShopModal = document.getElementById('sound-shop-modal');
         
         const btnBuyPop = document.getElementById('btnBuyPop');
+        const btnSelectPop = document.getElementById('btnSelectPop');
         const btnBuyLaser = document.getElementById('btnBuyLaser');
+        const btnSelectLaser = document.getElementById('btnSelectLaser');
         const btnBuyCoin = document.getElementById('btnBuyCoin');
+        const btnSelectCoin = document.getElementById('btnSelectCoin');
+        
         const btnBuyClassicBgm = document.getElementById('btnBuyClassicBgm');
+        const btnSelectClassicBgm = document.getElementById('btnSelectClassicBgm');
         const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
+        const btnSelectArcadeBgm = document.getElementById('btnSelectArcadeBgm');
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
@@ -836,7 +888,7 @@
         }
 
         function buySoundEffect(type, cost) {
-            if (state.score >= cost) {
+            if (state.score >= cost && !state.unlockedSounds[type]) {
                 state.score -= cost;
                 state.unlockedSounds[type] = true;
                 state.activeSound = type;
@@ -845,12 +897,29 @@
             }
         }
 
+        function selectSoundEffect(type) {
+            if (state.unlockedSounds[type]) {
+                state.activeSound = (state.activeSound === type) ? 'none' : type;
+                playClickSound();
+                updateUI();
+            }
+        }
+
         function buyBgmTrack(type, cost) {
-            if (state.score >= cost) {
+            if (state.score >= cost && !state.unlockedBgm[type]) {
                 state.score -= cost;
                 state.unlockedBgm[type] = true;
                 state.activeBgm = type;
                 startBgm();
+                updateUI();
+            }
+        }
+
+        function selectBgmTrack(type) {
+            if (state.unlockedBgm[type]) {
+                state.activeBgm = (state.activeBgm === type) ? 'none' : type;
+                if (state.soundEnabled) startBgm();
+                else if (bgmInterval) clearInterval(bgmInterval);
                 updateUI();
             }
         }
@@ -1230,45 +1299,95 @@
                 btnMinSize.innerHTML = `${text.upgradeCost}<span id="costMinSize">${state.costMinSize}</span>)`;
             }
 
-            // Sound shop buttons update
-            if (state.unlockedSounds.pop) {
-                btnBuyPop.disabled = true;
-                btnBuyPop.innerText = text.purchased;
-            } else {
+            // --- Sound Shop UI Management ---
+            // Pop Sound
+            if (!state.unlockedSounds.pop) {
+                btnBuyPop.style.display = 'inline-block';
                 btnBuyPop.disabled = state.score < state.costs.pop;
-                btnBuyPop.innerHTML = `${text.upgradeCost}<span id="costPop">${state.costs.pop}</span>)`;
+                btnBuyPop.innerText = `${text.buy} (${state.costs.pop})`;
+                btnSelectPop.style.display = 'none';
+            } else {
+                btnBuyPop.style.display = 'none';
+                btnSelectPop.style.display = 'inline-block';
+                if (state.activeSound === 'pop') {
+                    btnSelectPop.innerText = text.selected;
+                    btnSelectPop.classList.add('active');
+                } else {
+                    btnSelectPop.innerText = text.select;
+                    btnSelectPop.classList.remove('active');
+                }
             }
 
-            if (state.unlockedSounds.laser) {
-                btnBuyLaser.disabled = true;
-                btnBuyLaser.innerText = text.purchased;
-            } else {
+            // Laser Sound
+            if (!state.unlockedSounds.laser) {
+                btnBuyLaser.style.display = 'inline-block';
                 btnBuyLaser.disabled = state.score < state.costs.laser;
-                btnBuyLaser.innerHTML = `${text.upgradeCost}<span id="costLaser">${state.costs.laser}</span>)`;
+                btnBuyLaser.innerText = `${text.buy} (${state.costs.laser})`;
+                btnSelectLaser.style.display = 'none';
+            } else {
+                btnBuyLaser.style.display = 'none';
+                btnSelectLaser.style.display = 'inline-block';
+                if (state.activeSound === 'laser') {
+                    btnSelectLaser.innerText = text.selected;
+                    btnSelectLaser.classList.add('active');
+                } else {
+                    btnSelectLaser.innerText = text.select;
+                    btnSelectLaser.classList.remove('active');
+                }
             }
 
-            if (state.unlockedSounds.coin) {
-                btnBuyCoin.disabled = true;
-                btnBuyCoin.innerText = text.purchased;
-            } else {
+            // Coin Sound
+            if (!state.unlockedSounds.coin) {
+                btnBuyCoin.style.display = 'inline-block';
                 btnBuyCoin.disabled = state.score < state.costs.coin;
-                btnBuyCoin.innerHTML = `${text.upgradeCost}<span id="costCoin">${state.costs.coin}</span>)`;
+                btnBuyCoin.innerText = `${text.buy} (${state.costs.coin})`;
+                btnSelectCoin.style.display = 'none';
+            } else {
+                btnBuyCoin.style.display = 'none';
+                btnSelectCoin.style.display = 'inline-block';
+                if (state.activeSound === 'coin') {
+                    btnSelectCoin.innerText = text.selected;
+                    btnSelectCoin.classList.add('active');
+                } else {
+                    btnSelectCoin.innerText = text.select;
+                    btnSelectCoin.classList.remove('active');
+                }
             }
 
-            if (state.unlockedBgm.classic) {
-                btnBuyClassicBgm.disabled = true;
-                btnBuyClassicBgm.innerText = text.purchased;
-            } else {
+            // Classic BGM
+            if (!state.unlockedBgm.classic) {
+                btnBuyClassicBgm.style.display = 'inline-block';
                 btnBuyClassicBgm.disabled = state.score < state.costs.classic;
-                btnBuyClassicBgm.innerHTML = `${text.upgradeCost}<span id="costClassicBgm">${state.costs.classic}</span>)`;
+                btnBuyClassicBgm.innerText = `${text.buy} (${state.costs.classic})`;
+                btnSelectClassicBgm.style.display = 'none';
+            } else {
+                btnBuyClassicBgm.style.display = 'none';
+                btnSelectClassicBgm.style.display = 'inline-block';
+                if (state.activeBgm === 'classic') {
+                    btnSelectClassicBgm.innerText = text.selected;
+                    btnSelectClassicBgm.classList.add('active');
+                } else {
+                    btnSelectClassicBgm.innerText = text.select;
+                    btnSelectClassicBgm.classList.remove('active');
+                }
             }
 
-            if (state.unlockedBgm.arcade) {
-                btnBuyArcadeBgm.disabled = true;
-                btnBuyArcadeBgm.innerText = text.purchased;
-            } else {
+            // Arcade BGM
+            if (!state.unlockedBgm.arcade) {
+                btnBuyArcadeBgm.style.display = 'inline-block';
                 btnBuyArcadeBgm.disabled = state.score < state.costs.arcade;
-                btnBuyArcadeBgm.innerHTML = `${text.upgradeCost}<span id="costArcadeBgm">${state.costs.arcade}</span>)`;
+                btnBuyArcadeBgm.innerText = `${text.buy} (${state.costs.arcade})`;
+                btnSelectArcadeBgm.style.display = 'none';
+            } else {
+                btnBuyArcadeBgm.style.display = 'none';
+                btnSelectArcadeBgm.style.display = 'inline-block';
+                if (state.activeBgm === 'arcade') {
+                    btnSelectArcadeBgm.innerText = text.selected;
+                    btnSelectArcadeBgm.classList.add('active');
+                } else {
+                    btnSelectArcadeBgm.innerText = text.select;
+                    btnSelectArcadeBgm.classList.remove('active');
+                }
             }
 
             updateStatsUI(isTyping);
