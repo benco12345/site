@@ -513,32 +513,40 @@
             <div class="category-title" id="lblCatVolumeUpgrades">שדרוגי עוצמה (חוזק מוזיקה)</div>
             
             <div class="sound-row">
-                <span>400%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 350)">קנה (350)</button>
+                <span>200% (כפול 2)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol200" onclick="buyVolumeUpgrade('200', 200)">קנה (200)</button>
             </div>
             <div class="sound-row">
-                <span>500%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 500)">קנה (500)</button>
+                <span>300% (כפול 3)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol300" onclick="buyVolumeUpgrade('300', 300)">קנה (300)</button>
             </div>
             <div class="sound-row">
-                <span>600%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 700)">‍♂️קנה (700)</button>
+                <span>400% (כפול 4)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 450)">קנה (450)</button>
             </div>
             <div class="sound-row">
-                <span>700%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 950)">קנה (950)</button>
+                <span>500% (כפול 5)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 600)">קנה (600)</button>
             </div>
             <div class="sound-row">
-                <span>800%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1200)">קנה (1200)</button>
+                <span>600% (כפול 6)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 800)">קנה (800)</button>
             </div>
             <div class="sound-row">
-                <span>900%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1500)">קנה (1500)</button>
+                <span>700% (כפול 7)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 1050)">קנה (1050)</button>
             </div>
             <div class="sound-row">
-                <span>1000%</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2000)">קנה (2000)</button>
+                <span>800% (כפול 8)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1350)">קנה (1350)</button>
+            </div>
+            <div class="sound-row">
+                <span>900% (כפול 9)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1700)">קנה (1700)</button>
+            </div>
+            <div class="sound-row">
+                <span>1000% (כפול 10)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2200)">קנה (2200)</button>
             </div>
         </div>
     </div>
@@ -579,15 +587,15 @@
                 <option value="0.5">50%</option>
                 <option value="0.75">75%</option>
                 <option value="1.0" selected>100%</option>
-                <option value="2.0">200%</option>
-                <option value="3.0">300%</option>
-                <option value="4.0" id="optVol400" style="display:none;">400%</option>
-                <option value="5.0" id="optVol500" style="display:none;">500%</option>
-                <option value="6.0" id="optVol600" style="display:none;">600%</option>
-                <option value="7.0" id="optVol700" style="display:none;">700%</option>
-                <option value="8.0" id="optVol800" style="display:none;">800%</option>
-                <option value="9.0" id="optVol900" style="display:none;">900%</option>
-                <option value="10.0" id="optVol1000" style="display:none;">1000%</option>
+                <option value="2.0" id="optVol200" style="display:none;">200% (x2)</option>
+                <option value="3.0" id="optVol300" style="display:none;">300% (x3)</option>
+                <option value="4.0" id="optVol400" style="display:none;">400% (x4)</option>
+                <option value="5.0" id="optVol500" style="display:none;">500% (x5)</option>
+                <option value="6.0" id="optVol600" style="display:none;">600% (x6)</option>
+                <option value="7.0" id="optVol700" style="display:none;">700% (x7)</option>
+                <option value="8.0" id="optVol800" style="display:none;">800% (x8)</option>
+                <option value="9.0" id="optVol900" style="display:none;">900% (x9)</option>
+                <option value="10.0" id="optVol1000" style="display:none;">1000% (x10)</option>
             </select>
         </div>
         <div class="stat-row">
@@ -761,10 +769,10 @@
             soundVolume: 1.0,
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
-            unlockedVolumes: { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+            unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
             activeSound: 'none',
             activeBgm: 'none',
-            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '400': 350, '500': 500, '600': 700, '700': 950, '800': 1200, '900': 1500, '1000': 2000 }
+            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
         };
 
         let currentCircles = 0;
@@ -799,6 +807,8 @@
         const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
         const btnSelectArcadeBgm = document.getElementById('btnSelectArcadeBgm');
 
+        const btnBuyVol200 = document.getElementById('btnBuyVol200');
+        const btnBuyVol300 = document.getElementById('btnBuyVol300');
         const btnBuyVol400 = document.getElementById('btnBuyVol400');
         const btnBuyVol500 = document.getElementById('btnBuyVol500');
         const btnBuyVol600 = document.getElementById('btnBuyVol600');
@@ -807,6 +817,8 @@
         const btnBuyVol900 = document.getElementById('btnBuyVol900');
         const btnBuyVol1000 = document.getElementById('btnBuyVol1000');
 
+        const optVol200 = document.getElementById('optVol200');
+        const optVol300 = document.getElementById('optVol300');
         const optVol400 = document.getElementById('optVol400');
         const optVol500 = document.getElementById('optVol500');
         const optVol600 = document.getElementById('optVol600');
@@ -1246,10 +1258,10 @@
                     soundVolume: 1.0,
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
-                    unlockedVolumes: { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+                    unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
                     activeSound: 'none',
                     activeBgm: 'none',
-                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '400': 350, '500': 500, '600': 700, '700': 950, '800': 1200, '900': 1500, '1000': 2000 }
+                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
                 };
                 soundToggleSelect.value = 'on';
                 soundVolumeSelect.value = '1.0';
@@ -1483,10 +1495,10 @@
                 }
             }
 
-            // Volume Upgrades 400% - 1000%
-            const volLevels = ['400', '500', '600', '700', '800', '900', '1000'];
-            const btnMap = { '400': btnBuyVol400, '500': btnBuyVol500, '600': btnBuyVol600, '700': btnBuyVol700, '800': btnBuyVol800, '900': btnBuyVol900, '1000': btnBuyVol1000 };
-            const optMap = { '400': optVol400, '500': optVol500, '600': optVol600, '700': optVol700, '800': optVol800, '900': optVol900, '1000': optVol1000 };
+            // Volume Upgrades 200% - 1000%
+            const volLevels = ['200', '300', '400', '500', '600', '700', '800', '900', '1000'];
+            const btnMap = { '200': btnBuyVol200, '300': btnBuyVol300, '400': btnBuyVol400, '500': btnBuyVol500, '600': btnBuyVol600, '700': btnBuyVol700, '800': btnBuyVol800, '900': btnBuyVol900, '1000': btnBuyVol1000 };
+            const optMap = { '200': optVol200, '300': optVol300, '400': optVol400, '500': optVol500, '600': optVol600, '700': optVol700, '800': optVol800, '900': optVol900, '1000': optVol1000 };
 
             volLevels.forEach(lvl => {
                 const btn = btnMap[lvl];
@@ -1651,7 +1663,7 @@
             if (typeof state.soundVolume === 'undefined') state.soundVolume = 1.0;
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
-            if (!state.unlockedVolumes) state.unlockedVolumes = { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
+            if (!state.unlockedVolumes) state.unlockedVolumes = { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
             if (!state.activeSound) state.activeSound = 'none';
             if (!state.activeBgm) state.activeBgm = 'none';
 
