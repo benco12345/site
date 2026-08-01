@@ -437,8 +437,8 @@
 <body>
 
     <input type="text" id="devCodeInput" placeholder="Code...">
-    <button id="btnAbout" onclick="toggleButtonPage()">דף כפתור 📄</button>
-    <button id="btnSoundShop" onclick="toggleSoundShop()">חנות סאונד 🎵</button>
+    <button id="btnAbout" onclick="toggleButtonPage()">Button Page 📄</button>
+    <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
@@ -448,7 +448,7 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
-    <!-- דף כפתור -->
+    <!-- Button Page Modal -->
     <div id="button-page-modal">
         <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
         <div id="button-page-content">
@@ -456,97 +456,97 @@
             <div class="controls-list">
                 <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
                 <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
-                <div><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></div>
-                <div><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></div>
-                <div><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+                <div><strong>A:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                <div><strong>S:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                <div><strong>D:</strong> <span id="descKeyD">Open/Close Stats</span></div>
             </div>
         </div>
     </div>
 
-    <!-- חנות סאונד מודל -->
+    <!-- Sound Shop Modal -->
     <div id="sound-shop-modal">
         <div id="sound-shop-content">
             <button id="btnCloseSoundShop" onclick="toggleSoundShop()">❌</button>
-            <h2 id="lblSoundShopTitle" style="color: #FFEB3B; margin-top: 0;">חנות סאונד 🎵</h2>
+            <h2 id="lblSoundShopTitle" style="color: #FFEB3B; margin-top: 0;">Sound Shop 🎵</h2>
             
-            <div class="category-title" id="lblCatClickSounds">סאונד לחיצה על עיגול</div>
+            <div class="category-title" id="lblCatClickSounds">Click Sound Effects</div>
             
             <div class="sound-row">
-                <span id="lblPopSound">פופ רגיל (Pop)</span>
+                <span id="lblPopSound">Pop Sound</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">קנה (30)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectPop" onclick="selectSoundEffect('pop')" style="display:none;">בחר</button>
+                    <button class="shop-action-btn btn-buy" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">Buy (30)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectPop" onclick="selectSoundEffect('pop')" style="display:none;">Select</button>
                 </div>
             </div>
             <div class="sound-row">
-                <span id="lblLaserSound">לייזר (Laser)</span>
+                <span id="lblLaserSound">Laser Sound</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">קנה (70)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectLaser" onclick="selectSoundEffect('laser')" style="display:none;">בחר</button>
+                    <button class="shop-action-btn btn-buy" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">Buy (70)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectLaser" onclick="selectSoundEffect('laser')" style="display:none;">Select</button>
                 </div>
             </div>
             <div class="sound-row">
-                <span id="lblCoinSound">מטבע (Coin)</span>
+                <span id="lblCoinSound">Coin Sound</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">קנה (120)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectCoin" onclick="selectSoundEffect('coin')" style="display:none;">בחר</button>
+                    <button class="shop-action-btn btn-buy" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">Buy (120)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectCoin" onclick="selectSoundEffect('coin')" style="display:none;">Select</button>
                 </div>
             </div>
 
-            <div class="category-title" id="lblCatBgm">מוזיקת רקע</div>
+            <div class="category-title" id="lblCatBgm">Background Music</div>
             
             <div class="sound-row">
-                <span id="lblBgmClassic">קלאסי (Classic Loop)</span>
+                <span id="lblBgmClassic">Classic Loop</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">קנה (100)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectClassicBgm" onclick="selectBgmTrack('classic')" style="display:none;">בחר</button>
+                    <button class="shop-action-btn btn-buy" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">Buy (100)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectClassicBgm" onclick="selectBgmTrack('classic')" style="display:none;">Select</button>
                 </div>
             </div>
             <div class="sound-row">
-                <span id="lblBgmArcade">ארקייד מהיר (Arcade Beat)</span>
+                <span id="lblBgmArcade">Arcade Beat</span>
                 <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">קנה (250)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">בחר</button>
+                    <button class="shop-action-btn btn-buy" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">Buy (250)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">Select</button>
                 </div>
             </div>
 
-            <div class="category-title" id="lblCatVolumeUpgrades">שדרוגי עוצמה (חוזק מוזיקה)</div>
+            <div class="category-title" id="lblCatVolumeUpgrades">Volume Upgrades</div>
             
             <div class="sound-row">
-                <span>200% (כפול 2)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol200" onclick="buyVolumeUpgrade('200', 200)">קנה (200)</button>
+                <span>200% (x2)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol200" onclick="buyVolumeUpgrade('200', 200)">Buy (200)</button>
             </div>
             <div class="sound-row">
-                <span>300% (כפול 3)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol300" onclick="buyVolumeUpgrade('300', 300)">קנה (300)</button>
+                <span>300% (x3)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol300" onclick="buyVolumeUpgrade('300', 300)">Buy (300)</button>
             </div>
             <div class="sound-row">
-                <span>400% (כפול 4)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 450)">קנה (450)</button>
+                <span>400% (x4)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 450)">Buy (450)</button>
             </div>
             <div class="sound-row">
-                <span>500% (כפול 5)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 600)">קנה (600)</button>
+                <span>500% (x5)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 600)">Buy (600)</button>
             </div>
             <div class="sound-row">
-                <span>600% (כפול 6)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 800)">קנה (800)</button>
+                <span>600% (x6)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 800)">Buy (800)</button>
             </div>
             <div class="sound-row">
-                <span>700% (כפול 7)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 1050)">קנה (1050)</button>
+                <span>700% (x7)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 1050)">Buy (1050)</button>
             </div>
             <div class="sound-row">
-                <span>800% (כפול 8)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1350)">קנה (1350)</button>
+                <span>800% (x8)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1350)">Buy (1350)</button>
             </div>
             <div class="sound-row">
-                <span>900% (כפול 9)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1700)">קנה (1700)</button>
+                <span>900% (x9)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1700)">Buy (1700)</button>
             </div>
             <div class="sound-row">
-                <span>1000% (כפול 10)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2200)">קנה (2200)</button>
+                <span>1000% (x10)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2200)">Buy (2200)</button>
             </div>
         </div>
     </div>
@@ -574,14 +574,14 @@
     <div id="settings-panel" class="panel">
         <h3 id="lblSettingsTitle">Settings ⚙️</h3>
         <div class="stat-row">
-            <span id="lblSoundStatus">Sound / סאונד:</span>
+            <span id="lblSoundStatus">Sound:</span>
             <select id="soundToggleSelect" onchange="changeSoundToggle(this.value)">
                 <option value="on" id="optSoundOn">On 🔊</option>
                 <option value="off" id="optSoundOff">Off 🔇</option>
             </select>
         </div>
         <div class="stat-row">
-            <span id="lblSoundVolume">Volume / עוצמה:</span>
+            <span id="lblSoundVolume">Volume:</span>
             <select id="soundVolumeSelect" onchange="changeSoundVolume(this.value)">
                 <option value="0.25">25%</option>
                 <option value="0.5">50%</option>
@@ -599,10 +599,17 @@
             </select>
         </div>
         <div class="stat-row">
-            <span id="lblLanguage">Language / שפה:</span>
+            <span id="lblLanguage">Language:</span>
             <select id="langSelect" onchange="changeLanguage(this.value)">
-                <option value="en">English</option>
+                <option value="en" selected>English</option>
                 <option value="he">עברית</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ru">Русский</option>
+                <option value="ar">العربية</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
             </select>
         </div>
         <div class="stat-row">
@@ -697,15 +704,15 @@
                 lblLiveStats: "Live Stats", lblCurrentScore: "Current Score:", lblLifetimeScore: "Lifetime Score:",
                 lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
-                lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
-                lblSoundStatus: "Sound / סאונד:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
-                lblSoundVolume: "Volume / עוצמה:",
+                lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language:",
+                lblSoundStatus: "Sound:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
+                lblSoundVolume: "Volume:",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
                 btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
-                lblPopSound: "Pop Sound:", lblLaserSound: "Laser Sound:", lblCoinSound: "Coin Sound:",
-                lblBgmClassic: "Classic Loop:", lblBgmArcade: "Arcade Beat:",
+                lblPopSound: "Pop Sound", lblLaserSound: "Laser Sound", lblCoinSound: "Coin Sound",
+                lblBgmClassic: "Classic Loop", lblBgmArcade: "Arcade Beat",
                 buy: "Buy", selected: "Selected ✅", select: "Select", purchased: "Purchased! ✅",
                 upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
@@ -738,8 +745,8 @@
                 btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
-                lblPopSound: "סאונד פופ:", lblLaserSound: "סאונד לייזר:", lblCoinSound: "סאונד מטבע:",
-                lblBgmClassic: "קלאסי (Classic):", lblBgmArcade: "ארקייד (Arcade):",
+                lblPopSound: "סאונד פופ", lblLaserSound: "סאונד לייזר", lblCoinSound: "סאונד מטבע",
+                lblBgmClassic: "קלאסי (Classic)", lblBgmArcade: "ארקייד (Arcade)",
                 buy: "קנה", selected: "נבחר ✅", select: "בחר", purchased: "נרכש! ✅",
                 upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
@@ -749,6 +756,244 @@
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט"
+            },
+            es: {
+                lblScore: "Puntuación: ",
+                btnMenuOpen: "Menú 🛠️", btnMenuClose: "Cerrar ❌",
+                btnStatsOpen: "Estadísticas 📊", btnStatsClose: "Cerrar ❌",
+                btnSettingsOpen: "Ajustes ⚙️", btnSettingsClose: "Cerrar ❌",
+                lblSaveLoad: "Guardar y Cargar 💾", btnDownload: "Descargar archivo (.txt)", btnLoad: "Cargar desde TXT",
+                btnOpenTextSave: "Exportar código 📋", btnOpenTextLoad: "Importar código 📥",
+                lblExportTitle: "Exportar código", lblImportTitle: "Importar código",
+                btnCopyClipboard: "Copiar al portapapeles 📋", btnApplyLoadCode: "Cargar partida 🎮",
+                lblUpgrades: "Mejoras ⬆️", lblMaxCircles: "Círculos máx:", lblPointsPerCatch: "Puntos por captura:",
+                lblSpawnRate: "Frecuencia:", lblEvery: "Cada ", lblSec: "s",
+                lblMinSize: "Tamaño mín:", lblPx: "px",
+                lblLiveStats: "Estadísticas en vivo", lblCurrentScore: "Puntuación actual:", lblLifetimeScore: "Puntuación total:",
+                lblCirclesOnScreen: "Círculos en pantalla:", lblGameVars: "Variables del juego",
+                lblStatMaxCircles: "Círculos máx:", lblStatPoints: "Puntos / Captura:", lblStatMinSize: "Tamaño mín (px):", lblStatSpawnRate: "Frecuencia (ms):",
+                lblSettingsTitle: "Ajustes ⚙️", lblLanguage: "Idioma:",
+                lblSoundStatus: "Sonido:", optSoundOn: "Activado 🔊", optSoundOff: "Desactivado 🔇",
+                lblSoundVolume: "Volumen:",
+                lblDeviceMode: "Modo de dispositivo:", optDesktop: "Escritorio 💻", optMobile: "Móvil 📱",
+                btnResetGame: "Reiniciar juego 🔄", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
+                btnSoundShop: "Tienda de sonidos 🎵", lblSoundShopTitle: "Tienda de sonidos 🎵",
+                lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
+                lblPopSound: "Sonido Pop", lblLaserSound: "Sonido Láser", lblCoinSound: "Sonido Moneda",
+                lblBgmClassic: "Bucle Clásico", lblBgmArcade: "Ritmo Arcade",
+                buy: "Comprar", selected: "Seleccionado ✅", select: "Seleccionar", purchased: "¡Comprado! ✅",
+                upgradeCost: "Costo: ", maxSpeed: "¡Velocidad máxima!", maxSize: "¡Tamaño máximo!",
+                alertLoadSuccess: "¡Juego cargado con éxito! 🎮", alertLoadError: "¡Error! El código no es válido.",
+                alertCopied: "¡Código copiado al portapapeles! 📋",
+                btnAbout: "Página de botones 📄", 
+                lblButtonPageTitle: "Página de botones", 
+                lblKeySpace: "Espacio:", descSpace: "Hacer clic en el círculo",
+                lblKeyCode: ". o / :", descKeyCode: "Escribir código",
+                descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas"
+            },
+            fr: {
+                lblScore: "Score : ",
+                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Fermer ❌",
+                btnStatsOpen: "Stats 📊", btnStatsClose: "Fermer ❌",
+                btnSettingsOpen: "Paramètres ⚙️", btnSettingsClose: "Fermer ❌",
+                lblSaveLoad: "Sauvegarde 💾", btnDownload: "Télécharger (.txt)", btnLoad: "Charger (TXT)",
+                btnOpenTextSave: "Exporter le code 📋", btnOpenTextLoad: "Importer le code 📥",
+                lblExportTitle: "Exporter", lblImportTitle: "Importer",
+                btnCopyClipboard: "Copier 📋", btnApplyLoadCode: "Charger 🎮",
+                lblUpgrades: "Améliorations ⬆️", lblMaxCircles: "Cercles max :", lblPointsPerCatch: "Points par prise :",
+                lblSpawnRate: "Apparition :", lblEvery: "Chaque ", lblSec: "s",
+                lblMinSize: "Taille min :", lblPx: "px",
+                lblLiveStats: "Stats en direct", lblCurrentScore: "Score actuel :", lblLifetimeScore: "Score total :",
+                lblCirclesOnScreen: "Cercles à l'écran :", lblGameVars: "Variables du jeu",
+                lblStatMaxCircles: "Cercles max :", lblStatPoints: "Points / Prise :", lblStatMinSize: "Taille min (px) :", lblStatSpawnRate: "Apparition (ms) :",
+                lblSettingsTitle: "Paramètres ⚙️", lblLanguage: "Langue :",
+                lblSoundStatus: "Son :", optSoundOn: "Activé 🔊", optSoundOff: "Désactivé 🔇",
+                lblSoundVolume: "Volume :",
+                lblDeviceMode: "Mode d'appareil :", optDesktop: "Bureau 💻", optMobile: "Mobile 📱",
+                btnResetGame: "Réinitialiser 🔄", confirmReset: "Êtes-vous sûr de vouloir réinitialiser ?",
+                btnSoundShop: "Boutique audio 🎵", lblSoundShopTitle: "Boutique audio 🎵",
+                lblCatClickSounds: "Effets de clic", lblCatBgm: "Musique de fond", lblCatVolumeUpgrades: "Améliorations de volume",
+                lblPopSound: "Son Pop", lblLaserSound: "Son Laser", lblCoinSound: "Son Pièce",
+                lblBgmClassic: "Boucle classique", lblBgmArcade: "Rythme Arcade",
+                buy: "Acheter", selected: "Sélectionné ✅", select: "Sélectionner", purchased: "Acheté ! ✅",
+                upgradeCost: "Coût : ", maxSpeed: "Vitesse max !", maxSize: "Taille max !",
+                alertLoadSuccess: "Jeu chargé avec succès ! 🎮", alertLoadError: "Erreur ! Le code est invalide.",
+                alertCopied: "Code copié dans le presse-papiers ! 📋",
+                btnAbout: "Page des boutons 📄", 
+                lblButtonPageTitle: "Page des boutons", 
+                lblKeySpace: "Espace :", descSpace: "Cliquer sur le cercle",
+                lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
+                descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats"
+            },
+            de: {
+                lblScore: "Punkte: ",
+                btnMenuOpen: "Menü 🛠️", btnMenuClose: "Schließen ❌",
+                btnStatsOpen: "Statistiken 📊", btnStatsClose: "Schließen ❌",
+                btnSettingsOpen: "Einstellungen ⚙️", btnSettingsClose: "Schließen ❌",
+                lblSaveLoad: "Speichern & Laden 💾", btnDownload: "Datei herunterladen (.txt)", btnLoad: "Laden (TXT)",
+                btnOpenTextSave: "Code exportieren 📋", btnOpenTextLoad: "Code importieren 📥",
+                lblExportTitle: "Code exportieren", lblImportTitle: "Code importieren",
+                btnCopyClipboard: "In Zwischenablage kopieren 📋", btnApplyLoadCode: "Laden 🎮",
+                lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max. Kreise:", lblPointsPerCatch: "Punkte pro Fang:",
+                lblSpawnRate: "Spawn-Rate:", lblEvery: "Alle ", lblSec: "s",
+                lblMinSize: "Min. Größe:", lblPx: "px",
+                lblLiveStats: "Live-Statistiken", lblCurrentScore: "Aktuelle Punkte:", lblLifetimeScore: "Gesamtpunkte:",
+                lblCirclesOnScreen: "Kreise auf dem Bildschirm:", lblGameVars: "Spielvariablen",
+                lblStatMaxCircles: "Max. Kreise:", lblStatPoints: "Punkte / Fang:", lblStatMinSize: "Min. Größe (px):", lblStatSpawnRate: "Spawn-Rate (ms):",
+                lblSettingsTitle: "Einstellungen ⚙️", lblLanguage: "Sprache:",
+                lblSoundStatus: "Ton:", optSoundOn: "An 🔊", optSoundOff: "Aus 🔇",
+                lblSoundVolume: "Lautstärke:",
+                lblDeviceMode: "Gerätemodus:", optDesktop: "Desktop 💻", optMobile: "Mobil 📱",
+                btnResetGame: "Spiel zurücksetzen 🔄", confirmReset: "Möchtest du das Spiel wirklich zurücksetzen?",
+                btnSoundShop: "Sound-Shop 🎵", lblSoundShopTitle: "Sound-Shop 🎵",
+                lblCatClickSounds: "Klick-Soundeffekte", lblCatBgm: "Hintergrundmusik", lblCatVolumeUpgrades: "Lautstärke-Upgrades",
+                lblPopSound: "Pop-Sound", lblLaserSound: "Laser-Sound", lblCoinSound: "Münz-Sound",
+                lblBgmClassic: "Klassischer Loop", lblBgmArcade: "Arcade-Beat",
+                buy: "Kaufen", selected: "Ausgewählt ✅", select: "Auswählen", purchased: "Gekauft! ✅",
+                upgradeCost: "Kosten: ", maxSpeed: "Höchstgeschwindigkeit!", maxSize: "Maximale Größe!",
+                alertLoadSuccess: "Spiel erfolgreich geladen! 🎮", alertLoadError: "Fehler! Der Code ist ungültig.",
+                alertCopied: "Code in die Zwischenablage kopiert! 📋",
+                btnAbout: "Tastenseite 📄", 
+                lblButtonPageTitle: "Tastenseite", 
+                lblKeySpace: "Leertaste:", descSpace: "Kreis anklicken",
+                lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
+                descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen"
+            },
+            ru: {
+                lblScore: "Счет: ",
+                btnMenuOpen: "Меню 🛠️", btnMenuClose: "Закрыть ❌",
+                btnStatsOpen: "Статистика 📊", btnStatsClose: "Закрыть ❌",
+                btnSettingsOpen: "Настройки ⚙️", btnSettingsClose: "Закрыть ❌",
+                lblSaveLoad: "Сохранение 💾", btnDownload: "Скачать файл (.txt)", btnLoad: "Загрузить (TXT)",
+                btnOpenTextSave: "Экспорт кода 📋", btnOpenTextLoad: "Импорт кода 📥",
+                lblExportTitle: "Экспорт кода", lblImportTitle: "Импорт кода",
+                btnCopyClipboard: "Копировать в буфер 📋", btnApplyLoadCode: "Загрузить 🎮",
+                lblUpgrades: "Улучшения ⬆️", lblMaxCircles: "Макс. кругов:", lblPointsPerCatch: "Очков за пойманный:",
+                lblSpawnRate: "Частота спавна:", lblEvery: "Каждые ", lblSec: "с",
+                lblMinSize: "Мин. размер:", lblPx: "пикс",
+                lblLiveStats: "Живая статистика", lblCurrentScore: "Текущий счет:", lblLifetimeScore: "Общий счет:",
+                lblCirclesOnScreen: "Кругов на экране:", lblGameVars: "Переменные игры",
+                lblStatMaxCircles: "Макс. кругов:", lblStatPoints: "Очков / Поимка:", lblStatMinSize: "Мин. размер (px):", lblStatSpawnRate: "Частота (ms):",
+                lblSettingsTitle: "Настройки ⚙️", lblLanguage: "Язык:",
+                lblSoundStatus: "Звук:", optSoundOn: "Вкл 🔊", optSoundOff: "Выкл 🔇",
+                lblSoundVolume: "Громкость:",
+                lblDeviceMode: "Режим устройства:", optDesktop: "ПК 💻", optMobile: "Телефон 📱",
+                btnResetGame: "Сбросить игру 🔄", confirmReset: "Вы уверены, что хотите сбросить игру?",
+                btnSoundShop: "Магазин звуков 🎵", lblSoundShopTitle: "Магазин звуков 🎵",
+                lblCatClickSounds: "Звуки клика", lblCatBgm: "Фоновая музыка", lblCatVolumeUpgrades: "Улучшения громкости",
+                lblPopSound: "Звук Поп", lblLaserSound: "Звук Лазер", lblCoinSound: "Звук Монета",
+                lblBgmClassic: "Классический луп", lblBgmArcade: "Аркадный бит",
+                buy: "Купить", selected: "Выбрано ✅", select: "Выбрать", purchased: "Куплено! ✅",
+                upgradeCost: "Цена: ", maxSpeed: "Макс. скорость!", maxSize: "Макс. размер!",
+                alertLoadSuccess: "Игра успешно загружена! 🎮", alertLoadError: "Ошибка! Код сохранения недействителен.",
+                alertCopied: "Код скопирован в буфер обмена! 📋",
+                btnAbout: "Страница кнопок 📄", 
+                lblButtonPageTitle: "Страница кнопок", 
+                lblKeySpace: "Пробел:", descSpace: "Кликнуть на круг",
+                lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
+                descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику"
+            },
+            ar: {
+                lblScore: "النقاط: ",
+                btnMenuOpen: "القائمة 🛠️", btnMenuClose: "إغلاق ❌",
+                btnStatsOpen: "الإحصائيات 📊", btnStatsClose: "إغلاق ❌",
+                btnSettingsOpen: "الإعدادات ⚙️", btnSettingsClose: "إغلاق ❌",
+                lblSaveLoad: "الحفظ والتحميل 💾", btnDownload: "تنزيل ملف الحفظ (.txt)", btnLoad: "تحميل الحفظ (TXT)",
+                btnOpenTextSave: "تصدير الكود 📋", btnOpenTextLoad: "استيراد الكود 📥",
+                lblExportTitle: "تصدير الكود", lblImportTitle: "استيراد الكود",
+                btnCopyClipboard: "نسخ للحافظة 📋", btnApplyLoadCode: "تحميل اللعبة 🎮",
+                lblUpgrades: "الترقيات ⬆️", lblMaxCircles: "الحد الأقصى للدوائر:", lblPointsPerCatch: "النقاط لكل صيد:",
+                lblSpawnRate: "معدل الظهور:", lblEvery: "كل ", lblSec: "ث",
+                lblMinSize: "الحد الأدنى للحجم:", lblPx: "بكسل",
+                lblLiveStats: "الإحصائيات الحية", lblCurrentScore: "النقاط الحالية:", lblLifetimeScore: "مجموع النقاط:",
+                lblCirclesOnScreen: "الدوائر على الشاشة:", lblGameVars: "متغيرات اللعبة",
+                lblStatMaxCircles: "الحد الأقصى للدوائر:", lblStatPoints: "نقاط / صيد:", lblStatMinSize: "الحجم الأدنى (px):", lblStatSpawnRate: "معدل الظهور (ms):",
+                lblSettingsTitle: "الإعدادات ⚙️", lblLanguage: "اللغة:",
+                lblSoundStatus: "الصوت:", optSoundOn: "تشغيل 🔊", optSoundOff: "إيقاف 🔇",
+                lblSoundVolume: "مستوى الصوت:",
+                lblDeviceMode: "وضع الجهاز:", optDesktop: "كمبيوتر 💻", optMobile: "هاتف 📱",
+                btnResetGame: "إعادة ضبط اللعبة 🔄", confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط اللعبة؟",
+                btnSoundShop: "متجر الأصوات 🎵", lblSoundShopTitle: "متجر الأصوات 🎵",
+                lblCatClickSounds: "تأثيرات صوت النقرة", lblCatBgm: "موسيقى الخلفية", lblCatVolumeUpgrades: "ترقيات مستوى الصوت",
+                lblPopSound: "صوت البوب", lblLaserSound: "صوت الليزر", lblCoinSound: "صوت العملة",
+                lblBgmClassic: "حلقة كلاسيكية", lblBgmArcade: "إيقاع أركيد",
+                buy: "شراء", selected: "محدد ✅", select: "تحديد", purchased: "تم الشراء! ✅",
+                upgradeCost: "التكلفة: ", maxSpeed: "السرعة القصوى!", maxSize: "الحجم الأقصى!",
+                alertLoadSuccess: "تم تحميل اللعبة بنجاح! 🎮", alertLoadError: "خطأ! كود الحفظ غير صالح.",
+                alertCopied: "تم نسخ كود الحفظ إلى الحافظة! 📋",
+                btnAbout: "صفحة الأزرار 📄", 
+                lblButtonPageTitle: "صفحة الأزرار", 
+                lblKeySpace: "مسافة:", descSpace: "النقر على الدائرة",
+                lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
+                descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات"
+            },
+            zh: {
+                lblScore: "得分: ",
+                btnMenuOpen: "菜单 🛠️", btnMenuClose: "关闭 ❌",
+                btnStatsOpen: "统计 📊", btnStatsClose: "关闭 ❌",
+                btnSettingsOpen: "设置 ⚙️", btnSettingsClose: "关闭 ❌",
+                lblSaveLoad: "保存与加载 💾", btnDownload: "下载存档文件 (.txt)", btnLoad: "从TXT加载",
+                btnOpenTextSave: "导出代码 📋", btnOpenTextLoad: "导入代码 📥",
+                lblExportTitle: "导出存档代码", lblImportTitle: "导入存档代码",
+                btnCopyClipboard: "复制到剪贴板 📋", btnApplyLoadCode: "加载存档 🎮",
+                lblUpgrades: "升级 ⬆️", lblMaxCircles: "最大圆圈数:", lblPointsPerCatch: "每抓得分:",
+                lblSpawnRate: "生成频率:", lblEvery: "每 ", lblSec: "秒",
+                lblMinSize: "最小尺寸:", lblPx: "像素",
+                lblLiveStats: "实时统计", lblCurrentScore: "当前得分:", lblLifetimeScore: "总得分:",
+                lblCirclesOnScreen: "屏幕上的圆圈:", lblGameVars: "游戏变量",
+                lblStatMaxCircles: "最大圆圈数:", lblStatPoints: "分数 / 抓取:", lblStatMinSize: "最小尺寸 (px):", lblStatSpawnRate: "生成率 (ms):",
+                lblSettingsTitle: "设置 ⚙️", lblLanguage: "语言:",
+                lblSoundStatus: "声音:", optSoundOn: "开启 🔊", optSoundOff: "关闭 🔇",
+                lblSoundVolume: "音量:",
+                lblDeviceMode: "设备模式:", optDesktop: "电脑 💻", optMobile: "手机 📱",
+                btnResetGame: "重置游戏 🔄", confirmReset: "确定要重置游戏吗？",
+                btnSoundShop: "声音商店 🎵", lblSoundShopTitle: "声音商店 🎵",
+                lblCatClickSounds: "点击音效", lblCatBgm: "背景音乐", lblCatVolumeUpgrades: "音量升级",
+                lblPopSound: "气泡声", lblLaserSound: "激光声", lblCoinSound: "金币声",
+                lblBgmClassic: "经典循环", lblBgmArcade: "街机节奏",
+                buy: "购买", selected: "已选择 ✅", select: "选择", purchased: "已购买！ ✅",
+                upgradeCost: "花费: ", maxSpeed: "最高速度！", maxSize: "最大尺寸！",
+                alertLoadSuccess: "游戏加载成功！ 🎮", alertLoadError: "错误！存档代码无效。",
+                alertCopied: "存档代码已复制到剪贴板！ 📋",
+                btnAbout: "按钮页面 📄", 
+                lblButtonPageTitle: "按钮页面", 
+                lblKeySpace: "空格键:", descSpace: "点击悬停的圆圈",
+                lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
+                descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计"
+            },
+            ja: {
+                lblScore: "スコア: ",
+                btnMenuOpen: "メニュー 🛠️", btnMenuClose: "閉じる ❌",
+                btnStatsOpen: "統計 📊", btnStatsClose: "閉じる ❌",
+                btnSettingsOpen: "設定 ⚙️", btnSettingsClose: "閉じる ❌",
+                lblSaveLoad: "セーブとロード 💾", btnDownload: "セーブファイルをダウンロード (.txt)", btnLoad: "TXTからロード",
+                btnOpenTextSave: "コードをエクスポート 📋", btnOpenTextLoad: "コードをインポート 📥",
+                lblExportTitle: "セーブコードのエクスポート", lblImportTitle: "セーブコードのインポート",
+                btnCopyClipboard: "クリップボードにコピー 📋", btnApplyLoadCode: "セーブをロード 🎮",
+                lblUpgrades: "アップグレード ⬆️", lblMaxCircles: "最大円数:", lblPointsPerCatch: "獲得ポイント/個:",
+                lblSpawnRate: "出現頻度:", lblEvery: "", lblSec: "秒ごと",
+                lblMinSize: "最小サイズ:", lblPx: "px",
+                lblLiveStats: "ライブ統計", lblCurrentScore: "現在のスコア:", lblLifetimeScore: "通算スコア:",
+                lblCirclesOnScreen: "画面上の円:", lblGameVars: "ゲーム変数",
+                lblStatMaxCircles: "最大円数:", lblStatPoints: "ポイント/獲得:", lblStatMinSize: "最小サイズ (px):", lblStatSpawnRate: "出現率 (ms):",
+                lblSettingsTitle: "設定 ⚙️", lblLanguage: "言語:",
+                lblSoundStatus: "サウンド:", optSoundOn: "オン 🔊", optSoundOff: "オフ 🔇",
+                lblSoundVolume: "音量:",
+                lblDeviceMode: "デバイスモード:", optDesktop: "デスクトップ 💻", optMobile: "モバイル 📱",
+                btnResetGame: "ゲームリセット 🔄", confirmReset: "本当にゲームをリセットしますか？",
+                btnSoundShop: "サウンドショップ 🎵", lblSoundShopTitle: "サウンドショップ 🎵",
+                lblCatClickSounds: "クリック効果音", lblCatBgm: "BGM", lblCatVolumeUpgrades: "音量アップグレード",
+                lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
+                lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
+                buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
+                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
+                alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
+                alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
+                btnAbout: "ボタンページ 📄", 
+                lblButtonPageTitle: "ボタンページ", 
+                lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
+                lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
+                descKeyA: "メニューを開く/閉じる", descKeyS: "設定を開く/閉じる", descKeyD: "統計を開く/閉じる"
             }
         };
 
@@ -763,7 +1008,7 @@
             costPoints: 10,
             costSpeed: 15,
             costMinSize: 8,
-            language: 'he', 
+            language: 'en', 
             deviceMode: 'desktop',
             soundEnabled: true,
             soundVolume: 1.0,
@@ -1025,12 +1270,12 @@
 
         function changeLanguage(lang) {
             state.language = lang;
-            const dir = lang === 'he' ? 'rtl' : 'ltr';
+            const dir = (lang === 'he' || lang === 'ar') ? 'rtl' : 'ltr';
             document.documentElement.lang = lang;
             document.documentElement.dir = dir;
             langSelect.value = lang;
 
-            const text = t[lang];
+            const text = t[lang] || t['en'];
 
             document.getElementById('lblScore').innerText = text.lblScore;
             document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
@@ -1042,7 +1287,7 @@
             document.getElementById('lblImportTitle').innerText = text.lblImportTitle;
             document.getElementById('btnCopyClipboard').innerText = text.btnCopyClipboard;
             document.getElementById('btnApplyLoadCode').innerText = text.btnApplyLoadCode;
-            document.getElementById('loadCodeTextarea').placeholder = lang === 'he' ? 'הדבק כאן את קוד השמירה...' : 'Paste your save code here...';
+            document.getElementById('loadCodeTextarea').placeholder = text.alertLoadError ? text.alertLoadError : 'Paste your save code here...';
 
             document.getElementById('lblUpgrades').innerText = text.lblUpgrades;
             document.getElementById('lblMaxCircles').innerText = text.lblMaxCircles;
@@ -1135,14 +1380,14 @@
                     hoveredCircle = null;  
                 }
             } 
-            else if (key === 'a' || key === 'ש') {
-                state.language === 'en' ? toggleMenu() : toggleStats();
+            else if (key === 'a') {
+                toggleMenu();
             } 
-            else if (key === 's' || key === 'ד') {
+            else if (key === 's') {
                 toggleSettings();
             } 
-            else if (key === 'd' || key === 'ג') {
-                state.language === 'en' ? toggleStats() : toggleMenu();
+            else if (key === 'd') {
+                toggleStats();
             }
         });
 
@@ -1194,7 +1439,7 @@
         }
 
         function refreshPanelButtons() {
-            const text = t[state.language];
+            const text = t[state.language] || t['en'];
             menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
             statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
             settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
@@ -1216,7 +1461,7 @@
         function copySaveToClipboard() {
             saveCodeTextarea.select();
             navigator.clipboard.writeText(saveCodeTextarea.value).then(() => {
-                alert(t[state.language].alertCopied);
+                alert((t[state.language] || t['en']).alertCopied);
             });
         }
 
@@ -1239,7 +1484,7 @@
         }
 
         function resetGame() {
-            const text = t[state.language];
+            const text = t[state.language] || t['en'];
             if (confirm(text.confirmReset)) {
                 state = {
                     score: 0,
@@ -1382,7 +1627,7 @@
             spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
             minSizeDisplay.innerText = state.minCircleSize;
             
-            const text = t[state.language];
+            const text = t[state.language] || t['en'];
 
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
             btnPoints.disabled = state.score < state.costPoints;
@@ -1650,14 +1895,14 @@
                 try {
                     loadedState = JSON.parse(atob(fileContent));
                 } catch (err2) {
-                    alert(t[state.language].alertLoadError);
+                    alert((t[state.language] || t['en']).alertLoadError);
                     return;
                 }
             }
             
             state = { ...state, ...loadedState }; 
             if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
-            if (!state.language) state.language = 'he'; 
+            if (!state.language) state.language = 'en'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
             if (typeof state.soundVolume === 'undefined') state.soundVolume = 1.0;
@@ -1679,7 +1924,7 @@
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
             else if (bgmInterval) clearInterval(bgmInterval);
 
-            alert(t[state.language].alertLoadSuccess);
+            alert((t[state.language] || t['en']).alertLoadSuccess);
         }
 
         initGame();
