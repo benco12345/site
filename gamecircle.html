@@ -181,7 +181,6 @@
         }
         .controls-list span { color: #4CAF50; }
 
-        /* Save & Load Text GUI Modals */
         .text-modal {
             position: absolute;
             top: 0;
@@ -343,14 +342,13 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
-    <!-- דף כפתור -->
     <div id="button-page-modal">
         <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
         <div id="button-page-content">
             <h2 id="lblButtonPageTitle">Button Page</h2>
             <div class="controls-list">
                 <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
-                <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Focus cheat code box</span></div>
+                <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
                 <div><strong>A / ש:</strong> <span id="descKeyA">Open/Close Menu</span></div>
                 <div><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></div>
                 <div><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></div>
@@ -358,7 +356,6 @@
         </div>
     </div>
 
-    <!-- Text Save GUI Modal -->
     <div id="textSaveModal" class="text-modal">
         <div class="text-modal-content">
             <h3 id="lblExportTitle">Export Save Code</h3>
@@ -368,7 +365,6 @@
         </div>
     </div>
 
-    <!-- Text Load GUI Modal -->
     <div id="textLoadModal" class="text-modal">
         <div class="text-modal-content">
             <h3 id="lblImportTitle">Import Save Code</h3>
@@ -443,26 +439,25 @@
         <h3 id="lblUpgrades">Upgrades ⬆️</h3>
         <div class="upgrade-box">
             <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
-            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">10</span>)</button>
+            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">5</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
-            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">20</span>)</button>
+            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">10</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
-            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">30</span>)</button>
+            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">15</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
-            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">15</span>)</button>
+            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">8</span>)</button>
         </div>
     </div>
 
     <div id="game-area"></div>
 
     <script>
-        // --- Translation Dictionary ---
         const t = {
             en: {
                 lblScore: "Score: ",
@@ -525,10 +520,10 @@
             pointsPerClick: 1,
             spawnRateMs: 1000, 
             minCircleSize: 40,
-            costMaxCircles: 10,
-            costPoints: 20,
-            costSpeed: 30,
-            costMinSize: 15,
+            costMaxCircles: 5,
+            costPoints: 10,
+            costSpeed: 15,
+            costMinSize: 8,
             language: 'he', 
             deviceMode: 'desktop' 
         };
@@ -727,7 +722,6 @@
             settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
         }
 
-        // Text Save/Load GUI Controls
         function openTextSaveModal() {
             menuPanel.style.display = 'none';
             refreshPanelButtons();
@@ -955,7 +949,7 @@
             if (state.score >= state.costMaxCircles) {
                 state.score -= state.costMaxCircles;
                 state.maxCircles += 3;
-                state.costMaxCircles = Math.floor(state.costMaxCircles * 1.5);
+                state.costMaxCircles = Math.floor(state.costMaxCircles * 1.25);
                 updateUI();
             }
         }
@@ -964,7 +958,7 @@
             if (state.score >= state.costPoints) {
                 state.score -= state.costPoints;
                 state.pointsPerClick += 1;
-                state.costPoints = Math.floor(state.costPoints * 1.8);
+                state.costPoints = Math.floor(state.costPoints * 1.3);
                 updateUI();
             }
         }
@@ -973,7 +967,7 @@
             if (state.score >= state.costSpeed && state.spawnRateMs > 100) {
                 state.score -= state.costSpeed;
                 state.spawnRateMs = Math.max(100, Math.floor(state.spawnRateMs * 0.85));
-                state.costSpeed = Math.floor(state.costSpeed * 1.6);
+                state.costSpeed = Math.floor(state.costSpeed * 1.3);
                 updateUI();
                 startGameLoop();
             }
@@ -983,7 +977,7 @@
             if (state.score >= state.costMinSize && state.minCircleSize < 150) {
                 state.score -= state.costMinSize;
                 state.minCircleSize += 10;
-                state.costMinSize = Math.floor(state.costMinSize * 1.5);
+                state.costMinSize = Math.floor(state.costMinSize * 1.25);
                 updateUI();
             }
         }
