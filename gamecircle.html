@@ -292,6 +292,9 @@
         .save-load-btn { background: #FF9800 !important; color: #111 !important; }
         .save-load-btn:hover { background: #F57C00 !important; }
 
+        .reset-btn { background: #f44336 !important; color: white !important; margin-top: 15px; }
+        .reset-btn:hover { background: #d32f2f !important; }
+
         .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
         hr { border: 1px solid #777; margin: 20px 0; }
@@ -390,6 +393,7 @@
                 <option value="mobile" id="optMobile">Mobile 📱</option>
             </select>
         </div>
+        <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">Reset Game 🔄</button>
     </div>
 
     <div id="stats-panel" class="panel">
@@ -476,6 +480,7 @@
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
+                btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
@@ -502,6 +507,7 @@
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
+                btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
@@ -542,6 +548,7 @@
         const btnPoints = document.getElementById('btnPoints');
         const btnSpeed = document.getElementById('btnSpeed');
         const btnMinSize = document.getElementById('btnMinSize'); 
+        const btnResetGame = document.getElementById('btnResetGame');
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
@@ -616,6 +623,7 @@
             document.getElementById('lblDeviceMode').innerText = text.lblDeviceMode;
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
+            btnResetGame.innerText = text.btnResetGame;
 
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
@@ -758,6 +766,31 @@
             if (!fileContent) return;
             processLoadedData(fileContent);
             closeTextLoadModal();
+        }
+
+        function resetGame() {
+            const text = t[state.language];
+            if (confirm(text.confirmReset)) {
+                state = {
+                    score: 0,
+                    totalScore: 0, 
+                    maxCircles: 5,
+                    pointsPerClick: 1,
+                    spawnRateMs: 1000, 
+                    minCircleSize: 40,
+                    costMaxCircles: 5,
+                    costPoints: 10,
+                    costSpeed: 15,
+                    costMinSize: 8,
+                    language: state.language, 
+                    deviceMode: state.deviceMode 
+                };
+                gameArea.innerHTML = '';
+                currentCircles = 0;
+                startGameLoop();
+                updateUI();
+                toggleSettings();
+            }
         }
 
         devCodeInput.addEventListener('input', function() {
