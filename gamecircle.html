@@ -65,6 +65,24 @@
         }
         #btnSoundShop:hover { background: #C2185B; }
 
+        #btnChallengeMode {
+            position: absolute;
+            top: 10px;
+            left: 235px; 
+            z-index: 100;
+            background: #FF9800;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnChallengeMode:hover { background: #F57C00; }
+
         #score-hud {
             position: absolute;
             top: 20px;
@@ -81,6 +99,25 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             white-space: nowrap;
             transition: all 0.3s ease;
+        }
+
+        #challenge-hud {
+            position: absolute;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 26px;
+            font-weight: bold;
+            color: #FFEB3B;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 8px 25px;
+            border-radius: 12px;
+            z-index: 50;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: none;
+            text-align: center;
+            border: 2px solid #FF9800;
+            white-space: nowrap;
         }
 
         #bottom-nav {
@@ -146,7 +183,7 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        #button-page-modal {
+        #button-page-modal, #challenge-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -160,7 +197,7 @@
             align-items: center;
         }
 
-        #btnCloseButtonPage {
+        #btnCloseButtonPage, #btnCloseChallengeModal {
             position: absolute;
             top: 20px;
             right: 20px; 
@@ -172,9 +209,9 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover { transform: scale(1.2); }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover { transform: scale(1.2); }
 
-        #button-page-content {
+        #button-page-content, #challenge-modal-content {
             background: rgba(30, 30, 40, 0.95);
             padding: 40px;
             border-radius: 20px;
@@ -185,8 +222,9 @@
             width: 85%;
             max-width: 500px;
         }
+        #challenge-modal-content { border-color: #FF9800; }
 
-        #button-page-content h2 {
+        #button-page-content h2, #challenge-modal-content h2 {
             margin-top: 0;
             color: #FFEB3B;
             font-size: 32px;
@@ -452,9 +490,15 @@
             padding: 8px 20px;
             top: 10px;
         }
+        body.mobile-mode #challenge-hud {
+            font-size: 18px;
+            padding: 6px 15px;
+            top: 50px;
+        }
         body.mobile-mode #devCodeInput { top: 50px; } 
         body.mobile-mode #btnAbout { top: 50px; }
         body.mobile-mode #btnSoundShop { top: 50px; left: 100px; padding: 5px 8px; font-size: 13px; }
+        body.mobile-mode #btnChallengeMode { top: 50px; left: 195px; padding: 5px 8px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -462,13 +506,25 @@
     <input type="text" id="devCodeInput" placeholder="Code...">
     <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
     <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
+    <button id="btnChallengeMode" onclick="toggleChallengeModal()">Challenge ⚡</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
+    <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
 
     <div id="bottom-nav">
         <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
         <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    </div>
+
+    <!-- Challenge Mode Modal -->
+    <div id="challenge-modal">
+        <button id="btnCloseChallengeModal" onclick="toggleChallengeModal()">❌</button>
+        <div id="challenge-modal-content">
+            <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
+            <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">Normal 🟢</button>
+            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">Press the Color 🎨</button>
+        </div>
     </div>
 
     <!-- דף שני (Button Page Modal) -->
@@ -752,7 +808,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
-                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats"
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
+                btnChallengeMode: "Challenge ⚡", lblChallengeTitle: "Challenge Mode ⚡",
+                btnModeNormal: "Normal 🟢", btnModePressColor: "Press the Color 🎨",
+                lblPressTheColorInstruction: "Press the color"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -788,7 +847,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
-                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט"
+                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
+                btnChallengeMode: "אתגר ⚡", lblChallengeTitle: "מצב אתגר ⚡",
+                btnModeNormal: "רגיל (Normal) 🟢", btnModePressColor: "לחץ על הצבע (Press the color) 🎨",
+                lblPressTheColorInstruction: "לחץ על הצבע"
             },
             es: {
                 lblScore: "Puntuación: ",
@@ -824,7 +886,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Espacio:", descSpace: "Hacer clic en el círculo",
                 lblKeyCode: ". o / :", descKeyCode: "Escribir código",
-                descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas"
+                descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas",
+                btnChallengeMode: "Desafío ⚡", lblChallengeTitle: "Modo Desafío ⚡",
+                btnModeNormal: "Normal 🟢", btnModePressColor: "Presiona el color 🎨",
+                lblPressTheColorInstruction: "Presiona el color"
             },
             fr: {
                 lblScore: "Score : ",
@@ -860,7 +925,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Espace :", descSpace: "Cliquer sur le cercle",
                 lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
-                descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats"
+                descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats",
+                btnChallengeMode: "Défi ⚡", lblChallengeTitle: "Mode Défi ⚡",
+                btnModeNormal: "Normal 🟢", btnModePressColor: "Appuyez sur la couleur 🎨",
+                lblPressTheColorInstruction: "Appuyez sur la couleur"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -869,7 +937,7 @@
                 btnSettingsOpen: "Einstellungen ⚙️", btnSettingsClose: "Schließen ❌",
                 lblSaveLoad: "Speichern & Laden 💾", btnDownload: "Datei herunterladen (.txt)", btnLoad: "Laden (TXT)",
                 btnOpenTextSave: "Code exportieren 📋", btnOpenTextLoad: "Code importieren 📥",
-                lblExportTitle: "Code exportieren", lblImportTitle: "Code importieren",
+                lblExportTitle: "Code exportieren", lblImportTitle: "Code exportieren",
                 btnCopyClipboard: "In Zwischenablage kopieren 📋", btnApplyLoadCode: "Laden 🎮",
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max. Kreise:", lblPointsPerCatch: "Punkte pro Fang:",
                 lblSpawnRate: "Spawn-Rate:", lblEvery: "Alle ", lblSec: "s",
@@ -896,7 +964,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Leertaste:", descSpace: "Kreis anklicken",
                 lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
-                descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen"
+                descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen",
+                btnChallengeMode: "Herausforderung ⚡", lblChallengeTitle: "Herausforderungsmodus ⚡",
+                btnModeNormal: "Normal 🟢", btnModePressColor: "Drücke die Farbe 🎨",
+                lblPressTheColorInstruction: "Drücke die Farbe"
             },
             ru: {
                 lblScore: "Счет: ",
@@ -932,7 +1003,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Пробел:", descSpace: "Кликнуть на круг",
                 lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
-                descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику"
+                descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику",
+                btnChallengeMode: "Вызов ⚡", lblChallengeTitle: "Режим Вызова ⚡",
+                btnModeNormal: "Нормальный 🟢", btnModePressColor: "Нажми цвет 🎨",
+                lblPressTheColorInstruction: "Нажми цвет"
             },
             ar: {
                 lblScore: "النقاط: ",
@@ -968,7 +1042,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "مسافة:", descSpace: "النقر على الدائرة",
                 lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
-                descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات"
+                descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات",
+                btnChallengeMode: "تحدي ⚡", lblChallengeTitle: "وضع التحدي ⚡",
+                btnModeNormal: "عادي 🟢", btnModePressColor: "اضغط على اللون 🎨",
+                lblPressTheColorInstruction: "اضغط على اللون"
             },
             zh: {
                 lblScore: "得分: ",
@@ -1004,7 +1081,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "空格键:", descSpace: "点击悬停的圆圈",
                 lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
-                descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计"
+                descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计",
+                btnChallengeMode: "挑战 ⚡", lblChallengeTitle: "挑战模式 ⚡",
+                btnModeNormal: "普通 🟢", btnModePressColor: "点击颜色 🎨",
+                lblPressTheColorInstruction: "点击颜色"
             },
             ja: {
                 lblScore: "スコア: ",
@@ -1031,7 +1111,7 @@
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
                 lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
                 buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
-                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
+                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "Maximale Größe!",
                 alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
                 alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
                 btnAbout: "2ページ目 📄", 
@@ -1040,7 +1120,10 @@
                 btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
-                descKeyA: "メニューを開く/閉じる", descKeyS: "設定を開く/閉じる", descKeyD: "統計を開く/閉じる"
+                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
+                btnChallengeMode: "チャレンジ ⚡", lblChallengeTitle: "チャレンジモード ⚡",
+                btnModeNormal: "ノーマル 🟢", btnModePressColor: "色を押す 🎨",
+                lblPressTheColorInstruction: "色を押す"
             }
         };
 
@@ -1059,6 +1142,8 @@
             deviceMode: 'desktop',
             soundEnabled: true,
             soundVolume: 1.0,
+            challengeMode: 'normal',
+            targetColorName: '',
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
             unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
@@ -1086,6 +1171,12 @@
         const btnResetGame = document.getElementById('btnResetGame');
         const btnSoundShop = document.getElementById('btnSoundShop');
         const soundShopModal = document.getElementById('sound-shop-modal');
+        const challengeModal = document.getElementById('challenge-modal');
+        const challengeHud = document.getElementById('challenge-hud');
+        const targetColorNameDisplay = document.getElementById('targetColorName');
+
+        const bottomNav = document.getElementById('bottom-nav');
+        const btnAbout = document.getElementById('btnAbout');
         
         const btnBuyPop = document.getElementById('btnBuyPop');
         const btnSelectPop = document.getElementById('btnSelectPop');
@@ -1148,6 +1239,89 @@
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
 
+        function toggleChallengeModal() {
+            initAudio();
+            const isOpen = challengeModal.style.display === 'flex';
+            if (!isOpen) {
+                menuPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                buttonPageModal.style.display = 'none';
+                soundShopModal.style.display = 'none';
+                refreshPanelButtons();
+            }
+            challengeModal.style.display = isOpen ? 'none' : 'flex';
+        }
+
+        const availableColors = [
+            { name: 'red', hex: '#ff0000' },
+            { name: 'blue', hex: '#0000ff' },
+            { name: 'green', hex: '#00ff00' },
+            { name: 'yellow', hex: '#ffff00' },
+            { name: 'purple', hex: '#800080' },
+            { name: 'orange', hex: '#ffa500' }
+        ];
+
+        function setChallengeMode(mode) {
+            state.challengeMode = mode;
+            toggleChallengeModal();
+
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            buttonPageModal.style.display = 'none';
+            soundShopModal.style.display = 'none';
+
+            if (mode === 'press_color') {
+                bottomNav.style.display = 'none';
+                btnAbout.style.display = 'none';
+                btnSoundShop.style.display = 'none';
+                challengeHud.style.display = 'block';
+                pickNewTargetColor();
+                ensureTargetCircleExists();
+            } else {
+                bottomNav.style.display = 'flex';
+                btnAbout.style.display = 'block';
+                btnSoundShop.style.display = 'block';
+                challengeHud.style.display = 'none';
+                refreshExistingCirclesColors();
+            }
+            refreshPanelButtons();
+        }
+
+        function pickNewTargetColor() {
+            const randomColorObj = availableColors[Math.floor(Math.random() * availableColors.length)];
+            state.targetColorName = randomColorObj.name;
+            targetColorNameDisplay.innerText = state.targetColorName;
+            targetColorNameDisplay.style.color = randomColorObj.hex;
+        }
+
+        function ensureTargetCircleExists() {
+            const circles = document.querySelectorAll('.circle');
+            if (circles.length === 0) {
+                spawnCircle(true);
+                return;
+            }
+            
+            // Check if target color exists among current circles, if not, convert one circle to target color
+            let hasTarget = Array.from(circles).some(c => c.dataset.colorName === state.targetColorName);
+            if (!hasTarget) {
+                const randomCircle = circles[Math.floor(Math.random() * circles.length)];
+                const targetObj = availableColors.find(c => c.name === state.targetColorName);
+                randomCircle.style.backgroundColor = targetObj.hex;
+                randomCircle.dataset.colorName = targetObj.name;
+            }
+        }
+
+        function refreshExistingCirclesColors() {
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach(circle => {
+                const chosenColorObj = availableColors[Math.floor(Math.random() * availableColors.length)];
+                circle.style.backgroundColor = chosenColorObj.hex;
+                circle.dataset.colorName = chosenColorObj.name;
+            });
+        }
+
         function openHelpSubModal() {
             const container = document.getElementById('helps-container');
             container.style.display = container.style.display === 'none' ? 'block' : 'none';
@@ -1168,7 +1342,7 @@
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                const vol = state.soundVolume * 2.5; // Boosted baseline volume factor
+                const vol = state.soundVolume * 2.5;
                 
                 if (state.activeSound === 'pop') {
                     osc.type = 'sine';
@@ -1192,8 +1366,8 @@
                     osc.stop(audioCtx.currentTime + 0.15);
                 } else if (state.activeSound === 'coin') {
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
-                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
+                    osc.frequency.setValueAtTime(987.77, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08);
                     gain.gain.setValueAtTime(0.4 * vol, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.2);
                     osc.connect(gain);
@@ -1212,10 +1386,10 @@
             let tempo = 600;
             
             if (state.activeBgm === 'classic') {
-                notes = [261.63, 329.63, 392.00, 523.25]; // C E G C
+                notes = [261.63, 329.63, 392.00, 523.25];
                 tempo = 600;
             } else if (state.activeBgm === 'arcade') {
-                notes = [440, 554.37, 659.25, 880, 659.25, 554.37]; // A C# E A E C#
+                notes = [440, 554.37, 659.25, 880, 659.25, 554.37];
                 tempo = 300;
             }
 
@@ -1226,7 +1400,7 @@
                 try {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    const vol = state.soundVolume * 2.5; // Boosted baseline volume factor
+                    const vol = state.soundVolume * 2.5;
                     osc.type = state.activeBgm === 'arcade' ? 'square' : 'triangle';
                     osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
                     
@@ -1267,6 +1441,7 @@
                 statsPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
                 buttonPageModal.style.display = 'none';
+                challengeModal.style.display = 'none';
                 refreshPanelButtons();
             }
             soundShopModal.style.display = isOpen ? 'none' : 'flex';
@@ -1387,6 +1562,11 @@
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
             document.getElementById('btnOpenHelps').innerText = text.btnOpenHelps;
             document.getElementById('btnDevSupport').innerText = text.btnDevSupport;
+            document.getElementById('btnChallengeMode').innerText = text.btnChallengeMode;
+            document.getElementById('lblChallengeTitle').innerText = text.lblChallengeTitle;
+            document.getElementById('btnModeNormal').innerText = text.btnModeNormal;
+            document.getElementById('btnModePressColor').innerText = text.btnModePressColor;
+            document.getElementById('lblPressTheColorInstruction').innerText = text.lblPressTheColorInstruction;
             
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
             document.getElementById('descSpace').innerText = text.descSpace;
@@ -1434,14 +1614,16 @@
                     hoveredCircle = null;  
                 }
             } 
-            else if (key === 'a') {
-                toggleMenu();
-            } 
-            else if (key === 's') {
-                toggleSettings();
-            } 
-            else if (key === 'd') {
-                toggleStats();
+            else if (state.challengeMode === 'normal') {
+                if (key === 'a') {
+                    toggleMenu();
+                } 
+                else if (key === 's') {
+                    toggleSettings();
+                } 
+                else if (key === 'd') {
+                    toggleStats();
+                }
             }
         });
 
@@ -1450,44 +1632,52 @@
         }, { once: true });
 
         function toggleButtonPage() {
+            if (state.challengeMode === 'press_color') return;
             const isOpen = buttonPageModal.style.display === 'flex';
             if (!isOpen) {
                 menuPanel.style.display = 'none';
                 statsPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
                 soundShopModal.style.display = 'none';
+                challengeModal.style.display = 'none';
                 refreshPanelButtons();
             }
             buttonPageModal.style.display = isOpen ? 'none' : 'flex';
         }
 
         function toggleMenu() {
+            if (state.challengeMode === 'press_color') return;
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
             soundShopModal.style.display = 'none';
+            challengeModal.style.display = 'none';
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
 
         function toggleStats() {
+            if (state.challengeMode === 'press_color') return;
             const isOpen = statsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
             soundShopModal.style.display = 'none';
+            challengeModal.style.display = 'none';
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
             refreshPanelButtons();
         }
 
         function toggleSettings() {
+            if (state.challengeMode === 'press_color') return;
             const isOpen = settingsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
             soundShopModal.style.display = 'none';
+            challengeModal.style.display = 'none';
             settingsPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -1555,6 +1745,8 @@
                     deviceMode: state.deviceMode,
                     soundEnabled: true,
                     soundVolume: 1.0,
+                    challengeMode: 'normal',
+                    targetColorName: '',
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
                     unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
@@ -1567,6 +1759,7 @@
                 gameArea.innerHTML = '';
                 currentCircles = 0;
                 if (bgmInterval) clearInterval(bgmInterval);
+                setChallengeMode('normal');
                 startGameLoop();
                 updateUI();
                 toggleSettings();
@@ -1580,12 +1773,18 @@
                 const circles = document.querySelectorAll('.circle');
                 if (circles.length > 0) {
                     let earned = (circles.length * state.pointsPerClick);
+                    if (state.challengeMode === 'press_color') earned *= 3;
                     state.score += earned;
                     state.totalScore += earned; 
                     circles.forEach(circle => circle.remove());
                     currentCircles = 0;
                     playClickSound();
                     updateUI();
+                    if (state.challengeMode === 'press_color') {
+                        pickNewTargetColor();
+                        refreshExistingCirclesColors();
+                        ensureTargetCircleExists();
+                    }
                 }
                 this.value = '';
                 this.blur();
@@ -1604,6 +1803,7 @@
                 settingsPanel.style.display = 'none';
                 buttonPageModal.style.display = 'none';
                 soundShopModal.style.display = 'none';
+                challengeModal.style.display = 'none';
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
                 
@@ -1662,6 +1862,7 @@
                     }
                 }
             }
+            if (state.challengeMode === 'press_color') ensureTargetCircleExists();
             updateUI(); 
         }
 
@@ -1704,7 +1905,6 @@
             }
 
             // --- Sound Shop UI Management ---
-            // Pop Sound
             if (!state.unlockedSounds.pop) {
                 btnBuyPop.style.display = 'inline-block';
                 btnBuyPop.disabled = state.score < state.costs.pop;
@@ -1722,7 +1922,6 @@
                 }
             }
 
-            // Laser Sound
             if (!state.unlockedSounds.laser) {
                 btnBuyLaser.style.display = 'inline-block';
                 btnBuyLaser.disabled = state.score < state.costs.laser;
@@ -1740,7 +1939,6 @@
                 }
             }
 
-            // Coin Sound
             if (!state.unlockedSounds.coin) {
                 btnBuyCoin.style.display = 'inline-block';
                 btnBuyCoin.disabled = state.score < state.costs.coin;
@@ -1758,7 +1956,6 @@
                 }
             }
 
-            // Classic BGM
             if (!state.unlockedBgm.classic) {
                 btnBuyClassicBgm.style.display = 'inline-block';
                 btnBuyClassicBgm.disabled = state.score < state.costs.classic;
@@ -1776,7 +1973,6 @@
                 }
             }
 
-            // Arcade BGM
             if (!state.unlockedBgm.arcade) {
                 btnBuyArcadeBgm.style.display = 'inline-block';
                 btnBuyArcadeBgm.disabled = state.score < state.costs.arcade;
@@ -1794,7 +1990,6 @@
                 }
             }
 
-            // Volume Upgrades 200% - 1000%
             const volLevels = ['200', '300', '400', '500', '600', '700', '800', '900', '1000'];
             const btnMap = { '200': btnBuyVol200, '300': btnBuyVol300, '400': btnBuyVol400, '500': btnBuyVol500, '600': btnBuyVol600, '700': btnBuyVol700, '800': btnBuyVol800, '900': btnBuyVol900, '1000': btnBuyVol1000 };
             const optMap = { '200': optVol200, '300': optVol300, '400': optVol400, '500': optVol500, '600': optVol600, '700': optVol700, '800': optVol800, '900': optVol900, '1000': optVol1000 };
@@ -1828,12 +2023,12 @@
 
         function startGameLoop() {
             clearInterval(gameInterval);
-            gameInterval = setInterval(() => spawnCircle(false), state.spawnRateMs);
-        }
-
-        function getRandomColor() {
-            const h = Math.floor(Math.random() * 360);
-            return `hsl(${h}, 100%, 60%)`;
+            gameInterval = setInterval(() => {
+                spawnCircle(false);
+                if (state.challengeMode === 'press_color') {
+                    ensureTargetCircleExists();
+                }
+            }, state.spawnRateMs);
         }
 
         function spawnCircle(force = false) {
@@ -1845,7 +2040,17 @@
             const size = Math.floor(Math.random() * 50) + state.minCircleSize;
             circle.style.width = size + 'px';
             circle.style.height = size + 'px';
-            circle.style.backgroundColor = getRandomColor();
+
+            let chosenColorObj;
+            if (state.challengeMode === 'press_color' && currentCircles === 0) {
+                // Guarantee the first circle or an empty board has the target color
+                chosenColorObj = availableColors.find(c => c.name === state.targetColorName) || availableColors[0];
+            } else {
+                chosenColorObj = availableColors[Math.floor(Math.random() * availableColors.length)];
+            }
+
+            circle.style.backgroundColor = chosenColorObj.hex;
+            circle.dataset.colorName = chosenColorObj.name;
 
             const maxX = gameArea.clientWidth - size;
             const maxY = gameArea.clientHeight - size;
@@ -1861,8 +2066,29 @@
 
             circle.onclick = function() {
                 playClickSound();
-                state.score += state.pointsPerClick;
-                state.totalScore += state.pointsPerClick; 
+                let earned = state.pointsPerClick;
+                
+                if (state.challengeMode === 'press_color') {
+                    if (this.dataset.colorName === state.targetColorName) {
+                        earned *= 3;
+                        state.score += earned;
+                        state.totalScore += earned;
+                        pickNewTargetColor();
+                        refreshExistingCirclesColors();
+                        ensureTargetCircleExists();
+                    } else {
+                        earned *= 3;
+                        state.score -= earned;
+                        if (state.score < 0) state.score = 0;
+                        pickNewTargetColor();
+                        refreshExistingCirclesColors();
+                        ensureTargetCircleExists();
+                    }
+                } else {
+                    state.score += earned;
+                    state.totalScore += earned;
+                }
+
                 currentCircles--;
                 this.remove();
                 hoveredCircle = null; 
@@ -1960,6 +2186,7 @@
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
             if (typeof state.soundVolume === 'undefined') state.soundVolume = 1.0;
+            if (!state.challengeMode) state.challengeMode = 'normal';
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
             if (!state.unlockedVolumes) state.unlockedVolumes = { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
@@ -1971,6 +2198,7 @@
             
             changeLanguage(state.language); 
             changeDeviceMode(state.deviceMode); 
+            setChallengeMode(state.challengeMode);
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             startGameLoop();
