@@ -143,7 +143,7 @@
         }
 
         #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
-        #settings-panel { left: 50%; transform: translateX(-50%); width: 300px; }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
         #button-page-modal {
@@ -199,7 +199,6 @@
         }
         .controls-list span { color: #4CAF50; }
 
-        /* Sound Shop Modal */
         #sound-shop-modal {
             position: absolute;
             top: 0;
@@ -334,7 +333,7 @@
         }
 
         .stat-input, select {
-            width: 90px;
+            width: 100px;
             padding: 5px;
             border-radius: 5px;
             border: 1px solid #777;
@@ -343,7 +342,7 @@
             font-weight: bold;
             text-align: center;
         }
-        select { width: 120px; cursor: pointer; }
+        select { width: 130px; cursor: pointer; }
 
         .stat-input:disabled {
             background: transparent;
@@ -543,6 +542,16 @@
             </select>
         </div>
         <div class="stat-row">
+            <span id="lblSoundVolume">Volume / עוצמה:</span>
+            <select id="soundVolumeSelect" onchange="changeSoundVolume(this.value)">
+                <option value="0.25">25%</option>
+                <option value="0.5" selected>50%</option>
+                <option value="0.75">75%</option>
+                <option value="2.0">200%</option>
+                <option value="3.0">300%</option>
+            </select>
+        </div>
+        <div class="stat-row">
             <span id="lblLanguage">Language / שפה:</span>
             <select id="langSelect" onchange="changeLanguage(this.value)">
                 <option value="en">English</option>
@@ -643,6 +652,7 @@
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
                 lblSoundStatus: "Sound / סאונד:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
+                lblSoundVolume: "Volume / עוצמה:",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
                 btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
@@ -676,6 +686,7 @@
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
                 lblSoundStatus: "סאונד / Sound:", optSoundOn: "פועל 🔊", optSoundOff: "כבוי 🔇",
+                lblSoundVolume: "עוצמת סאונד / Volume:",
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
@@ -708,6 +719,7 @@
             language: 'he', 
             deviceMode: 'desktop',
             soundEnabled: true,
+            soundVolume: 0.5,
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
             activeSound: 'none',
@@ -765,6 +777,7 @@
         
         const langSelect = document.getElementById('langSelect');
         const soundToggleSelect = document.getElementById('soundToggleSelect');
+        const soundVolumeSelect = document.getElementById('soundVolumeSelect');
         const deviceSelect = document.getElementById('deviceSelect');
         
         const editCurrentScore = document.getElementById('editCurrentScore');
@@ -790,13 +803,14 @@
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
+                const vol = state.soundVolume;
                 
                 if (state.activeSound === 'pop') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(400, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.2 * vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.1);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start();
@@ -805,8 +819,8 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(900, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15 * vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.15);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start();
@@ -815,8 +829,8 @@
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
                     osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.2 * vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.2);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start();
@@ -847,11 +861,12 @@
                 try {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
+                    const vol = state.soundVolume;
                     osc.type = state.activeBgm === 'arcade' ? 'square' : 'triangle';
                     osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
                     
-                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (tempo / 1000 * 0.5));
+                    gain.gain.setValueAtTime(0.03 * vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001 * vol, audioCtx.currentTime + (tempo / 1000 * 0.5));
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -872,6 +887,11 @@
             } else {
                 if (bgmInterval) clearInterval(bgmInterval);
             }
+        }
+
+        function changeSoundVolume(val) {
+            state.soundVolume = parseFloat(val);
+            soundVolumeSelect.value = val;
         }
 
         function toggleSoundShop() {
@@ -969,6 +989,7 @@
             document.getElementById('lblSoundStatus').innerText = text.lblSoundStatus;
             document.getElementById('optSoundOn').innerText = text.optSoundOn;
             document.getElementById('optSoundOff').innerText = text.optSoundOff;
+            document.getElementById('lblSoundVolume').innerText = text.lblSoundVolume;
             
             document.getElementById('lblDeviceMode').innerText = text.lblDeviceMode;
             document.getElementById('optDesktop').innerText = text.optDesktop;
@@ -1154,6 +1175,7 @@
                     language: state.language, 
                     deviceMode: state.deviceMode,
                     soundEnabled: true,
+                    soundVolume: 0.5,
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
                     activeSound: 'none',
@@ -1161,6 +1183,7 @@
                     costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250 }
                 };
                 soundToggleSelect.value = 'on';
+                soundVolumeSelect.value = '0.5';
                 gameArea.innerHTML = '';
                 currentCircles = 0;
                 if (bgmInterval) clearInterval(bgmInterval);
@@ -1266,6 +1289,7 @@
             autoDetectDevice(); 
             changeLanguage(state.language);
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
+            soundVolumeSelect.value = state.soundVolume.toString();
             startGameLoop();
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
         }
@@ -1536,6 +1560,7 @@
             if (!state.language) state.language = 'he'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
+            if (typeof state.soundVolume === 'undefined') state.soundVolume = 0.5;
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
             if (!state.activeSound) state.activeSound = 'none';
@@ -1547,6 +1572,7 @@
             changeLanguage(state.language); 
             changeDeviceMode(state.deviceMode); 
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
+            soundVolumeSelect.value = state.soundVolume.toString();
             startGameLoop();
             
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
