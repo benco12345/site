@@ -193,9 +193,32 @@
             margin-bottom: 20px;
         }
 
+        .modal-menu-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .modal-menu-btn:hover { background: #1976D2; transform: translateY(-2px); }
+
         .controls-list {
             font-size: 18px;
             line-height: 2.2;
+            text-align: left;
+        }
+        [dir="rtl"] .controls-list {
+            text-align: right;
         }
         .controls-list span { color: #4CAF50; }
 
@@ -437,7 +460,7 @@
 <body>
 
     <input type="text" id="devCodeInput" placeholder="Code...">
-    <button id="btnAbout" onclick="toggleButtonPage()">Button Page 📄</button>
+    <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
     <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
@@ -448,17 +471,23 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
-    <!-- Button Page Modal -->
+    <!-- דף שני (Button Page Modal) -->
     <div id="button-page-modal">
         <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
         <div id="button-page-content">
-            <h2 id="lblButtonPageTitle">Button Page</h2>
-            <div class="controls-list">
-                <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
-                <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
-                <div><strong>A:</strong> <span id="descKeyA">Open/Close Menu</span></div>
-                <div><strong>S:</strong> <span id="descKeyS">Open/Close Settings</span></div>
-                <div><strong>D:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+            <h2 id="lblButtonPageTitle">Second Page</h2>
+            
+            <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">עזרה (Helps) 💡</button>
+            <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-modal-btn modal-menu-btn" id="btnDevSupport" style="background: #5865F2;">Developer Support 💬</a>
+
+            <div id="helps-container" style="display: none; margin-top: 20px; border-top: 2px solid #555; padding-top: 15px;">
+                <div class="controls-list">
+                    <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
+                    <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
+                    <div><strong>A:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                    <div><strong>S:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                    <div><strong>D:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -717,8 +746,10 @@
                 upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
-                btnAbout: "Button Page 📄", 
-                lblButtonPageTitle: "Button Page", 
+                btnAbout: "Second Page 📄", 
+                lblButtonPageTitle: "Second Page", 
+                btnOpenHelps: "Helps 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats"
@@ -751,8 +782,10 @@
                 upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
-                btnAbout: "דף כפתור 📄", 
-                lblButtonPageTitle: "דף כפתור", 
+                btnAbout: "דף שני 📄", 
+                lblButtonPageTitle: "דף שני", 
+                btnOpenHelps: "עזרה (Helps) 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט"
@@ -785,8 +818,10 @@
                 upgradeCost: "Costo: ", maxSpeed: "¡Velocidad máxima!", maxSize: "¡Tamaño máximo!",
                 alertLoadSuccess: "¡Juego cargado con éxito! 🎮", alertLoadError: "¡Error! El código no es válido.",
                 alertCopied: "¡Código copiado al portapapeles! 📋",
-                btnAbout: "Página de botones 📄", 
-                lblButtonPageTitle: "Página de botones", 
+                btnAbout: "Segundo Página 📄", 
+                lblButtonPageTitle: "Segundo Página", 
+                btnOpenHelps: "Ayuda 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Espacio:", descSpace: "Hacer clic en el círculo",
                 lblKeyCode: ". o / :", descKeyCode: "Escribir código",
                 descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas"
@@ -819,8 +854,10 @@
                 upgradeCost: "Coût : ", maxSpeed: "Vitesse max !", maxSize: "Taille max !",
                 alertLoadSuccess: "Jeu chargé avec succès ! 🎮", alertLoadError: "Erreur ! Le code est invalide.",
                 alertCopied: "Code copié dans le presse-papiers ! 📋",
-                btnAbout: "Page des boutons 📄", 
-                lblButtonPageTitle: "Page des boutons", 
+                btnAbout: "Deuxième Page 📄", 
+                lblButtonPageTitle: "Deuxième Page", 
+                btnOpenHelps: "Aide 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Espace :", descSpace: "Cliquer sur le cercle",
                 lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
                 descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats"
@@ -853,8 +890,10 @@
                 upgradeCost: "Kosten: ", maxSpeed: "Höchstgeschwindigkeit!", maxSize: "Maximale Größe!",
                 alertLoadSuccess: "Spiel erfolgreich geladen! 🎮", alertLoadError: "Fehler! Der Code ist ungültig.",
                 alertCopied: "Code in die Zwischenablage kopiert! 📋",
-                btnAbout: "Tastenseite 📄", 
-                lblButtonPageTitle: "Tastenseite", 
+                btnAbout: "Zweite Seite 📄", 
+                lblButtonPageTitle: "Zweite Seite", 
+                btnOpenHelps: "Hilfe 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Leertaste:", descSpace: "Kreis anklicken",
                 lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
                 descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen"
@@ -887,8 +926,10 @@
                 upgradeCost: "Цена: ", maxSpeed: "Макс. скорость!", maxSize: "Макс. размер!",
                 alertLoadSuccess: "Игра успешно загружена! 🎮", alertLoadError: "Ошибка! Код сохранения недействителен.",
                 alertCopied: "Код скопирован в буфер обмена! 📋",
-                btnAbout: "Страница кнопок 📄", 
-                lblButtonPageTitle: "Страница кнопок", 
+                btnAbout: "Вторая Страница 📄", 
+                lblButtonPageTitle: "Вторая Страница", 
+                btnOpenHelps: "Помощь 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "Пробел:", descSpace: "Кликнуть на круг",
                 lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
                 descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику"
@@ -921,8 +962,10 @@
                 upgradeCost: "التكلفة: ", maxSpeed: "السرعة القصوى!", maxSize: "الحجم الأقصى!",
                 alertLoadSuccess: "تم تحميل اللعبة بنجاح! 🎮", alertLoadError: "خطأ! كود الحفظ غير صالح.",
                 alertCopied: "تم نسخ كود الحفظ إلى الحافظة! 📋",
-                btnAbout: "صفحة الأزرار 📄", 
-                lblButtonPageTitle: "صفحة الأزرار", 
+                btnAbout: "الصفحة الثانية 📄", 
+                lblButtonPageTitle: "الصفحة الثانية", 
+                btnOpenHelps: "المساعدة 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "مسافة:", descSpace: "النقر على الدائرة",
                 lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
                 descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات"
@@ -955,8 +998,10 @@
                 upgradeCost: "花费: ", maxSpeed: "最高速度！", maxSize: "最大尺寸！",
                 alertLoadSuccess: "游戏加载成功！ 🎮", alertLoadError: "错误！存档代码无效。",
                 alertCopied: "存档代码已复制到剪贴板！ 📋",
-                btnAbout: "按钮页面 📄", 
-                lblButtonPageTitle: "按钮页面", 
+                btnAbout: "第二页 📄", 
+                lblButtonPageTitle: "第二页", 
+                btnOpenHelps: "帮助 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "空格键:", descSpace: "点击悬停的圆圈",
                 lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
                 descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计"
@@ -989,8 +1034,10 @@
                 upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
                 alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
                 alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
-                btnAbout: "ボタンページ 📄", 
-                lblButtonPageTitle: "ボタンページ", 
+                btnAbout: "2ページ目 📄", 
+                lblButtonPageTitle: "2ページ目", 
+                btnOpenHelps: "ヘルプ 💡",
+                btnDevSupport: "Developer Support 💬",
                 lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
                 descKeyA: "メニューを開く/閉じる", descKeyS: "設定を開く/閉じる", descKeyD: "統計を開く/閉じる"
@@ -1100,6 +1147,11 @@
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
+
+        function openHelpSubModal() {
+            const container = document.getElementById('helps-container');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
 
         function initAudio() {
             if (!audioCtx) {
@@ -1333,6 +1385,8 @@
 
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
+            document.getElementById('btnOpenHelps').innerText = text.btnOpenHelps;
+            document.getElementById('btnDevSupport').innerText = text.btnDevSupport;
             
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
             document.getElementById('descSpace').innerText = text.descSpace;
