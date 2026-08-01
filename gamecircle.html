@@ -509,6 +509,37 @@
                     <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">בחר</button>
                 </div>
             </div>
+
+            <div class="category-title" id="lblCatVolumeUpgrades">שדרוגי עוצמה (חוזק מוזיקה)</div>
+            
+            <div class="sound-row">
+                <span>400%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 350)">קנה (350)</button>
+            </div>
+            <div class="sound-row">
+                <span>500%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 500)">קנה (500)</button>
+            </div>
+            <div class="sound-row">
+                <span>600%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 700)">‍♂️קנה (700)</button>
+            </div>
+            <div class="sound-row">
+                <span>700%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 950)">קנה (950)</button>
+            </div>
+            <div class="sound-row">
+                <span>800%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1200)">קנה (1200)</button>
+            </div>
+            <div class="sound-row">
+                <span>900%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1500)">קנה (1500)</button>
+            </div>
+            <div class="sound-row">
+                <span>1000%</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2000)">קנה (2000)</button>
+            </div>
         </div>
     </div>
 
@@ -545,10 +576,18 @@
             <span id="lblSoundVolume">Volume / עוצמה:</span>
             <select id="soundVolumeSelect" onchange="changeSoundVolume(this.value)">
                 <option value="0.25">25%</option>
-                <option value="0.5" selected>50%</option>
+                <option value="0.5">50%</option>
                 <option value="0.75">75%</option>
+                <option value="1.0" selected>100%</option>
                 <option value="2.0">200%</option>
                 <option value="3.0">300%</option>
+                <option value="4.0" id="optVol400" style="display:none;">400%</option>
+                <option value="5.0" id="optVol500" style="display:none;">500%</option>
+                <option value="6.0" id="optVol600" style="display:none;">600%</option>
+                <option value="7.0" id="optVol700" style="display:none;">700%</option>
+                <option value="8.0" id="optVol800" style="display:none;">800%</option>
+                <option value="9.0" id="optVol900" style="display:none;">900%</option>
+                <option value="10.0" id="optVol1000" style="display:none;">1000%</option>
             </select>
         </div>
         <div class="stat-row">
@@ -656,10 +695,10 @@
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
                 btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
-                lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music",
+                lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
                 lblPopSound: "Pop Sound:", lblLaserSound: "Laser Sound:", lblCoinSound: "Coin Sound:",
                 lblBgmClassic: "Classic Loop:", lblBgmArcade: "Arcade Beat:",
-                buy: "Buy", selected: "Selected ✅", select: "Select",
+                buy: "Buy", selected: "Selected ✅", select: "Select", purchased: "Purchased! ✅",
                 upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
@@ -690,10 +729,10 @@
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
-                lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע",
+                lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
                 lblPopSound: "סאונד פופ:", lblLaserSound: "סאונד לייזר:", lblCoinSound: "סאונד מטבע:",
                 lblBgmClassic: "קלאסי (Classic):", lblBgmArcade: "ארקייד (Arcade):",
-                buy: "קנה", selected: "נבחר ✅", select: "בחר",
+                buy: "קנה", selected: "נבחר ✅", select: "בחר", purchased: "נרכש! ✅",
                 upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
@@ -719,12 +758,13 @@
             language: 'he', 
             deviceMode: 'desktop',
             soundEnabled: true,
-            soundVolume: 0.5,
+            soundVolume: 1.0,
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
+            unlockedVolumes: { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
             activeSound: 'none',
             activeBgm: 'none',
-            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250 }
+            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '400': 350, '500': 500, '600': 700, '700': 950, '800': 1200, '900': 1500, '1000': 2000 }
         };
 
         let currentCircles = 0;
@@ -758,6 +798,22 @@
         const btnSelectClassicBgm = document.getElementById('btnSelectClassicBgm');
         const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
         const btnSelectArcadeBgm = document.getElementById('btnSelectArcadeBgm');
+
+        const btnBuyVol400 = document.getElementById('btnBuyVol400');
+        const btnBuyVol500 = document.getElementById('btnBuyVol500');
+        const btnBuyVol600 = document.getElementById('btnBuyVol600');
+        const btnBuyVol700 = document.getElementById('btnBuyVol700');
+        const btnBuyVol800 = document.getElementById('btnBuyVol800');
+        const btnBuyVol900 = document.getElementById('btnBuyVol900');
+        const btnBuyVol1000 = document.getElementById('btnBuyVol1000');
+
+        const optVol400 = document.getElementById('optVol400');
+        const optVol500 = document.getElementById('optVol500');
+        const optVol600 = document.getElementById('optVol600');
+        const optVol700 = document.getElementById('optVol700');
+        const optVol800 = document.getElementById('optVol800');
+        const optVol900 = document.getElementById('optVol900');
+        const optVol1000 = document.getElementById('optVol1000');
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
@@ -944,6 +1000,17 @@
             }
         }
 
+        function buyVolumeUpgrade(level, cost) {
+            if (state.score >= cost && !state.unlockedVolumes[level]) {
+                state.score -= cost;
+                state.unlockedVolumes[level] = true;
+                state.soundVolume = parseFloat(level);
+                soundVolumeSelect.value = state.soundVolume.toString();
+                playClickSound();
+                updateUI();
+            }
+        }
+
         function changeLanguage(lang) {
             state.language = lang;
             const dir = lang === 'he' ? 'rtl' : 'ltr';
@@ -1000,6 +1067,7 @@
             document.getElementById('lblSoundShopTitle').innerText = text.lblSoundShopTitle;
             document.getElementById('lblCatClickSounds').innerText = text.lblCatClickSounds;
             document.getElementById('lblCatBgm').innerText = text.lblCatBgm;
+            document.getElementById('lblCatVolumeUpgrades').innerText = text.lblCatVolumeUpgrades;
             document.getElementById('lblPopSound').innerText = text.lblPopSound;
             document.getElementById('lblLaserSound').innerText = text.lblLaserSound;
             document.getElementById('lblCoinSound').innerText = text.lblCoinSound;
@@ -1175,15 +1243,16 @@
                     language: state.language, 
                     deviceMode: state.deviceMode,
                     soundEnabled: true,
-                    soundVolume: 0.5,
+                    soundVolume: 1.0,
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
+                    unlockedVolumes: { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
                     activeSound: 'none',
                     activeBgm: 'none',
-                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250 }
+                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '400': 350, '500': 500, '600': 700, '700': 950, '800': 1200, '900': 1500, '1000': 2000 }
                 };
                 soundToggleSelect.value = 'on';
-                soundVolumeSelect.value = '0.5';
+                soundVolumeSelect.value = '1.0';
                 gameArea.innerHTML = '';
                 currentCircles = 0;
                 if (bgmInterval) clearInterval(bgmInterval);
@@ -1414,6 +1483,25 @@
                 }
             }
 
+            // Volume Upgrades 400% - 1000%
+            const volLevels = ['400', '500', '600', '700', '800', '900', '1000'];
+            const btnMap = { '400': btnBuyVol400, '500': btnBuyVol500, '600': btnBuyVol600, '700': btnBuyVol700, '800': btnBuyVol800, '900': btnBuyVol900, '1000': btnBuyVol1000 };
+            const optMap = { '400': optVol400, '500': optVol500, '600': optVol600, '700': optVol700, '800': optVol800, '900': optVol900, '1000': optVol1000 };
+
+            volLevels.forEach(lvl => {
+                const btn = btnMap[lvl];
+                const opt = optMap[lvl];
+                if (state.unlockedVolumes[lvl]) {
+                    btn.disabled = true;
+                    btn.innerText = text.purchased;
+                    opt.style.display = 'block';
+                } else {
+                    btn.disabled = state.score < state.costs[lvl];
+                    btn.innerText = `${text.buy} (${state.costs[lvl]})`;
+                    opt.style.display = 'none';
+                }
+            });
+
             updateStatsUI(isTyping);
         }
 
@@ -1560,9 +1648,10 @@
             if (!state.language) state.language = 'he'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
-            if (typeof state.soundVolume === 'undefined') state.soundVolume = 0.5;
+            if (typeof state.soundVolume === 'undefined') state.soundVolume = 1.0;
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
+            if (!state.unlockedVolumes) state.unlockedVolumes = { '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
             if (!state.activeSound) state.activeSound = 'none';
             if (!state.activeBgm) state.activeBgm = 'none';
 
