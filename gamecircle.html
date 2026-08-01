@@ -47,6 +47,24 @@
         }
         #btnAbout:hover { background: #1976D2; }
 
+        #btnSoundShop {
+            position: absolute;
+            top: 10px;
+            left: 120px; 
+            z-index: 100;
+            background: #E91E63;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnSoundShop:hover { background: #C2185B; }
+
         #score-hud {
             position: absolute;
             top: 20px;
@@ -125,7 +143,7 @@
         }
 
         #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
-        #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 300px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
         #button-page-modal {
@@ -181,6 +199,61 @@
         }
         .controls-list span { color: #4CAF50; }
 
+        /* Sound Shop Modal */
+        #sound-shop-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #sound-shop-content {
+            background: rgba(30, 30, 40, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid #E91E63;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 85%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        #btnCloseSoundShop {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 30px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .category-title {
+            color: #03A9F4;
+            border-bottom: 2px solid #03A9F4;
+            padding-bottom: 5px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: left;
+            direction: ltr;
+        }
+        [dir="rtl"] .category-title {
+            text-align: right;
+        }
+
         .text-modal {
             position: absolute;
             top: 0;
@@ -232,7 +305,7 @@
         }
 
         .stat-input, select {
-            width: 80px;
+            width: 90px;
             padding: 5px;
             border-radius: 5px;
             border: 1px solid #777;
@@ -241,7 +314,7 @@
             font-weight: bold;
             text-align: center;
         }
-        select { width: 110px; cursor: pointer; }
+        select { width: 120px; cursor: pointer; }
 
         .stat-input:disabled {
             background: transparent;
@@ -330,12 +403,14 @@
         }
         body.mobile-mode #devCodeInput { top: 50px; } 
         body.mobile-mode #btnAbout { top: 50px; }
+        body.mobile-mode #btnSoundShop { top: 50px; left: 100px; padding: 5px 8px; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <input type="text" id="devCodeInput" placeholder="Code...">
     <button id="btnAbout" onclick="toggleButtonPage()">דף כפתור 📄</button>
+    <button id="btnSoundShop" onclick="toggleSoundShop()">חנות סאונד 🎵</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
 
@@ -345,6 +420,7 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
+    <!-- דף כפתור -->
     <div id="button-page-modal">
         <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
         <div id="button-page-content">
@@ -359,6 +435,41 @@
         </div>
     </div>
 
+    <!-- חנות סאונד מודל -->
+    <div id="sound-shop-modal">
+        <div id="sound-shop-content">
+            <button id="btnCloseSoundShop" onclick="toggleSoundShop()">❌</button>
+            <h2 id="lblSoundShopTitle" style="color: #FFEB3B; margin-top: 0;">חנות סאונד 🎵</h2>
+            
+            <div class="category-title" id="lblCatClickSounds">סאונד לחיצה על עיגול</div>
+            
+            <div class="upgrade-box">
+                <p><strong id="lblPopSound">פופ רגיל (Pop):</strong></p>
+                <button class="menu-btn" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">קנה (מחיר: <span id="costPop">30</span>)</button>
+            </div>
+            <div class="upgrade-box">
+                <p><strong id="lblLaserSound">לייזר (Laser):</strong></p>
+                <button class="menu-btn" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">קנה (מחיר: <span id="costLaser">70</span>)</button>
+            </div>
+            <div class="upgrade-box">
+                <p><strong id="lblCoinSound">מטבע (Coin):</strong></p>
+                <button class="menu-btn" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">קנה (מחיר: <span id="costCoin">120</span>)</button>
+            </div>
+
+            <div class="category-title" id="lblCatBgm">מוזיקת רקע</div>
+            
+            <div class="upgrade-box">
+                <p><strong id="lblBgmClassic">קלאסי (Classic Loop):</strong></p>
+                <button class="menu-btn" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">קנה (מחיר: <span id="costClassicBgm">100</span>)</button>
+            </div>
+            <div class="upgrade-box">
+                <p><strong id="lblBgmArcade">ארקייד מהיר (Arcade Beat):</strong></p>
+                <button class="menu-btn" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">קנה (מחיר: <span id="costArcadeBgm">250</span>)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Save GUI Modal -->
     <div id="textSaveModal" class="text-modal">
         <div class="text-modal-content">
             <h3 id="lblExportTitle">Export Save Code</h3>
@@ -368,6 +479,7 @@
         </div>
     </div>
 
+    <!-- Text Load GUI Modal -->
     <div id="textLoadModal" class="text-modal">
         <div class="text-modal-content">
             <h3 id="lblImportTitle">Import Save Code</h3>
@@ -379,6 +491,13 @@
 
     <div id="settings-panel" class="panel">
         <h3 id="lblSettingsTitle">Settings ⚙️</h3>
+        <div class="stat-row">
+            <span id="lblSoundStatus">Sound / סאונד:</span>
+            <select id="soundToggleSelect" onchange="changeSoundToggle(this.value)">
+                <option value="on" id="optSoundOn">On 🔊</option>
+                <option value="off" id="optSoundOff">Off 🔇</option>
+            </select>
+        </div>
         <div class="stat-row">
             <span id="lblLanguage">Language / שפה:</span>
             <select id="langSelect" onchange="changeLanguage(this.value)">
@@ -479,9 +598,14 @@
                 lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
+                lblSoundStatus: "Sound / סאונד:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
-                upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
+                btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
+                lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music",
+                lblPopSound: "Pop Sound:", lblLaserSound: "Laser Sound:", lblCoinSound: "Coin Sound:",
+                lblBgmClassic: "Classic Loop:", lblBgmArcade: "Arcade Beat:",
+                purchased: "Purchased! ✅", upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
                 btnAbout: "Button Page 📄", 
@@ -506,9 +630,14 @@
                 lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
+                lblSoundStatus: "סאונד / Sound:", optSoundOn: "פועל 🔊", optSoundOff: "כבוי 🔇",
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
-                upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
+                btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
+                lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע",
+                lblPopSound: "סאונד פופ:", lblLaserSound: "סאונד לייזר:", lblCoinSound: "סאונד מטבע:",
+                lblBgmClassic: "קלאסי (Classic):", lblBgmArcade: "ארקייד (Arcade):",
+                purchased: "נרכש! ✅", upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
                 btnAbout: "דף כפתור 📄", 
@@ -531,12 +660,20 @@
             costSpeed: 15,
             costMinSize: 8,
             language: 'he', 
-            deviceMode: 'desktop' 
+            deviceMode: 'desktop',
+            soundEnabled: true,
+            unlockedSounds: { pop: false, laser: false, coin: false },
+            unlockedBgm: { classic: false, arcade: false },
+            activeSound: 'none',
+            activeBgm: 'none',
+            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250 }
         };
 
         let currentCircles = 0;
         let gameInterval;
         let hoveredCircle = null;
+        let audioCtx = null;
+        let bgmInterval = null;
 
         const scoreDisplay = document.getElementById('scoreDisplay');
         const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
@@ -549,6 +686,14 @@
         const btnSpeed = document.getElementById('btnSpeed');
         const btnMinSize = document.getElementById('btnMinSize'); 
         const btnResetGame = document.getElementById('btnResetGame');
+        const btnSoundShop = document.getElementById('btnSoundShop');
+        const soundShopModal = document.getElementById('sound-shop-modal');
+        
+        const btnBuyPop = document.getElementById('btnBuyPop');
+        const btnBuyLaser = document.getElementById('btnBuyLaser');
+        const btnBuyCoin = document.getElementById('btnBuyCoin');
+        const btnBuyClassicBgm = document.getElementById('btnBuyClassicBgm');
+        const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
         
         const gameArea = document.getElementById('game-area');
         const devCodeInput = document.getElementById('devCodeInput');
@@ -567,6 +712,7 @@
         const loadCodeTextarea = document.getElementById('loadCodeTextarea');
         
         const langSelect = document.getElementById('langSelect');
+        const soundToggleSelect = document.getElementById('soundToggleSelect');
         const deviceSelect = document.getElementById('deviceSelect');
         
         const editCurrentScore = document.getElementById('editCurrentScore');
@@ -576,6 +722,138 @@
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playClickSound() {
+            if (!state.soundEnabled || state.activeSound === 'none') return;
+            initAudio();
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                if (state.activeSound === 'pop') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.1);
+                } else if (state.activeSound === 'laser') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } else if (state.activeSound === 'coin') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
+                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
+                }
+            } catch(e) {}
+        }
+
+        function startBgm() {
+            if (bgmInterval) clearInterval(bgmInterval);
+            if (!state.soundEnabled || state.activeBgm === 'none') return;
+            
+            let notes = [];
+            let tempo = 600;
+            
+            if (state.activeBgm === 'classic') {
+                notes = [261.63, 329.63, 392.00, 523.25]; // C E G C
+                tempo = 600;
+            } else if (state.activeBgm === 'arcade') {
+                notes = [440, 554.37, 659.25, 880, 659.25, 554.37]; // A C# E A E C#
+                tempo = 300;
+            }
+
+            let index = 0;
+            bgmInterval = setInterval(() => {
+                if (!state.soundEnabled || state.activeBgm === 'none') return;
+                initAudio();
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = state.activeBgm === 'arcade' ? 'square' : 'triangle';
+                    osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (tempo / 1000 * 0.5));
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + (tempo / 1000 * 0.5));
+                    
+                    index = (index + 1) % notes.length;
+                } catch(e) {}
+            }, tempo);
+        }
+
+        function changeSoundToggle(val) {
+            state.soundEnabled = (val === 'on');
+            soundToggleSelect.value = val;
+            if (state.soundEnabled) {
+                startBgm();
+            } else {
+                if (bgmInterval) clearInterval(bgmInterval);
+            }
+        }
+
+        function toggleSoundShop() {
+            initAudio();
+            const isOpen = soundShopModal.style.display === 'flex';
+            if (!isOpen) {
+                menuPanel.style.display = 'none';
+                statsPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                buttonPageModal.style.display = 'none';
+                refreshPanelButtons();
+            }
+            soundShopModal.style.display = isOpen ? 'none' : 'flex';
+        }
+
+        function buySoundEffect(type, cost) {
+            if (state.score >= cost) {
+                state.score -= cost;
+                state.unlockedSounds[type] = true;
+                state.activeSound = type;
+                playClickSound();
+                updateUI();
+            }
+        }
+
+        function buyBgmTrack(type, cost) {
+            if (state.score >= cost) {
+                state.score -= cost;
+                state.unlockedBgm[type] = true;
+                state.activeBgm = type;
+                startBgm();
+                updateUI();
+            }
+        }
 
         function changeLanguage(lang) {
             state.language = lang;
@@ -619,11 +897,24 @@
 
             document.getElementById('lblSettingsTitle').innerText = text.lblSettingsTitle;
             document.getElementById('lblLanguage').innerText = text.lblLanguage;
+            document.getElementById('lblSoundStatus').innerText = text.lblSoundStatus;
+            document.getElementById('optSoundOn').innerText = text.optSoundOn;
+            document.getElementById('optSoundOff').innerText = text.optSoundOff;
             
             document.getElementById('lblDeviceMode').innerText = text.lblDeviceMode;
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
             btnResetGame.innerText = text.btnResetGame;
+            btnSoundShop.innerText = text.btnSoundShop;
+            
+            document.getElementById('lblSoundShopTitle').innerText = text.lblSoundShopTitle;
+            document.getElementById('lblCatClickSounds').innerText = text.lblCatClickSounds;
+            document.getElementById('lblCatBgm').innerText = text.lblCatBgm;
+            document.getElementById('lblPopSound').innerText = text.lblPopSound;
+            document.getElementById('lblLaserSound').innerText = text.lblLaserSound;
+            document.getElementById('lblCoinSound').innerText = text.lblCoinSound;
+            document.getElementById('lblBgmClassic').innerText = text.lblBgmClassic;
+            document.getElementById('lblBgmArcade').innerText = text.lblBgmArcade;
 
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
@@ -658,6 +949,7 @@
         }
 
         document.addEventListener('keydown', function(event) {
+            initAudio();
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.tagName === 'TEXTAREA') return;
 
             const key = event.key.toLowerCase();
@@ -684,12 +976,17 @@
             }
         });
 
+        document.addEventListener('click', function() {
+            initAudio();
+        }, { once: true });
+
         function toggleButtonPage() {
             const isOpen = buttonPageModal.style.display === 'flex';
             if (!isOpen) {
                 menuPanel.style.display = 'none';
                 statsPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
+                soundShopModal.style.display = 'none';
                 refreshPanelButtons();
             }
             buttonPageModal.style.display = isOpen ? 'none' : 'flex';
@@ -700,6 +997,7 @@
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
+            soundShopModal.style.display = 'none';
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -709,6 +1007,7 @@
             menuPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
+            soundShopModal.style.display = 'none';
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
             refreshPanelButtons();
@@ -719,6 +1018,7 @@
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.style.display = 'none';
+            soundShopModal.style.display = 'none';
             settingsPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -783,10 +1083,18 @@
                     costSpeed: 15,
                     costMinSize: 8,
                     language: state.language, 
-                    deviceMode: state.deviceMode 
+                    deviceMode: state.deviceMode,
+                    soundEnabled: true,
+                    unlockedSounds: { pop: false, laser: false, coin: false },
+                    unlockedBgm: { classic: false, arcade: false },
+                    activeSound: 'none',
+                    activeBgm: 'none',
+                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250 }
                 };
+                soundToggleSelect.value = 'on';
                 gameArea.innerHTML = '';
                 currentCircles = 0;
+                if (bgmInterval) clearInterval(bgmInterval);
                 startGameLoop();
                 updateUI();
                 toggleSettings();
@@ -804,6 +1112,7 @@
                     state.totalScore += earned; 
                     circles.forEach(circle => circle.remove());
                     currentCircles = 0;
+                    playClickSound();
                     updateUI();
                 }
                 this.value = '';
@@ -822,6 +1131,7 @@
                 menuPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
                 buttonPageModal.style.display = 'none';
+                soundShopModal.style.display = 'none';
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
                 
@@ -886,7 +1196,9 @@
         function initGame() {
             autoDetectDevice(); 
             changeLanguage(state.language);
+            soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             startGameLoop();
+            if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
         }
 
         function updateUI(isTyping = false) {
@@ -916,6 +1228,47 @@
                 btnMinSize.innerText = text.maxSize;
             } else {
                 btnMinSize.innerHTML = `${text.upgradeCost}<span id="costMinSize">${state.costMinSize}</span>)`;
+            }
+
+            // Sound shop buttons update
+            if (state.unlockedSounds.pop) {
+                btnBuyPop.disabled = true;
+                btnBuyPop.innerText = text.purchased;
+            } else {
+                btnBuyPop.disabled = state.score < state.costs.pop;
+                btnBuyPop.innerHTML = `${text.upgradeCost}<span id="costPop">${state.costs.pop}</span>)`;
+            }
+
+            if (state.unlockedSounds.laser) {
+                btnBuyLaser.disabled = true;
+                btnBuyLaser.innerText = text.purchased;
+            } else {
+                btnBuyLaser.disabled = state.score < state.costs.laser;
+                btnBuyLaser.innerHTML = `${text.upgradeCost}<span id="costLaser">${state.costs.laser}</span>)`;
+            }
+
+            if (state.unlockedSounds.coin) {
+                btnBuyCoin.disabled = true;
+                btnBuyCoin.innerText = text.purchased;
+            } else {
+                btnBuyCoin.disabled = state.score < state.costs.coin;
+                btnBuyCoin.innerHTML = `${text.upgradeCost}<span id="costCoin">${state.costs.coin}</span>)`;
+            }
+
+            if (state.unlockedBgm.classic) {
+                btnBuyClassicBgm.disabled = true;
+                btnBuyClassicBgm.innerText = text.purchased;
+            } else {
+                btnBuyClassicBgm.disabled = state.score < state.costs.classic;
+                btnBuyClassicBgm.innerHTML = `${text.upgradeCost}<span id="costClassicBgm">${state.costs.classic}</span>)`;
+            }
+
+            if (state.unlockedBgm.arcade) {
+                btnBuyArcadeBgm.disabled = true;
+                btnBuyArcadeBgm.innerText = text.purchased;
+            } else {
+                btnBuyArcadeBgm.disabled = state.score < state.costs.arcade;
+                btnBuyArcadeBgm.innerHTML = `${text.upgradeCost}<span id="costArcadeBgm">${state.costs.arcade}</span>)`;
             }
 
             updateStatsUI(isTyping);
@@ -965,6 +1318,7 @@
             circle.onmouseleave = function() { if (hoveredCircle === this) hoveredCircle = null; };
 
             circle.onclick = function() {
+                playClickSound();
                 state.score += state.pointsPerClick;
                 state.totalScore += state.pointsPerClick; 
                 currentCircles--;
@@ -1062,13 +1416,23 @@
             if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
             if (!state.language) state.language = 'he'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
+            if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
+            if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
+            if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
+            if (!state.activeSound) state.activeSound = 'none';
+            if (!state.activeBgm) state.activeBgm = 'none';
 
             gameArea.innerHTML = '';
             currentCircles = 0;
             
             changeLanguage(state.language); 
             changeDeviceMode(state.deviceMode); 
+            soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             startGameLoop();
+            
+            if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
+            else if (bgmInterval) clearInterval(bgmInterval);
+
             alert(t[state.language].alertLoadSuccess);
         }
 
