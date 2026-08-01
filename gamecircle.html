@@ -16,7 +16,6 @@
             touch-action: manipulation; 
         }
 
-        /* Secret Dev Input (Top Right) */
         #devCodeInput {
             position: absolute;
             top: 10px;
@@ -30,7 +29,6 @@
             width: 80px;
         }
 
-        /* Button Page Opener (Top Left) */
         #btnAbout {
             position: absolute;
             top: 10px;
@@ -49,7 +47,6 @@
         }
         #btnAbout:hover { background: #1976D2; }
 
-        /* Score Display */
         #score-hud {
             position: absolute;
             top: 20px;
@@ -68,7 +65,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Bottom Navigation Bar */
         #bottom-nav {
             position: absolute;
             bottom: 20px;
@@ -111,7 +107,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Panels Base */
         .panel {
             position: absolute;
             bottom: 80px;
@@ -133,9 +128,6 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 280px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        /* ================================================== */
-        /* NEW: Button Page (Full Screen Modal) */
-        /* ================================================== */
         #button-page-modal {
             position: absolute;
             top: 0;
@@ -144,8 +136,8 @@
             height: 100dvh;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
-            z-index: 3000; /* הכי גבוה שאפשר */
-            display: none; /* הופך ל-flex כשפתוח */
+            z-index: 3000;
+            display: none;
             justify-content: center;
             align-items: center;
         }
@@ -153,7 +145,7 @@
         #btnCloseButtonPage {
             position: absolute;
             top: 20px;
-            right: 20px; /* תמיד למעלה ימינה */
+            right: 20px; 
             font-size: 35px;
             background: transparent;
             border: none;
@@ -162,9 +154,7 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover {
-            transform: scale(1.2);
-        }
+        #btnCloseButtonPage:hover { transform: scale(1.2); }
 
         #button-page-content {
             background: rgba(30, 30, 40, 0.95);
@@ -189,10 +179,46 @@
             font-size: 18px;
             line-height: 2.2;
         }
-        .controls-list span {
-            color: #4CAF50;
+        .controls-list span { color: #4CAF50; }
+
+        /* Save & Load Text GUI Modals */
+        .text-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(3px);
+            z-index: 4000;
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
-        /* ================================================== */
+        .text-modal-content {
+            background: rgba(40, 40, 50, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #FF9800;
+            color: white;
+            width: 85%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .text-modal-content textarea {
+            width: 100%;
+            height: 120px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #777;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
 
         h3 { margin-top: 0; color: #4CAF50; }
         #stats-panel h3 { color: #03A9F4; }
@@ -216,7 +242,6 @@
             font-weight: bold;
             text-align: center;
         }
-        
         select { width: 110px; cursor: pointer; }
 
         .stat-input:disabled {
@@ -272,7 +297,6 @@
         .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
         hr { border: 1px solid #777; margin: 20px 0; }
 
-        /* MOBILE MODE */
         body.mobile-mode #bottom-nav {
             bottom: 10px; 
             padding: 0 5px; 
@@ -319,6 +343,7 @@
         <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
     </div>
 
+    <!-- דף כפתור -->
     <div id="button-page-modal">
         <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
         <div id="button-page-content">
@@ -330,6 +355,26 @@
                 <div><strong>S / ד:</strong> <span id="descKeyS">Open/Close Settings</span></div>
                 <div><strong>D / ג:</strong> <span id="descKeyD">Open/Close Stats</span></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Text Save GUI Modal -->
+    <div id="textSaveModal" class="text-modal">
+        <div class="text-modal-content">
+            <h3 id="lblExportTitle">Export Save Code</h3>
+            <textarea id="saveCodeTextarea" readonly></textarea>
+            <button class="menu-btn save-load-btn" id="btnCopyClipboard" onclick="copySaveToClipboard()">Copy to Clipboard 📋</button>
+            <button class="menu-btn" onclick="closeTextSaveModal()" style="background:#777; margin-top:5px;">Close ❌</button>
+        </div>
+    </div>
+
+    <!-- Text Load GUI Modal -->
+    <div id="textLoadModal" class="text-modal">
+        <div class="text-modal-content">
+            <h3 id="lblImportTitle">Import Save Code</h3>
+            <textarea id="loadCodeTextarea" placeholder="Paste your save code here..."></textarea>
+            <button class="menu-btn save-load-btn" id="btnApplyLoadCode" onclick="loadGameFromText()">Load Save 🎮</button>
+            <button class="menu-btn" onclick="closeTextLoadModal()" style="background:#777; margin-top:5px;">Close ❌</button>
         </div>
     </div>
 
@@ -390,6 +435,10 @@
         <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
         <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
         <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
+        
+        <button class="menu-btn save-load-btn" id="btnOpenTextSave" onclick="openTextSaveModal()">Export Code (GUI) 📋</button>
+        <button class="menu-btn save-load-btn" id="btnOpenTextLoad" onclick="openTextLoadModal()">Import Code (GUI) 📥</button>
+
         <hr>
         <h3 id="lblUpgrades">Upgrades ⬆️</h3>
         <div class="upgrade-box">
@@ -421,6 +470,9 @@
                 btnStatsOpen: "Stats 📊", btnStatsClose: "Close ❌",
                 btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close ❌",
                 lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
+                btnOpenTextSave: "Export Code (GUI) 📋", btnOpenTextLoad: "Import Code (GUI) 📥",
+                lblExportTitle: "Export Save Code", lblImportTitle: "Import Save Code",
+                btnCopyClipboard: "Copy to Clipboard 📋", btnApplyLoadCode: "Load Save 🎮",
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
                 lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
                 lblMinSize: "Minimum Size:", lblPx: "px",
@@ -430,9 +482,8 @@
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language / שפה:",
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 upgradeCost: "Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
-                alertLoadSuccess: "Game loaded successfully from file! 🎮", alertLoadError: "Error! The file doesn't seem to be a valid save file.",
-                
-                // Button Page translations
+                alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
+                alertCopied: "Save code copied to clipboard! 📋",
                 btnAbout: "Button Page 📄", 
                 lblButtonPageTitle: "Button Page", 
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
@@ -445,6 +496,9 @@
                 btnStatsOpen: "סטטיסטיקה 📊", btnStatsClose: "סגור ❌",
                 btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגור ❌",
                 lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת שמירה (.txt)", btnLoad: "טעינת שמירה (TXT)",
+                btnOpenTextSave: "ייצוא קוד (GUI) 📋", btnOpenTextLoad: "ייבוא קוד (GUI) 📥",
+                lblExportTitle: "ייצוא קוד שמירה", lblImportTitle: "ייבוא קוד שמירה",
+                btnCopyClipboard: "העתק ללוח 📋", btnApplyLoadCode: "טען שמירה 🎮",
                 lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
                 lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
                 lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
@@ -454,9 +508,8 @@
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 upgradeCost: "שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
-                alertLoadSuccess: "המשחק נטען בהצלחה מתוך הקובץ! 🎮", alertLoadError: "שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.",
-                
-                // Button Page translations
+                alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
+                alertCopied: "קוד השמירה הועתק ללוח! 📋",
                 btnAbout: "דף כפתור 📄", 
                 lblButtonPageTitle: "דף כפתור", 
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
@@ -506,6 +559,10 @@
         const settingsToggleBtn = document.getElementById('settings-toggle-btn');
         
         const buttonPageModal = document.getElementById('button-page-modal');
+        const textSaveModal = document.getElementById('textSaveModal');
+        const textLoadModal = document.getElementById('textLoadModal');
+        const saveCodeTextarea = document.getElementById('saveCodeTextarea');
+        const loadCodeTextarea = document.getElementById('loadCodeTextarea');
         
         const langSelect = document.getElementById('langSelect');
         const deviceSelect = document.getElementById('deviceSelect');
@@ -531,6 +588,14 @@
             document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
             document.getElementById('btnDownload').innerText = text.btnDownload;
             document.getElementById('btnLoad').innerText = text.btnLoad;
+            document.getElementById('btnOpenTextSave').innerText = text.btnOpenTextSave;
+            document.getElementById('btnOpenTextLoad').innerText = text.btnOpenTextLoad;
+            document.getElementById('lblExportTitle').innerText = text.lblExportTitle;
+            document.getElementById('lblImportTitle').innerText = text.lblImportTitle;
+            document.getElementById('btnCopyClipboard').innerText = text.btnCopyClipboard;
+            document.getElementById('btnApplyLoadCode').innerText = text.btnApplyLoadCode;
+            document.getElementById('loadCodeTextarea').placeholder = lang === 'he' ? 'הדבק כאן את קוד השמירה...' : 'Paste your save code here...';
+
             document.getElementById('lblUpgrades').innerText = text.lblUpgrades;
             document.getElementById('lblMaxCircles').innerText = text.lblMaxCircles;
             document.getElementById('lblPointsPerCatch').innerText = text.lblPointsPerCatch;
@@ -557,7 +622,6 @@
             document.getElementById('optDesktop').innerText = text.optDesktop;
             document.getElementById('optMobile').innerText = text.optMobile;
 
-            // עדכון שמות הדף כפתור
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
             
@@ -590,20 +654,15 @@
             }
         }
 
-        // ==========================================
-        // מערכת קיצורי המקלדת
-        // ==========================================
         document.addEventListener('keydown', function(event) {
-            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT') return;
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.tagName === 'TEXTAREA') return;
 
             const key = event.key.toLowerCase();
 
-            // . או / לתיבת צ'יטים
             if (key === '.' || key === '/' || key === 'ץ' || key === 'ף') {
                 event.preventDefault(); 
                 devCodeInput.focus();
             }
-            // רווח
             else if (key === ' ' || event.code === 'Space') {
                 event.preventDefault(); 
                 if (hoveredCircle) {
@@ -611,27 +670,20 @@
                     hoveredCircle = null;  
                 }
             } 
-            // A או ש
             else if (key === 'a' || key === 'ש') {
-                if (state.language === 'en') toggleMenu();
-                else toggleStats();
+                state.language === 'en' ? toggleMenu() : toggleStats();
             } 
-            // S או ד
             else if (key === 's' || key === 'ד') {
                 toggleSettings();
             } 
-            // D או ג
             else if (key === 'd' || key === 'ג') {
-                if (state.language === 'en') toggleStats();
-                else toggleMenu();
+                state.language === 'en' ? toggleStats() : toggleMenu();
             }
         });
 
-        // פתיחת "דף כפתור"
         function toggleButtonPage() {
             const isOpen = buttonPageModal.style.display === 'flex';
             if (!isOpen) {
-                // סוגר הכל לפני שפותח את הדף הגדול
                 menuPanel.style.display = 'none';
                 statsPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
@@ -644,7 +696,7 @@
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
-            buttonPageModal.style.display = 'none'; // סוגר את דף הכפתור אם פתוח
+            buttonPageModal.style.display = 'none';
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -673,6 +725,45 @@
             menuToggleBtn.innerText = menuPanel.style.display === 'block' ? text.btnMenuClose : text.btnMenuOpen;
             statsToggleBtn.innerText = statsPanel.style.display === 'block' ? text.btnStatsClose : text.btnStatsOpen;
             settingsToggleBtn.innerText = settingsPanel.style.display === 'block' ? text.btnSettingsClose : text.btnSettingsOpen;
+        }
+
+        // Text Save/Load GUI Controls
+        function openTextSaveModal() {
+            menuPanel.style.display = 'none';
+            refreshPanelButtons();
+            let dataString = JSON.stringify(state);
+            if (devCodeInput.value !== "BEN") dataString = btoa(dataString);
+            saveCodeTextarea.value = dataString;
+            textSaveModal.style.display = 'flex';
+        }
+
+        function closeTextSaveModal() {
+            textSaveModal.style.display = 'none';
+        }
+
+        function copySaveToClipboard() {
+            saveCodeTextarea.select();
+            navigator.clipboard.writeText(saveCodeTextarea.value).then(() => {
+                alert(t[state.language].alertCopied);
+            });
+        }
+
+        function openTextLoadModal() {
+            menuPanel.style.display = 'none';
+            refreshPanelButtons();
+            loadCodeTextarea.value = '';
+            textLoadModal.style.display = 'flex';
+        }
+
+        function closeTextLoadModal() {
+            textLoadModal.style.display = 'none';
+        }
+
+        function loadGameFromText() {
+            let fileContent = loadCodeTextarea.value.trim();
+            if (!fileContent) return;
+            processLoadedData(fileContent);
+            closeTextLoadModal();
         }
 
         devCodeInput.addEventListener('input', function() {
@@ -920,41 +1011,41 @@
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                let fileContent = e.target.result;
-                let loadedState;
-
-                try {
-                    loadedState = JSON.parse(fileContent);
-                } catch (err1) {
-                    try {
-                        loadedState = JSON.parse(atob(fileContent));
-                    } catch (err2) {
-                        alert(t[state.language].alertLoadError);
-                        event.target.value = '';
-                        return;
-                    }
-                }
-                
-                state = { ...state, ...loadedState }; 
-                if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
-                if (!state.language) state.language = 'he'; 
-                if (!state.deviceMode) state.deviceMode = 'desktop';
-
-                gameArea.innerHTML = '';
-                currentCircles = 0;
-                
-                changeLanguage(state.language); 
-                changeDeviceMode(state.deviceMode); 
-                startGameLoop();
-                alert(t[state.language].alertLoadSuccess);
-                
+                processLoadedData(e.target.result);
                 event.target.value = '';
             };
             reader.readAsText(file);
+        }
+
+        function processLoadedData(fileContent) {
+            let loadedState;
+
+            try {
+                loadedState = JSON.parse(fileContent);
+            } catch (err1) {
+                try {
+                    loadedState = JSON.parse(atob(fileContent));
+                } catch (err2) {
+                    alert(t[state.language].alertLoadError);
+                    return;
+                }
+            }
+            
+            state = { ...state, ...loadedState }; 
+            if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
+            if (!state.language) state.language = 'he'; 
+            if (!state.deviceMode) state.deviceMode = 'desktop';
+
+            gameArea.innerHTML = '';
+            currentCircles = 0;
+            
+            changeLanguage(state.language); 
+            changeDeviceMode(state.deviceMode); 
+            startGameLoop();
+            alert(t[state.language].alertLoadSuccess);
         }
 
         initGame();
     </script>
 </body>
 </html>
-
