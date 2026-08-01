@@ -615,7 +615,7 @@
                 <option value="0.25">25%</option>
                 <option value="0.5">50%</option>
                 <option value="0.75">75%</option>
-                <option value="1.0" selected>100%</option>
+                <option value="1.0">100%</option>
                 <option value="2.0" id="optVol200" style="display:none;">200% (x2)</option>
                 <option value="3.0" id="optVol300" style="display:none;">300% (x3)</option>
                 <option value="4.0" id="optVol400" style="display:none;">400% (x4)</option>
@@ -1168,13 +1168,13 @@
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                const vol = state.soundVolume;
+                const vol = state.soundVolume * 2.5; // Boosted baseline volume factor
                 
                 if (state.activeSound === 'pop') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(400, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.2 * vol, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.4 * vol, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.1);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -1184,7 +1184,7 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(900, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.15 * vol, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.35 * vol, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.15);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -1194,7 +1194,7 @@
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
                     osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
-                    gain.gain.setValueAtTime(0.2 * vol, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.4 * vol, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01 * vol, audioCtx.currentTime + 0.2);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -1226,11 +1226,11 @@
                 try {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    const vol = state.soundVolume;
+                    const vol = state.soundVolume * 2.5; // Boosted baseline volume factor
                     osc.type = state.activeBgm === 'arcade' ? 'square' : 'triangle';
                     osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
                     
-                    gain.gain.setValueAtTime(0.03 * vol, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.08 * vol, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001 * vol, audioCtx.currentTime + (tempo / 1000 * 0.5));
                     
                     osc.connect(gain);
