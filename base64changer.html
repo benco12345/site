@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Base64 and Plain Text bidirectional converter with accessibility support and dark theme.">
+    <title>Base64 & Plain Text Converter</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border-color: #374151;
+            --error-color: #f87171;
+            --success-color: #4ade80;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2.5rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        main {
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            gap: 2rem;
+        }
+
+        section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1.25rem;
+            color: var(--accent-color);
+        }
+
+        .field-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.7rem 1.4rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        button.secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .status-message {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-success { color: var(--success-color); }
+        .status-error { color: var(--error-color); }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Text & Base64 Converter</h1>
+        <p>Easily switch between readable plain text and unreadable Base64 codes.</p>
+    </header>
+
+    <main>
+        <section aria-labelledby="converter-heading">
+            <h2 id="converter-heading">Bidirectional Conversion Tool</h2>
+            
+            <form id="converter-form" onsubmit="return false;">
+                <div class="field-group">
+                    <label for="unreadable-input">Unreadable Code (Base64):</label>
+                    <textarea id="unreadable-input" placeholder="Paste Base64 encoded string here..." aria-describedby="unreadable-hint"></textarea>
+                    <small id="unreadable-hint" style="color: var(--text-muted);">Contains encoded/unreadable format.</small>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" id="btn-to-readable" aria-label="Convert unreadable Base64 code to readable plain text">
+                        1. Decode (Unreadable ➔ Readable)
+                    </button>
+                    <button type="button" id="btn-to-unreadable" class="secondary" aria-label="Convert readable plain text to unreadable Base64 code">
+                        2. Encode (Readable ➔ Unreadable)
+                    </button>
+                </div>
+
+                <div class="field-group" style="margin-top: 2rem;">
+                    <label for="readable-input">Readable Text (Plain Text):</label>
+                    <textarea id="readable-input" placeholder="Type readable plain text here..." aria-describedby="readable-hint"></textarea>
+                    <small id="readable-hint" style="color: var(--text-muted);">Contains human-readable format.</small>
+                </div>
+            </form>
+
+            <div id="status-display" class="status-message" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Base64 Converter. Built with semantic HTML5 and WCAG accessibility standards.</p>
+    </footer>
+
+    <script>
+        const unreadableInput = document.getElementById('unreadable-input');
+        const readableInput = document.getElementById('readable-input');
+        const statusDisplay = document.getElementById('status-display');
+
+        function setStatus(message, isError = false) {
+            statusDisplay.textContent = message;
+            statusDisplay.className = 'status-message ' + (isError ? 'status-error' : 'status-success');
+        }
+
+        // 1. Convert from Unreadable (Base64) to Readable (Plain Text)
+        document.getElementById('btn-to-readable').addEventListener('click', () => {
+            const val = unreadableInput.value.trim();
+            if (!val) {
+                setStatus('Please enter an unreadable Base64 code first.', true);
+                return;
+            }
+            try {
+                const cleanStr = val.includes(';') ? val.split(',')[1] : val;
+                const decoded = decodeURIComponent(escape(atob(cleanStr)));
+                readableInput.value = decoded;
+                setStatus('Successfully updated: Converted from unreadable to readable text.', false);
+            } catch (err) {
+                setStatus('Error: Invalid Base64 code format for decoding.', true);
+            }
+        });
+
+        // 2. Convert from Readable (Plain Text) to Unreadable (Base64)
+        document.getElementById('btn-to-unreadable').addEventListener('click', () => {
+            const val = readableInput.value;
+            if (!val) {
+                setStatus('Please enter readable plain text first.', true);
+                return;
+            }
+            try {
+                const encoded = btoa(unescape(encodeURIComponent(val)));
+                unreadableInput.value = encoded;
+                setStatus('Successfully updated: Converted from readable text to unreadable Base64.', false);
+            } catch (err) {
+                setStatus('Error: Failed to encode the text.', true);
+            }
+        });
+    </script>
+</body>
+</html>
