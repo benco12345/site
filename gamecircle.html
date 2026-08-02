@@ -1,4 +1,334 @@
-ound-row span { font-size: 15px; font-weight: bold; }
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catch the Circles Game</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh; 
+            height: 100dvh; 
+            overflow: hidden;
+            background-color: red;
+            position: relative;
+            touch-action: manipulation; 
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        #devCodeInput {
+            position: absolute;
+            top: 10px;
+            right: 10px; 
+            z-index: 100;
+            color: black;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid black;
+            padding: 5px;
+            font-weight: bold;
+            width: 80px;
+        }
+
+        #btnAbout {
+            position: absolute;
+            top: 10px;
+            left: 10px; 
+            z-index: 100;
+            background: #2196F3;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnAbout:hover { background: #1976D2; }
+
+        #btnSoundShop {
+            position: absolute;
+            top: 10px;
+            left: 120px; 
+            z-index: 100;
+            background: #E91E63;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnSoundShop:hover { background: #C2185B; }
+
+        #btnChallengeMode {
+            position: absolute;
+            top: 10px;
+            left: 235px; 
+            z-index: 100;
+            background: #FF9800;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnChallengeMode:hover { background: #F57C00; }
+
+        #score-hud {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 15px;
+            z-index: 50;
+            pointer-events: none; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        #challenge-hud {
+            position: absolute;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 26px;
+            font-weight: bold;
+            color: #FFEB3B;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 8px 25px;
+            border-radius: 12px;
+            z-index: 50;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: none;
+            text-align: center;
+            border: 2px solid #FF9800;
+            white-space: nowrap;
+        }
+
+        #bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            z-index: 1000;
+            pointer-events: none; 
+        }
+
+        .bottom-btn {
+            pointer-events: auto; 
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: 3px solid white;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: background 0.3s;
+        }
+
+        #menu-toggle-btn {
+            text-shadow: 1px 1px 2px black;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 300% 300%;
+            animation: rainbowColors 3s ease infinite;
+        }
+        #settings-toggle-btn { background: #9C27B0; }
+        #settings-toggle-btn:hover { background: #7B1FA2; }
+        #stats-toggle-btn { background: #607D8B; }
+        #stats-toggle-btn:hover { background: #455A64; }
+
+        @keyframes rainbowColors {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .panel {
+            position: absolute;
+            bottom: 80px;
+            z-index: 999;
+            background: rgba(40, 40, 60, 0.95);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: none; 
+            border: 2px solid #555;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
+        #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
+        #stats-panel { inset-inline-end: 20px; width: 300px; }
+        
+        #button-page-modal, #challenge-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #btnCloseButtonPage, #btnCloseChallengeModal {
+            position: absolute;
+            top: 20px;
+            right: 20px; 
+            font-size: 35px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover { transform: scale(1.2); }
+
+        #button-page-content, #challenge-modal-content {
+            background: rgba(30, 30, 40, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            border: 4px solid #2196F3;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 85%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #challenge-modal-content { border-color: #FF9800; }
+
+        #button-page-content h2, #challenge-modal-content h2 {
+            margin-top: 0;
+            color: #FFEB3B;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .modal-menu-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .modal-menu-btn:hover { background: #1976D2; transform: translateY(-2px); }
+
+        .controls-list {
+            font-size: 18px;
+            line-height: 2.2;
+            text-align: left;
+        }
+        [dir="rtl"] .controls-list {
+            text-align: right;
+        }
+        .controls-list span { color: #4CAF50; }
+
+        #sound-shop-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #sound-shop-content {
+            background: rgba(30, 30, 40, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid #E91E63;
+            color: white;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            width: 85%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        #btnCloseSoundShop {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 30px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .category-title {
+            color: #03A9F4;
+            border-bottom: 2px solid #03A9F4;
+            padding-bottom: 5px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: left;
+            direction: ltr;
+        }
+        [dir="rtl"] .category-title {
+            text-align: right;
+        }
+
+        .sound-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #444;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .sound-row span { font-size: 15px; font-weight: bold; }
         
         .shop-action-btn {
             padding: 8px 14px;
@@ -35,6 +365,220 @@ ound-row span { font-size: 15px; font-weight: bold; }
             background: rgba(40, 40, 50, 0.95);
             padding: 25px;
             border-radius: 15px;
+            border: 2px solid #FF9800;
+            color: white;
+            width: 85%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .text-modal-content textarea {
+            width: 100%;
+            height: 120px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #777;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
+
+        h3 { margin-top: 0; color: #4CAF50; }
+        #stats-panel h3 { color: #03A9F4; }
+        #settings-panel h3 { color: #E040FB; }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .stat-input, select {
+            width: 100px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #777;
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+        }
+        select { width: 130px; cursor: pointer; }
+
+        .stat-input:disabled {
+            background: transparent;
+            border: none;
+            color: #FFEB3B;
+            font-size: 16px;
+            text-align: center;
+            appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        #game-area {
+            width: 100vw;
+            height: 100dvh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
+            transform: scale(0);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            -webkit-tap-highlight-color: transparent; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 14px;
+            user-select: none;
+        }
+        @keyframes popIn { to { transform: scale(1); } }
+
+        button.menu-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button.menu-btn:hover { background: #1976D2; }
+        button.menu-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .save-load-btn { background: #FF9800 !important; color: #111 !important; }
+        .save-load-btn:hover { background: #F57C00 !important; }
+
+        .reset-btn { background: #f44336 !important; color: white !important; margin-top: 15px; }
+        .reset-btn:hover { background: #d32f2f !important; }
+
+        .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
+        hr { border: 1px solid #777; margin: 20px 0; }
+
+        /* Mobile Adjustments for Better UX */
+        body.mobile-mode #bottom-nav {
+            bottom: 10px; 
+            padding: 0 8px; 
+            box-sizing: border-box;
+            gap: 6px; 
+        }
+        body.mobile-mode .bottom-btn {
+            flex: 1; 
+            padding: 12px 2px; 
+            font-size: 12px; 
+            border-width: 2px;
+            border-radius: 14px; 
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        }
+        body.mobile-mode .panel {
+            width: 94% !important;
+            inset-inline-start: 3% !important;
+            inset-inline-end: 3% !important;
+            transform: none !important; 
+            bottom: 72px; 
+            max-height: 60vh;
+            padding: 15px;
+        }
+        body.mobile-mode #score-hud {
+            font-size: 20px;
+            padding: 6px 20px;
+            top: 10px;
+            border-radius: 12px;
+        }
+        body.mobile-mode #challenge-hud {
+            font-size: 16px;
+            padding: 5px 12px;
+            top: 48px;
+        }
+        body.mobile-mode #devCodeInput { top: 48px; width: 65px; font-size: 12px; padding: 4px; } 
+        body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnChallengeMode { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <input type="text" id="devCodeInput" placeholder="Code...">
+    <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
+    <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
+    <button id="btnChallengeMode" onclick="toggleChallengeModal()">Challenge ⚡</button>
+
+    <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
+    <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
+
+    <div id="bottom-nav">
+        <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+        <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
+        <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    </div>
+
+    <!-- Challenge Mode Modal -->
+    <div id="challenge-modal">
+        <button id="btnCloseChallengeModal" onclick="toggleChallengeModal()">❌</button>
+        <div id="challenge-modal-content">
+            <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
+            <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">Normal 🟢</button>
+            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">Press the Color 🎨</button>
+        </div>
+    </div>
+
+    <!-- דף שני (Button Page Modal) -->
+    <div id="button-page-modal">
+        <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
+        <div id="button-page-content">
+            <h2 id="lblButtonPageTitle">Second Page</h2>
+            
+            <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">עזרה (Helps) 💡</button>
+            
+            <!-- Developer Support Toggle Button -->
+            <button class="modal-menu-btn" id="btnDevSupport" onclick="toggleDevSupport()" style="background: #5865F2;">Developer Support 💬</button>
+
+            <!-- Developer Support Links Container (Hidden by default) -->
+            <div id="dev-support-container" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 2px solid #5865F2; padding-top: 15px;">
+                <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-menu-btn" id="btnDiscord" style="background: #7289DA; margin-top: 0;">Discord Server 🎧</a>
+                <a href="https://benco12345.github.io/site/gamecirclealpha.html" target="_blank" class="modal-menu-btn" id="btnAlphaGame" style="background: #FF5722; margin-top: 0;">Alpha Game 🎮</a>
+            </div>
+
+            <div id="helps-container" style="display: none; margin-top: 20px; border-top: 2px solid #555; padding-top: 15px;">
+                <div class="controls-list">
+                    <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
+                    <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
+                    <div><strong>A:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                    <div><strong>S:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                    <div><strong>D:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Shop Modal -->
+    <div id="sound-shop-modal">
+        <div id="sound-shop-content">
+            <button id="btnCloseSoundShop" onclick="toggleSoundShop()">❌</button>
+            <h2 id="lblSoundShopTitle" style="color: #FFEB            border-radius: 15px;
             border: 2px solid #FF9800;
             color: white;
             width: 85%;
