@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק תפיסת עיגולים</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #222;
+        }
+
+        /* תפריט הצד */
+        #sidebar {
+            width: 320px;
+            background: #333;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        #sidebar h2 { margin-top: 0; color: #4CAF50; }
+        
+        /* אזור המשחק */
+        #game-area {
+            flex-grow: 1;
+            background-color: red; /* רקע אדום לפי הבקשה */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* העיגולים */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
+            transform: scale(0);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        /* עיצוב כפתורים ותיבות שדרוג */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #1976D2; }
+        button:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .save-load-btn { background: #FF9800; color: #111; }
+        .save-load-btn:hover { background: #F57C00; }
+
+        .upgrade-box {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
+        hr { border: 1px solid #555; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h2>ניקוד: <span id="scoreDisplay">0</span></h2>
+        
+        <hr>
+        <h3>שמירה וטעינה 💾</h3>
+        <button class="save-load-btn" onclick="saveGame()">הורד קובץ שמירה (.txt)</button>
+        <button class="save-load-btn" onclick="document.getElementById('fileInput').click()">טען קובץ שמירה מ-TXT</button>
+        <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
+
+        <hr>
+        <h3>שדרוגים ⬆️</h3>
+        
+        <div class="upgrade-box">
+            <p><strong>מקסימום עיגולים:</strong> <span id="maxCirclesDisplay">5</span></p>
+            <button id="btnMaxCircles" onclick="buyMaxCircles()">שדרג (מחיר: <span id="costMaxCircles">10</span>)</button>
+        </div>
+        
+        <div class="upgrade-box">
+            <p><strong>נקודות לתפיסה:</strong> <span id="pointsPerClickDisplay">1</span></p>
+            <button id="btnPoints" onclick="buyPoints()">שדרג (מחיר: <span id="costPoints">20</span>)</button>
+        </div>
+        
+        <div class="upgrade-box">
+            <p><strong>קצב יצירה:</strong> כל <span id="spawnSpeedDisplay">1.0</span> שניות</p>
+            <button id="btnSpeed" onclick="buySpeed()">שדרג (מחיר: <span id="costSpeed">30</span>)</button>
+        </div>
+    </div>
+
+    <div id="game-area"></div>
+
+    <script>
+        // האובייקט שמחזיק את כל המידע של המשחק - קל לשמירה ולטעינה
+        let state = {
+            score: 0,
+            maxCircles: 5,
+            pointsPerClick: 1,
+            spawnRateMs: 1000, // מהירות התחלתית: שנייה אחת
+            costMaxCircles: 10,
+            costPoints: 20,
+            costSpeed: 30
+        };
+
+        let currentCircles = 0;
+        let gameInterval;
+
+        // שליפת אלמנטים מה-HTML
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
+        const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
+        const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
+        
+        const costMaxCirclesDisplay = document.getElementById('costMaxCircles');
+        const costPointsDisplay = document.getElementById('costPoints');
+        const costSpeedDisplay = document.getElementById('costSpeed');
+        
+        const btnMaxCircles = document.getElementById('btnMaxCircles');
+        const btnPoints = document.getElementById('btnPoints');
+        const btnSpeed = document.getElementById('btnSpeed');
+        
+        const gameArea = document.getElementById('game-area');
+
+        // פונקציית אתחול
+        function initGame() {
+            updateUI();
+            startGameLoop();
+        }
+
+        // עדכון המסך לפי הנתונים הנוכחיים
+        function updateUI() {
+            scoreDisplay.innerText = Math.floor(state.score);
+            maxCirclesDisplay.innerText = state.maxCircles;
+            pointsPerClickDisplay.innerText = state.pointsPerClick;
+            spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
+            
+            costMaxCirclesDisplay.innerText = state.costMaxCircles;
+            costPointsDisplay.innerText = state.costPoints;
+            costSpeedDisplay.innerText = state.costSpeed;
+
+            // כיבוי והדלקה של כפתורי השדרוג לפי הניקוד
+            btnMaxCircles.disabled = state.score < state.costMaxCircles;
+            btnPoints.disabled = state.score < state.costPoints;
+            btnSpeed.disabled = state.score < state.costSpeed || state.spawnRateMs <= 100; // הגבלת מהירות מקסימלית
+            
+            if (state.spawnRateMs <= 100) {
+                btnSpeed.innerText = "מהירות מקסימלית!";
+            } else {
+                btnSpeed.innerHTML = `שדרג (מחיר: <span id="costSpeed">${state.costSpeed}</span>)`;
+            }
+        }
+
+        // לולאת המשחק
+        function startGameLoop() {
+            clearInterval(gameInterval);
+            gameInterval = setInterval(spawnCircle, state.spawnRateMs);
+        }
+
+        // יצירת צבעים אקראיים ובוהקים
+        function getRandomColor() {
+            const h = Math.floor(Math.random() * 360);
+            return `hsl(${h}, 100%, 60%)`;
+        }
+
+        // יצירת עיגול חדש
+        function spawnCircle() {
+            if (currentCircles >= state.maxCircles) return;
+
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            
+            // גודל אקראי בין 40 ל-90 פיקסלים
+            const size = Math.floor(Math.random() * 50) + 40;
+            circle.style.width = size + 'px';
+            circle.style.height = size + 'px';
+            circle.style.backgroundColor = getRandomColor();
+
+            // מיקום אקראי בתוך המסך
+            const maxX = gameArea.clientWidth - size;
+            const maxY = gameArea.clientHeight - size;
+            circle.style.left = Math.floor(Math.random() * maxX) + 'px';
+            circle.style.top = Math.floor(Math.random() * maxY) + 'px';
+
+            // אירוע לחיצה (תפיסת העיגול)
+            circle.onclick = function() {
+                state.score += state.pointsPerClick;
+                currentCircles--;
+                this.remove();
+                updateUI();
+            };
+
+            gameArea.appendChild(circle);
+            currentCircles++;
+        }
+
+        // --- שדרוגים ---
+
+        function buyMaxCircles() {
+            if (state.score >= state.costMaxCircles) {
+                state.score -= state.costMaxCircles;
+                state.maxCircles += 3; // מוסיף עוד 3 עיגולים למקסימום
+                state.costMaxCircles = Math.floor(state.costMaxCircles * 1.5);
+                updateUI();
+            }
+        }
+
+        function buyPoints() {
+            if (state.score >= state.costPoints) {
+                state.score -= state.costPoints;
+                state.pointsPerClick += 1;
+                state.costPoints = Math.floor(state.costPoints * 1.8);
+                updateUI();
+            }
+        }
+
+        function buySpeed() {
+            if (state.score >= state.costSpeed && state.spawnRateMs > 100) {
+                state.score -= state.costSpeed;
+                state.spawnRateMs = Math.max(100, Math.floor(state.spawnRateMs * 0.85)); // מזרז את הזמן ב-15%
+                state.costSpeed = Math.floor(state.costSpeed * 1.6);
+                updateUI();
+                startGameLoop(); // מעדכן את לולאת המשחק למהירות החדשה
+            }
+        }
+
+        // --- שמירה וטעינה ---
+
+        // שמירה: הופך את המשתנה state לטקסט ומוריד כקובץ TXT
+        function saveGame() {
+            const dataString = JSON.stringify(state);
+            const blob = new Blob([dataString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'CatchCircles_Save.txt';
+            document.body.appendChild(a);
+            a.click();
+            
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // טעינה: קורא קובץ TXT, מפענח אותו ומחליף את המצב הנוכחי
+        function loadGame(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const loadedState = JSON.parse(e.target.result);
+                    state = { ...state, ...loadedState }; // מיזוג הנתונים
+                    
+                    // ניקוי המסך מהעיגולים הקיימים
+                    gameArea.innerHTML = '';
+                    currentCircles = 0;
+                    
+                    updateUI();
+                    startGameLoop();
+                    alert("המשחק נטען בהצלחה מתוך הקובץ! 🎮");
+                } catch (err) {
+                    alert("שגיאה! נראה שהקובץ אינו קובץ שמירה תקין.");
+                }
+                
+                // איפוס הכפתור כדי לאפשר להעלות את אותו הקובץ שוב אם רוצים
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // הפעלת המשחק
+        initGame();
+    </script>
+</body>
+</html>
