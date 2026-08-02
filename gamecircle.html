@@ -1347,6 +1347,7 @@
                 challengeHud.style.display = 'block';
                 pickNewTargetColor();
                 ensureTargetCircleExists();
+                refreshExistingCirclesColors();
             } else {
                 bottomNav.style.display = 'flex';
                 btnAbout.style.display = 'block';
@@ -1387,6 +1388,12 @@
                 circle.style.backgroundColor = chosenColorObj.hex;
                 circle.dataset.colorName = chosenColorObj.name;
             });
+            if (state.challengeMode === 'press_color') {
+                circles.forEach(c => {
+                    c.innerText = '';
+                    if (c.timerInterval) clearInterval(c.timerInterval);
+                });
+            }
         }
 
         function openHelpSubModal() {
@@ -2161,10 +2168,12 @@
             circle.style.left = safeX + 'px';
             circle.style.top = safeY + 'px';
 
-            // Timer display inside the circle
-            let timeLeft = state.circleLifespanMs === 'infinite' ? null : state.circleLifespanMs;
+            // Timer display inside the circle (Disabled if Press the Color mode is active)
+            let timeLeft = (state.challengeMode === 'press_color' || state.circleLifespanMs === 'infinite') ? null : state.circleLifespanMs;
             if (timeLeft !== null) {
                 circle.innerText = (timeLeft / 1000).toFixed(1) + 's';
+            } else {
+                circle.innerText = '';
             }
 
             circle.onmouseenter = function() { hoveredCircle = this; };
@@ -2206,8 +2215,8 @@
             currentCircles++;
             updateStatsUI(); 
 
-            // Lifespan & Countdown Logic
-            if (state.circleLifespanMs !== 'infinite') {
+            // Lifespan & Countdown Logic (Only if not in Press the Color mode and lifespan is finite)
+            if (state.challengeMode !== 'press_color' && state.circleLifespanMs !== 'infinite') {
                 const startTime = Date.now();
                 const totalDuration = state.circleLifespanMs;
 
@@ -2220,9 +2229,6 @@
                         if (circle.parentNode === gameArea) {
                             circle.remove();
                             currentCircles--;
-                            if (state.challengeMode === 'press_color') {
-                                ensureTargetCircleExists();
-                            }
                             updateStatsUI();
                         }
                     } else {
