@@ -221,6 +221,8 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             width: 85%;
             max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         #challenge-modal-content { border-color: #FF9800; }
 
@@ -534,7 +536,15 @@
             <h2 id="lblButtonPageTitle">Second Page</h2>
             
             <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">עזרה (Helps) 💡</button>
-            <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-modal-btn modal-menu-btn" id="btnDevSupport" style="background: #5865F2;">Developer Support 💬</a>
+            
+            <!-- Developer Support Toggle Button -->
+            <button class="modal-menu-btn" id="btnDevSupport" onclick="toggleDevSupport()" style="background: #5865F2;">Developer Support 💬</button>
+
+            <!-- Developer Support Links Container (Hidden by default) -->
+            <div id="dev-support-container" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 2px solid #5865F2; padding-top: 15px;">
+                <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-menu-btn" id="btnDiscord" style="background: #7289DA; margin-top: 0;">Discord Server 🎧</a>
+                <a href="https://benco12345.github.io/site/gamecirclealpha.html" target="_blank" class="modal-menu-btn" id="btnAlphaGame" style="background: #FF5722; margin-top: 0;">Alpha Game 🎮</a>
+            </div>
 
             <div id="helps-container" style="display: none; margin-top: 20px; border-top: 2px solid #555; padding-top: 15px;">
                 <div class="controls-list">
@@ -806,6 +816,8 @@
                 lblButtonPageTitle: "Second Page", 
                 btnOpenHelps: "Helps 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Discord Server 🎧",
+                btnAlphaGame: "Alpha Game 🎮",
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
@@ -845,6 +857,8 @@
                 lblButtonPageTitle: "דף שני", 
                 btnOpenHelps: "עזרה (Helps) 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "שרת דיסקורד 🎧",
+                btnAlphaGame: "משחק אלפא 🎮",
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
@@ -884,6 +898,8 @@
                 lblButtonPageTitle: "Segundo Página", 
                 btnOpenHelps: "Ayuda 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Servidor de Discord 🎧",
+                btnAlphaGame: "Juego Alpha 🎮",
                 lblKeySpace: "Espacio:", descSpace: "Hacer clic en el círculo",
                 lblKeyCode: ". o / :", descKeyCode: "Escribir código",
                 descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas",
@@ -923,6 +939,8 @@
                 lblButtonPageTitle: "Deuxième Page", 
                 btnOpenHelps: "Aide 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Serveur Discord 🎧",
+                btnAlphaGame: "Jeu Alpha 🎮",
                 lblKeySpace: "Espace :", descSpace: "Cliquer sur le cercle",
                 lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
                 descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats",
@@ -962,6 +980,8 @@
                 lblButtonPageTitle: "Zweite Seite", 
                 btnOpenHelps: "Hilfe 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Discord Server 🎧",
+                btnAlphaGame: "Alpha Spiel 🎮",
                 lblKeySpace: "Leertaste:", descSpace: "Kreis anklicken",
                 lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
                 descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen",
@@ -1001,6 +1021,8 @@
                 lblButtonPageTitle: "Вторая Страница", 
                 btnOpenHelps: "Помощь 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Сервер Discord 🎧",
+                btnAlphaGame: "Альфа-игра 🎮",
                 lblKeySpace: "Пробел:", descSpace: "Кликнуть на круг",
                 lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
                 descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику",
@@ -1040,6 +1062,8 @@
                 lblButtonPageTitle: "الصفحة الثانية", 
                 btnOpenHelps: "المساعدة 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "خادم ديسكورد 🎧",
+                btnAlphaGame: "لعبة ألفا 🎮",
                 lblKeySpace: "مسافة:", descSpace: "النقر على الدائرة",
                 lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
                 descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات",
@@ -1079,6 +1103,8 @@
                 lblButtonPageTitle: "第二页", 
                 btnOpenHelps: "帮助 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Discord 服务器 🎧",
+                btnAlphaGame: "Alpha 游戏 🎮",
                 lblKeySpace: "空格键:", descSpace: "点击悬停的圆圈",
                 lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
                 descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计",
@@ -1118,6 +1144,8 @@
                 lblButtonPageTitle: "2ページ目", 
                 btnOpenHelps: "ヘルプ 💡",
                 btnDevSupport: "Developer Support 💬",
+                btnDiscord: "Discord サーバー 🎧",
+                btnAlphaGame: "アルファゲーム 🎮",
                 lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
@@ -1325,6 +1353,11 @@
         function openHelpSubModal() {
             const container = document.getElementById('helps-container');
             container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleDevSupport() {
+            const container = document.getElementById('dev-support-container');
+            container.style.display = container.style.display === 'none' ? 'flex' : 'none';
         }
 
         function initAudio() {
@@ -1561,7 +1594,11 @@
             document.getElementById('btnAbout').innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
             document.getElementById('btnOpenHelps').innerText = text.btnOpenHelps;
+            
             document.getElementById('btnDevSupport').innerText = text.btnDevSupport;
+            document.getElementById('btnDiscord').innerText = text.btnDiscord;
+            document.getElementById('btnAlphaGame').innerText = text.btnAlphaGame;
+
             document.getElementById('btnChallengeMode').innerText = text.btnChallengeMode;
             document.getElementById('lblChallengeTitle').innerText = text.lblChallengeTitle;
             document.getElementById('btnModeNormal').innerText = text.btnModeNormal;
