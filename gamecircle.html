@@ -794,6 +794,19 @@
             <p><strong id="lblLifespan">Circle Lifespan:</strong> <span id="lifespanDisplay">5</span><span id="lblSecLife">s</span></p>
             <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">Upgrade (Cost: <span id="costLifespan">5</span>)</button>
         </div>
+        
+        <hr>
+        <button class="menu-btn" id="btnToggleAutoUpgrades" onclick="toggleAutoUpgrades()" style="background: #9C27B0;">Autoclicker 🤖</button>
+        <div id="autoUpgradesContainer" style="display: none; border: 2px solid #9C27B0; padding: 10px; border-radius: 8px; margin-top: 10px;">
+            <div class="upgrade-box">
+                <p><strong id="lblAutoAmount">Clicks per Action:</strong> <span id="autoAmountDisplay">0</span></p>
+                <button class="menu-btn" id="btnAutoAmount" onclick="buyAutoAmount()">Upgrade (Cost: <span id="costAutoAmount">50</span>)</button>
+            </div>
+            <div class="upgrade-box">
+                <p><strong id="lblAutoInterval">Click Interval:</strong> <span id="autoIntervalDisplay">5.0</span><span id="lblSecAuto">s</span></p>
+                <button class="menu-btn" id="btnAutoInterval" onclick="buyAutoInterval()">Upgrade (Cost: <span id="costAutoInterval">50</span>)</button>
+            </div>
+        </div>
     </div>
 
     <div id="game-area"></div>
@@ -841,7 +854,8 @@
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnChallengeMode: "Challenge ⚡", lblChallengeTitle: "Challenge Mode ⚡",
                 btnModeNormal: "Normal 🟢", btnModePressColor: "Press the Color 🎨",
-                lblPressTheColorInstruction: "Press the color"
+                lblPressTheColorInstruction: "Press the color",
+                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -884,7 +898,8 @@
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
                 btnChallengeMode: "אתגר ⚡", lblChallengeTitle: "מצב אתגר ⚡",
                 btnModeNormal: "רגיל (Normal) 🟢", btnModePressColor: "לחץ על הצבע (Press the color) 🎨",
-                lblPressTheColorInstruction: "לחץ על הצבע"
+                lblPressTheColorInstruction: "לחץ על הצבע",
+                btnToggleAutoUpgrades: "לחיצה אוטומטית (Autoclicker) 🤖", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:"
             },
             es: {
                 lblScore: "Puntuación: ",
@@ -927,7 +942,8 @@
                 descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas",
                 btnChallengeMode: "Desafío ⚡", lblChallengeTitle: "Modo Desafío ⚡",
                 btnModeNormal: "Normal 🟢", btnModePressColor: "Presiona el color 🎨",
-                lblPressTheColorInstruction: "Presiona el color"
+                lblPressTheColorInstruction: "Presiona el color",
+                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:"
             },
             fr: {
                 lblScore: "Score : ",
@@ -970,7 +986,8 @@
                 descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats",
                 btnChallengeMode: "Défi ⚡", lblChallengeTitle: "Mode Défi ⚡",
                 btnModeNormal: "Normal 🟢", btnModePressColor: "Appuyez sur la couleur 🎨",
-                lblPressTheColorInstruction: "Appuyez sur la couleur"
+                lblPressTheColorInstruction: "Appuyez sur la couleur",
+                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -1013,7 +1030,8 @@
                 descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen",
                 btnChallengeMode: "Herausforderung ⚡", lblChallengeTitle: "Herausforderungsmodus ⚡",
                 btnModeNormal: "Normal 🟢", btnModePressColor: "Drücke die Farbe 🎨",
-                lblPressTheColorInstruction: "Drücke die Farbe"
+                lblPressTheColorInstruction: "Drücke die Farbe",
+                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:"
             },
             ru: {
                 lblScore: "Счет: ",
@@ -1056,7 +1074,8 @@
                 descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику",
                 btnChallengeMode: "Вызов ⚡", lblChallengeTitle: "Режим Вызова ⚡",
                 btnModeNormal: "Нормальный 🟢", btnModePressColor: "Нажми цвет 🎨",
-                lblPressTheColorInstruction: "Нажми цвет"
+                lblPressTheColorInstruction: "Нажми цвет",
+                btnToggleAutoUpgrades: "Автокликер 🤖", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:"
             },
             ar: {
                 lblScore: "النقاط: ",
@@ -1099,7 +1118,8 @@
                 descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات",
                 btnChallengeMode: "تحدي ⚡", lblChallengeTitle: "وضع التحدي ⚡",
                 btnModeNormal: "عادي 🟢", btnModePressColor: "اضغط على اللون 🎨",
-                lblPressTheColorInstruction: "اضغط على اللون"
+                lblPressTheColorInstruction: "اضغط على اللون",
+                btnToggleAutoUpgrades: "النقر التلقائي 🤖", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:"
             },
             zh: {
                 lblScore: "得分: ",
@@ -1142,7 +1162,8 @@
                 descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计",
                 btnChallengeMode: "挑战 ⚡", lblChallengeTitle: "挑战模式 ⚡",
                 btnModeNormal: "普通 🟢", btnModePressColor: "点击颜色 🎨",
-                lblPressTheColorInstruction: "点击颜色"
+                lblPressTheColorInstruction: "点击颜色",
+                btnToggleAutoUpgrades: "自动点击器 🤖", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:"
             },
             ja: {
                 lblScore: "スコア: ",
@@ -1185,7 +1206,8 @@
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnChallengeMode: "チャレンジ ⚡", lblChallengeTitle: "チャレンジモード ⚡",
                 btnModeNormal: "ノーマル 🟢", btnModePressColor: "色を押す 🎨",
-                lblPressTheColorInstruction: "色を押す"
+                lblPressTheColorInstruction: "色を押す",
+                btnToggleAutoUpgrades: "オートクリッカー 🤖", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:"
             }
         };
 
@@ -1197,11 +1219,15 @@
             spawnRateMs: 1000, 
             minCircleSize: 40,
             circleLifespanMs: 5000,
+            autoAmount: 0,
+            autoIntervalMs: 5000,
             costMaxCircles: 5,
             costPoints: 10,
             costSpeed: 15,
             costMinSize: 8,
             costLifespan: 5,
+            costAutoAmount: 50,
+            costAutoInterval: 50,
             language: 'en', 
             deviceMode: 'desktop',
             soundEnabled: true,
@@ -1218,6 +1244,7 @@
 
         let currentCircles = 0;
         let gameInterval;
+        let autoClickerInterval = null;
         let hoveredCircle = null;
         let audioCtx = null;
         let bgmInterval = null;
@@ -1230,11 +1257,16 @@
         const lifespanDisplay = document.getElementById('lifespanDisplay'); 
         const lblSecLife = document.getElementById('lblSecLife');
         
+        const autoAmountDisplay = document.getElementById('autoAmountDisplay');
+        const autoIntervalDisplay = document.getElementById('autoIntervalDisplay');
+        
         const btnMaxCircles = document.getElementById('btnMaxCircles');
         const btnPoints = document.getElementById('btnPoints');
         const btnSpeed = document.getElementById('btnSpeed');
         const btnMinSize = document.getElementById('btnMinSize'); 
         const btnLifespan = document.getElementById('btnLifespan'); 
+        const btnAutoAmount = document.getElementById('btnAutoAmount');
+        const btnAutoInterval = document.getElementById('btnAutoInterval');
         const btnResetGame = document.getElementById('btnResetGame');
         const btnSoundShop = document.getElementById('btnSoundShop');
         const soundShopModal = document.getElementById('sound-shop-modal');
@@ -1393,6 +1425,33 @@
                     c.innerText = '';
                     if (c.timerInterval) clearInterval(c.timerInterval);
                 });
+            }
+        }
+
+        function toggleAutoUpgrades() {
+            const container = document.getElementById('autoUpgradesContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function startAutoClicker() {
+            if (autoClickerInterval) clearInterval(autoClickerInterval);
+            if (state.autoAmount > 0) {
+                autoClickerInterval = setInterval(() => {
+                    triggerAutoClick();
+                }, state.autoIntervalMs);
+            }
+        }
+
+        function triggerAutoClick() {
+            let circles = Array.from(document.querySelectorAll('.circle'));
+            if (state.challengeMode === 'press_color') {
+                circles = circles.filter(c => c.dataset.colorName === state.targetColorName);
+            }
+            let limit = Math.min(circles.length, state.autoAmount);
+            for(let i=0; i<limit; i++) {
+                if(circles[i] && circles[i].click) {
+                    circles[i].click();
+                }
             }
         }
 
@@ -1604,6 +1663,11 @@
             document.getElementById('lblMinSize').innerText = text.lblMinSize;
             document.getElementById('lblPx').innerText = text.lblPx;
             document.getElementById('lblLifespan').innerText = text.lblLifespan;
+            
+            document.getElementById('btnToggleAutoUpgrades').innerText = text.btnToggleAutoUpgrades;
+            document.getElementById('lblAutoAmount').innerText = text.lblAutoAmount;
+            document.getElementById('lblAutoInterval').innerText = text.lblAutoInterval;
+            document.getElementById('lblSecAuto').innerText = text.lblSec;
             
             document.getElementById('lblLiveStats').innerText = text.lblLiveStats;
             document.getElementById('lblCurrentScore').innerText = text.lblCurrentScore;
@@ -1823,11 +1887,15 @@
                     spawnRateMs: 1000, 
                     minCircleSize: 40,
                     circleLifespanMs: 5000,
+                    autoAmount: 0,
+                    autoIntervalMs: 5000,
                     costMaxCircles: 5,
                     costPoints: 10,
                     costSpeed: 15,
                     costMinSize: 8,
                     costLifespan: 5,
+                    costAutoAmount: 50,
+                    costAutoInterval: 50,
                     language: state.language, 
                     deviceMode: state.deviceMode,
                     soundEnabled: true,
@@ -1848,6 +1916,7 @@
                 if (bgmInterval) clearInterval(bgmInterval);
                 setChallengeMode('normal');
                 startGameLoop();
+                startAutoClicker();
                 updateUI();
                 toggleSettings();
             }
@@ -1966,6 +2035,7 @@
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             startGameLoop();
+            startAutoClicker();
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
         }
 
@@ -1975,6 +2045,9 @@
             pointsPerClickDisplay.innerText = state.pointsPerClick;
             spawnSpeedDisplay.innerText = (state.spawnRateMs / 1000).toFixed(2);
             minSizeDisplay.innerText = state.minCircleSize;
+            
+            autoAmountDisplay.innerText = state.autoAmount;
+            autoIntervalDisplay.innerText = (state.autoIntervalMs / 1000).toFixed(2);
             
             const text = t[state.language] || t['en'];
 
@@ -2009,6 +2082,16 @@
                 lblSecLife.innerText = text.lblSec;
                 btnLifespan.disabled = state.score < state.costLifespan;
                 btnLifespan.innerHTML = `${text.upgradeCost}<span id="costLifespan">${state.costLifespan}</span>)`;
+            }
+            
+            btnAutoAmount.disabled = state.score < state.costAutoAmount;
+            btnAutoAmount.innerHTML = `${text.upgradeCost}<span id="costAutoAmount">${state.costAutoAmount}</span>)`;
+            
+            btnAutoInterval.disabled = state.score < state.costAutoInterval || state.autoIntervalMs <= 100;
+            if (state.autoIntervalMs <= 100) {
+                btnAutoInterval.innerText = text.maxSpeed;
+            } else {
+                btnAutoInterval.innerHTML = `${text.upgradeCost}<span id="costAutoInterval">${state.costAutoInterval}</span>)`;
             }
 
             // --- Sound Shop UI Management ---
@@ -2289,6 +2372,26 @@
                 updateUI();
             }
         }
+        
+        function buyAutoAmount() {
+            if (state.score >= state.costAutoAmount) {
+                state.score -= state.costAutoAmount;
+                state.autoAmount += 1;
+                state.costAutoAmount = Math.floor(state.costAutoAmount * 1.5);
+                startAutoClicker();
+                updateUI();
+            }
+        }
+        
+        function buyAutoInterval() {
+            if (state.score >= state.costAutoInterval && state.autoIntervalMs > 100) {
+                state.score -= state.costAutoInterval;
+                state.autoIntervalMs = Math.max(100, Math.floor(state.autoIntervalMs * 0.85));
+                state.costAutoInterval = Math.floor(state.costAutoInterval * 1.3);
+                startAutoClicker();
+                updateUI();
+            }
+        }
 
         function saveGame() {
             let dataString = JSON.stringify(state);
@@ -2339,6 +2442,10 @@
                 state.circleLifespanMs = 5000;
                 state.costLifespan = 5;
             }
+            if (typeof state.autoAmount === 'undefined') state.autoAmount = 0;
+            if (typeof state.autoIntervalMs === 'undefined') state.autoIntervalMs = 5000;
+            if (typeof state.costAutoAmount === 'undefined') state.costAutoAmount = 50;
+            if (typeof state.costAutoInterval === 'undefined') state.costAutoInterval = 50;
             if (!state.language) state.language = 'en'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
@@ -2359,6 +2466,7 @@
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             startGameLoop();
+            startAutoClicker();
             
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
             else if (bgmInterval) clearInterval(bgmInterval);
