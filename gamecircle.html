@@ -14,6 +14,9 @@
             background-color: red;
             position: relative;
             touch-action: manipulation; 
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         #devCodeInput {
@@ -471,44 +474,49 @@
         .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
         hr { border: 1px solid #777; margin: 20px 0; }
 
+        /* Mobile Adjustments for Better UX */
         body.mobile-mode #bottom-nav {
             bottom: 10px; 
-            padding: 0 5px; 
+            padding: 0 8px; 
             box-sizing: border-box;
-            gap: 5px; 
+            gap: 6px; 
         }
         body.mobile-mode .bottom-btn {
             flex: 1; 
-            padding: 10px 0; 
-            font-size: 13px; 
+            padding: 12px 2px; 
+            font-size: 12px; 
             border-width: 2px;
-            border-radius: 12px; 
+            border-radius: 14px; 
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
         }
         body.mobile-mode .panel {
-            width: 90% !important;
-            inset-inline-start: 5% !important;
-            inset-inline-end: 5% !important;
+            width: 94% !important;
+            inset-inline-start: 3% !important;
+            inset-inline-end: 3% !important;
             transform: none !important; 
-            bottom: 65px; 
+            bottom: 72px; 
+            max-height: 60vh;
+            padding: 15px;
         }
         body.mobile-mode #score-hud {
             font-size: 20px;
-            padding: 8px 20px;
+            padding: 6px 20px;
             top: 10px;
+            border-radius: 12px;
         }
         body.mobile-mode #challenge-hud {
-            font-size: 18px;
-            padding: 6px 15px;
-            top: 50px;
+            font-size: 16px;
+            padding: 5px 12px;
+            top: 48px;
         }
-        body.mobile-mode #devCodeInput { top: 50px; } 
-        body.mobile-mode #btnAbout { top: 50px; }
-        body.mobile-mode #btnSoundShop { top: 50px; left: 100px; padding: 5px 8px; font-size: 13px; }
-        body.mobile-mode #btnChallengeMode { top: 50px; left: 195px; padding: 5px 8px; font-size: 13px; }
+        body.mobile-mode #devCodeInput { top: 48px; width: 65px; font-size: 12px; padding: 4px; } 
+        body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnChallengeMode { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -2292,7 +2300,8 @@
             circle.onmouseenter = function() { hoveredCircle = this; };
             circle.onmouseleave = function() { if (hoveredCircle === this) hoveredCircle = null; };
 
-            circle.onclick = function() {
+            const handleCircleInteraction = function(e) {
+                if (e) e.preventDefault();
                 playClickSound();
                 let earned = state.pointsPerClick;
                 
@@ -2323,6 +2332,9 @@
                 hoveredCircle = null; 
                 updateUI();
             };
+
+            circle.addEventListener('touchstart', handleCircleInteraction, { passive: false });
+            circle.onclick = handleCircleInteraction;
 
             gameArea.appendChild(circle);
             currentCircles++;
