@@ -434,6 +434,14 @@
             transform: scale(0);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             -webkit-tap-highlight-color: transparent; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 14px;
+            user-select: none;
         }
         @keyframes popIn { to { transform: scale(1); } }
 
@@ -749,6 +757,10 @@
             <span id="lblStatSpawnRate">Spawn Rate (ms):</span>
             <input type="number" id="editSpawnRate" class="stat-input" disabled oninput="applyCheatEdits()">
         </div>
+        <div class="stat-row">
+            <span id="lblStatLifespan">Lifespan (ms):</span>
+            <input type="number" id="editLifespan" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
     </div>
 
     <div id="menu-panel" class="panel">
@@ -778,6 +790,10 @@
             <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
             <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">8</span>)</button>
         </div>
+        <div class="upgrade-box">
+            <p><strong id="lblLifespan">Circle Lifespan:</strong> <span id="lifespanDisplay">5</span><span id="lblSecLife">s</span></p>
+            <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">Upgrade (Cost: <span id="costLifespan">5</span>)</button>
+        </div>
     </div>
 
     <div id="game-area"></div>
@@ -796,9 +812,11 @@
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
                 lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
                 lblMinSize: "Minimum Size:", lblPx: "px",
+                lblLifespan: "Circle Lifespan:", infinite: "Infinite", maxLevel: "Max Level!",
                 lblLiveStats: "Live Stats", lblCurrentScore: "Current Score:", lblLifetimeScore: "Lifetime Score:",
                 lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
+                lblStatLifespan: "Lifespan (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language:",
                 lblSoundStatus: "Sound:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
                 lblSoundVolume: "Volume:",
@@ -837,9 +855,11 @@
                 lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
                 lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
                 lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
+                lblLifespan: "זמן חיי עיגול:", infinite: "אינסוף", maxLevel: "רמה מקסימלית!",
                 lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל:",
                 lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
+                lblStatLifespan: "זמן חיים (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
                 lblSoundStatus: "סאונד / Sound:", optSoundOn: "פועל 🔊", optSoundOff: "כבוי 🔇",
                 lblSoundVolume: "עוצמת סאונד / Volume:",
@@ -878,9 +898,11 @@
                 lblUpgrades: "Mejoras ⬆️", lblMaxCircles: "Círculos máx:", lblPointsPerCatch: "Puntos por captura:",
                 lblSpawnRate: "Frecuencia:", lblEvery: "Cada ", lblSec: "s",
                 lblMinSize: "Tamaño mín:", lblPx: "px",
+                lblLifespan: "Duración del círculo:", infinite: "Infinito", maxLevel: "¡Nivel Máximo!",
                 lblLiveStats: "Estadísticas en vivo", lblCurrentScore: "Puntuación actual:", lblLifetimeScore: "Puntuación total:",
                 lblCirclesOnScreen: "Círculos en pantalla:", lblGameVars: "Variables del juego",
                 lblStatMaxCircles: "Círculos máx:", lblStatPoints: "Puntos / Captura:", lblStatMinSize: "Tamaño mín (px):", lblStatSpawnRate: "Frecuencia (ms):",
+                lblStatLifespan: "Duración (ms):",
                 lblSettingsTitle: "Ajustes ⚙️", lblLanguage: "Idioma:",
                 lblSoundStatus: "Sonido:", optSoundOn: "Activado 🔊", optSoundOff: "Desactivado 🔇",
                 lblSoundVolume: "Volumen:",
@@ -919,9 +941,11 @@
                 lblUpgrades: "Améliorations ⬆️", lblMaxCircles: "Cercles max :", lblPointsPerCatch: "Points par prise :",
                 lblSpawnRate: "Apparition :", lblEvery: "Chaque ", lblSec: "s",
                 lblMinSize: "Taille min :", lblPx: "px",
+                lblLifespan: "Durée de vie :", infinite: "Infini", maxLevel: "Niveau Max !",
                 lblLiveStats: "Stats en direct", lblCurrentScore: "Score actuel :", lblLifetimeScore: "Score total :",
                 lblCirclesOnScreen: "Cercles à l'écran :", lblGameVars: "Variables du jeu",
                 lblStatMaxCircles: "Cercles max :", lblStatPoints: "Points / Prise :", lblStatMinSize: "Taille min (px) :", lblStatSpawnRate: "Apparition (ms) :",
+                lblStatLifespan: "Durée (ms):",
                 lblSettingsTitle: "Paramètres ⚙️", lblLanguage: "Langue :",
                 lblSoundStatus: "Son :", optSoundOn: "Activé 🔊", optSoundOff: "Désactivé 🔇",
                 lblSoundVolume: "Volume :",
@@ -960,9 +984,11 @@
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max. Kreise:", lblPointsPerCatch: "Punkte pro Fang:",
                 lblSpawnRate: "Spawn-Rate:", lblEvery: "Alle ", lblSec: "s",
                 lblMinSize: "Min. Größe:", lblPx: "px",
+                lblLifespan: "Kreis-Lebensdauer:", infinite: "Unendlich", maxLevel: "Max. Level!",
                 lblLiveStats: "Live-Statistiken", lblCurrentScore: "Aktuelle Punkte:", lblLifetimeScore: "Gesamtpunkte:",
                 lblCirclesOnScreen: "Kreise auf dem Bildschirm:", lblGameVars: "Spielvariablen",
                 lblStatMaxCircles: "Max. Kreise:", lblStatPoints: "Punkte / Fang:", lblStatMinSize: "Min. Größe (px):", lblStatSpawnRate: "Spawn-Rate (ms):",
+                lblStatLifespan: "Lebensdauer (ms):",
                 lblSettingsTitle: "Einstellungen ⚙️", lblLanguage: "Sprache:",
                 lblSoundStatus: "Ton:", optSoundOn: "An 🔊", optSoundOff: "Aus 🔇",
                 lblSoundVolume: "Lautstärke:",
@@ -996,14 +1022,16 @@
                 btnSettingsOpen: "Настройки ⚙️", btnSettingsClose: "Закрыть ❌",
                 lblSaveLoad: "Сохранение 💾", btnDownload: "Скачать файл (.txt)", btnLoad: "Загрузить (TXT)",
                 btnOpenTextSave: "Экспорт кода 📋", btnOpenTextLoad: "Импорт кода 📥",
-                lblExportTitle: "Экспорт кода", lblImportTitle: "Импорт кода",
+                lblExportTitle: "Экспорт кода", lblImportTitle: "Экспорт кода",
                 btnCopyClipboard: "Копировать в буфер 📋", btnApplyLoadCode: "Загрузить 🎮",
                 lblUpgrades: "Улучшения ⬆️", lblMaxCircles: "Макс. кругов:", lblPointsPerCatch: "Очков за пойманный:",
                 lblSpawnRate: "Частота спавна:", lblEvery: "Каждые ", lblSec: "с",
                 lblMinSize: "Мин. размер:", lblPx: "пикс",
+                lblLifespan: "Время жизни круга:", infinite: "Бесконечно", maxLevel: "Макс. уровень!",
                 lblLiveStats: "Живая статистика", lblCurrentScore: "Текущий счет:", lblLifetimeScore: "Общий счет:",
                 lblCirclesOnScreen: "Кругов на экране:", lblGameVars: "Переменные игры",
                 lblStatMaxCircles: "Макс. кругов:", lblStatPoints: "Очков / Поимка:", lblStatMinSize: "Мин. размер (px):", lblStatSpawnRate: "Частота (ms):",
+                lblStatLifespan: "Жизнь (ms):",
                 lblSettingsTitle: "Настройки ⚙️", lblLanguage: "Язык:",
                 lblSoundStatus: "Звук:", optSoundOn: "Вкл 🔊", optSoundOff: "Выкл 🔇",
                 lblSoundVolume: "Громкость:",
@@ -1042,9 +1070,11 @@
                 lblUpgrades: "الترقيات ⬆️", lblMaxCircles: "الحد الأقصى للدوائر:", lblPointsPerCatch: "النقاط لكل صيد:",
                 lblSpawnRate: "معدل الظهور:", lblEvery: "كل ", lblSec: "ث",
                 lblMinSize: "الحد الأدنى للحجم:", lblPx: "بكسل",
+                lblLifespan: "مدة بقاء الدائرة:", infinite: "لا نهائي", maxLevel: "مستوى أقصى!",
                 lblLiveStats: "الإحصائيات الحية", lblCurrentScore: "النقاط الحالية:", lblLifetimeScore: "مجموع النقاط:",
                 lblCirclesOnScreen: "الدوائر على الشاشة:", lblGameVars: "متغيرات اللعبة",
                 lblStatMaxCircles: "الحد الأقصى للدوائر:", lblStatPoints: "نقاط / صيد:", lblStatMinSize: "الحجم الأدنى (px):", lblStatSpawnRate: "معدل الظهور (ms):",
+                lblStatLifespan: "مدة البقاء (ms):",
                 lblSettingsTitle: "الإعدادات ⚙️", lblLanguage: "اللغة:",
                 lblSoundStatus: "الصوت:", optSoundOn: "تشغيل 🔊", optSoundOff: "إيقاف 🔇",
                 lblSoundVolume: "مستوى الصوت:",
@@ -1083,9 +1113,11 @@
                 lblUpgrades: "升级 ⬆️", lblMaxCircles: "最大圆圈数:", lblPointsPerCatch: "每抓得分:",
                 lblSpawnRate: "生成频率:", lblEvery: "每 ", lblSec: "秒",
                 lblMinSize: "最小尺寸:", lblPx: "像素",
+                lblLifespan: "圆圈存在时间:", infinite: "无限", maxLevel: "最高级别!",
                 lblLiveStats: "实时统计", lblCurrentScore: "当前得分:", lblLifetimeScore: "总得分:",
                 lblCirclesOnScreen: "屏幕上的圆圈:", lblGameVars: "游戏变量",
                 lblStatMaxCircles: "最大圆圈数:", lblStatPoints: "分数 / 抓取:", lblStatMinSize: "最小尺寸 (px):", lblStatSpawnRate: "生成率 (ms):",
+                lblStatLifespan: "存在时间 (ms):",
                 lblSettingsTitle: "设置 ⚙️", lblLanguage: "语言:",
                 lblSoundStatus: "声音:", optSoundOn: "开启 🔊", optSoundOff: "关闭 🔇",
                 lblSoundVolume: "音量:",
@@ -1124,9 +1156,11 @@
                 lblUpgrades: "アップグレード ⬆️", lblMaxCircles: "最大円数:", lblPointsPerCatch: "獲得ポイント/個:",
                 lblSpawnRate: "出現頻度:", lblEvery: "", lblSec: "秒ごと",
                 lblMinSize: "最小サイズ:", lblPx: "px",
+                lblLifespan: "円の寿命:", infinite: "無限", maxLevel: "最大レベル!",
                 lblLiveStats: "ライブ統計", lblCurrentScore: "現在のスコア:", lblLifetimeScore: "通算スコア:",
                 lblCirclesOnScreen: "画面上の円:", lblGameVars: "ゲーム変数",
                 lblStatMaxCircles: "最大円数:", lblStatPoints: "ポイント/獲得:", lblStatMinSize: "最小サイズ (px):", lblStatSpawnRate: "出現率 (ms):",
+                lblStatLifespan: "寿命 (ms):",
                 lblSettingsTitle: "設定 ⚙️", lblLanguage: "言語:",
                 lblSoundStatus: "サウンド:", optSoundOn: "オン 🔊", optSoundOff: "オフ 🔇",
                 lblSoundVolume: "音量:",
@@ -1137,7 +1171,7 @@
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
                 lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
                 buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
-                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "Maximale Größe!",
+                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
                 alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
                 alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
                 btnAbout: "2ページ目 📄", 
@@ -1162,10 +1196,12 @@
             pointsPerClick: 1,
             spawnRateMs: 1000, 
             minCircleSize: 40,
+            circleLifespanMs: 5000,
             costMaxCircles: 5,
             costPoints: 10,
             costSpeed: 15,
             costMinSize: 8,
+            costLifespan: 5,
             language: 'en', 
             deviceMode: 'desktop',
             soundEnabled: true,
@@ -1191,11 +1227,14 @@
         const pointsPerClickDisplay = document.getElementById('pointsPerClickDisplay');
         const spawnSpeedDisplay = document.getElementById('spawnSpeedDisplay');
         const minSizeDisplay = document.getElementById('minSizeDisplay'); 
+        const lifespanDisplay = document.getElementById('lifespanDisplay'); 
+        const lblSecLife = document.getElementById('lblSecLife');
         
         const btnMaxCircles = document.getElementById('btnMaxCircles');
         const btnPoints = document.getElementById('btnPoints');
         const btnSpeed = document.getElementById('btnSpeed');
         const btnMinSize = document.getElementById('btnMinSize'); 
+        const btnLifespan = document.getElementById('btnLifespan'); 
         const btnResetGame = document.getElementById('btnResetGame');
         const btnSoundShop = document.getElementById('btnSoundShop');
         const soundShopModal = document.getElementById('sound-shop-modal');
@@ -1266,6 +1305,7 @@
         const editPoints = document.getElementById('editPoints');
         const editMinSize = document.getElementById('editMinSize');
         const editSpawnRate = document.getElementById('editSpawnRate');
+        const editLifespan = document.getElementById('editLifespan');
 
         function toggleChallengeModal() {
             initAudio();
@@ -1331,7 +1371,6 @@
                 return;
             }
             
-            // Check if target color exists among current circles, if not, convert one circle to target color
             let hasTarget = Array.from(circles).some(c => c.dataset.colorName === state.targetColorName);
             if (!hasTarget) {
                 const randomCircle = circles[Math.floor(Math.random() * circles.length)];
@@ -1557,6 +1596,7 @@
             document.getElementById('lblSec').innerText = text.lblSec;
             document.getElementById('lblMinSize').innerText = text.lblMinSize;
             document.getElementById('lblPx').innerText = text.lblPx;
+            document.getElementById('lblLifespan').innerText = text.lblLifespan;
             
             document.getElementById('lblLiveStats').innerText = text.lblLiveStats;
             document.getElementById('lblCurrentScore').innerText = text.lblCurrentScore;
@@ -1567,6 +1607,7 @@
             document.getElementById('lblStatPoints').innerText = text.lblStatPoints;
             document.getElementById('lblStatMinSize').innerText = text.lblStatMinSize;
             document.getElementById('lblStatSpawnRate').innerText = text.lblStatSpawnRate;
+            document.getElementById('lblStatLifespan').innerText = text.lblStatLifespan;
 
             document.getElementById('lblSettingsTitle').innerText = text.lblSettingsTitle;
             document.getElementById('lblLanguage').innerText = text.lblLanguage;
@@ -1774,10 +1815,12 @@
                     pointsPerClick: 1,
                     spawnRateMs: 1000, 
                     minCircleSize: 40,
+                    circleLifespanMs: 5000,
                     costMaxCircles: 5,
                     costPoints: 10,
                     costSpeed: 15,
                     costMinSize: 8,
+                    costLifespan: 5,
                     language: state.language, 
                     deviceMode: state.deviceMode,
                     soundEnabled: true,
@@ -1835,6 +1878,7 @@
                 editPoints.disabled = false;
                 editMinSize.disabled = false;
                 editSpawnRate.disabled = false;
+                editLifespan.disabled = false;
                 
                 menuPanel.style.display = 'none';
                 settingsPanel.style.display = 'none';
@@ -1856,6 +1900,7 @@
                 editPoints.disabled = true;
                 editMinSize.disabled = true;
                 editSpawnRate.disabled = true;
+                editLifespan.disabled = true;
                 
                 this.value = '';
                 this.blur();
@@ -1871,6 +1916,7 @@
             let newPoints = parseInt(editPoints.value);
             let newSize = parseInt(editMinSize.value);
             let newRate = parseInt(editSpawnRate.value);
+            let newLife = parseInt(editLifespan.value);
 
             if (!isNaN(newScore)) state.score = newScore;
             if (!isNaN(newTotal)) state.totalScore = newTotal;
@@ -1884,6 +1930,10 @@
                 if (oldRate !== state.spawnRateMs) {
                     startGameLoop(); 
                 }
+            }
+
+            if (!isNaN(newLife) && newLife >= 1000) {
+                state.circleLifespanMs = newLife > 100000 ? 'infinite' : newLife;
             }
 
             if (!isNaN(newCircles) && newCircles >= 0) {
@@ -1939,6 +1989,19 @@
                 btnMinSize.innerText = text.maxSize;
             } else {
                 btnMinSize.innerHTML = `${text.upgradeCost}<span id="costMinSize">${state.costMinSize}</span>)`;
+            }
+
+            if (state.circleLifespanMs === 'infinite') {
+                lifespanDisplay.innerText = text.infinite;
+                lblSecLife.style.display = 'none';
+                btnLifespan.innerText = text.maxLevel;
+                btnLifespan.disabled = true;
+            } else {
+                lifespanDisplay.innerText = (state.circleLifespanMs / 1000).toFixed(1);
+                lblSecLife.style.display = 'inline';
+                lblSecLife.innerText = text.lblSec;
+                btnLifespan.disabled = state.score < state.costLifespan;
+                btnLifespan.innerHTML = `${text.upgradeCost}<span id="costLifespan">${state.costLifespan}</span>)`;
             }
 
             // --- Sound Shop UI Management ---
@@ -2056,6 +2119,7 @@
             if (document.activeElement !== editPoints) editPoints.value = state.pointsPerClick;
             if (document.activeElement !== editMinSize) editMinSize.value = state.minCircleSize;
             if (document.activeElement !== editSpawnRate) editSpawnRate.value = state.spawnRateMs;
+            if (document.activeElement !== editLifespan) editLifespan.value = state.circleLifespanMs === 'infinite' ? 999999 : state.circleLifespanMs;
         }
 
         function startGameLoop() {
@@ -2080,7 +2144,6 @@
 
             let chosenColorObj;
             if (state.challengeMode === 'press_color' && currentCircles === 0) {
-                // Guarantee the first circle or an empty board has the target color
                 chosenColorObj = availableColors.find(c => c.name === state.targetColorName) || availableColors[0];
             } else {
                 chosenColorObj = availableColors[Math.floor(Math.random() * availableColors.length)];
@@ -2097,6 +2160,12 @@
             
             circle.style.left = safeX + 'px';
             circle.style.top = safeY + 'px';
+
+            // Timer display inside the circle
+            let timeLeft = state.circleLifespanMs === 'infinite' ? null : state.circleLifespanMs;
+            if (timeLeft !== null) {
+                circle.innerText = (timeLeft / 1000).toFixed(1) + 's';
+            }
 
             circle.onmouseenter = function() { hoveredCircle = this; };
             circle.onmouseleave = function() { if (hoveredCircle === this) hoveredCircle = null; };
@@ -2127,6 +2196,7 @@
                 }
 
                 currentCircles--;
+                if (circle.timerInterval) clearInterval(circle.timerInterval);
                 this.remove();
                 hoveredCircle = null; 
                 updateUI();
@@ -2135,6 +2205,31 @@
             gameArea.appendChild(circle);
             currentCircles++;
             updateStatsUI(); 
+
+            // Lifespan & Countdown Logic
+            if (state.circleLifespanMs !== 'infinite') {
+                const startTime = Date.now();
+                const totalDuration = state.circleLifespanMs;
+
+                circle.timerInterval = setInterval(() => {
+                    const elapsed = Date.now() - startTime;
+                    const remaining = totalDuration - elapsed;
+
+                    if (remaining <= 0) {
+                        clearInterval(circle.timerInterval);
+                        if (circle.parentNode === gameArea) {
+                            circle.remove();
+                            currentCircles--;
+                            if (state.challengeMode === 'press_color') {
+                                ensureTargetCircleExists();
+                            }
+                            updateStatsUI();
+                        }
+                    } else {
+                        circle.innerText = (remaining / 1000).toFixed(1) + 's';
+                    }
+                }, 100);
+            }
         }
 
         function buyMaxCircles() {
@@ -2170,6 +2265,21 @@
                 state.score -= state.costMinSize;
                 state.minCircleSize += 10;
                 state.costMinSize = Math.floor(state.costMinSize * 1.25);
+                updateUI();
+            }
+        }
+
+        function buyLifespan() {
+            if (state.score >= state.costLifespan && state.circleLifespanMs !== 'infinite') {
+                state.score -= state.costLifespan;
+                
+                if (state.circleLifespanMs < 100000) {
+                    state.circleLifespanMs += 5000; 
+                } else if (state.circleLifespanMs === 100000) {
+                    state.circleLifespanMs = 'infinite';
+                }
+                
+                state.costLifespan = Math.floor(state.costLifespan * 1.15);
                 updateUI();
             }
         }
@@ -2219,6 +2329,10 @@
             
             state = { ...state, ...loadedState }; 
             if (typeof state.totalScore === 'undefined') state.totalScore = state.score;
+            if (typeof state.circleLifespanMs === 'undefined') {
+                state.circleLifespanMs = 5000;
+                state.costLifespan = 5;
+            }
             if (!state.language) state.language = 'en'; 
             if (!state.deviceMode) state.deviceMode = 'desktop';
             if (typeof state.soundEnabled === 'undefined') state.soundEnabled = true;
