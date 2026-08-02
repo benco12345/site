@@ -1,4 +1,480 @@
-<!DOCTYPE html>
+ound-row span { font-size: 15px; font-weight: bold; }
+        
+        .shop-action-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-buy { background: #4CAF50; }
+        .btn-buy:hover { background: #388E3C; }
+        .btn-buy:disabled { background: #555; color: #888; cursor: not-allowed; }
+
+        .btn-select { background: #FF9800; }
+        .btn-select:hover { background: #F57C00; }
+        .btn-select.active { background: #9C27B0; }
+
+        .text-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(3px);
+            z-index: 4000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .text-modal-content {
+            background: rgba(40, 40, 50, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #FF9800;
+            color: white;
+            width: 85%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .text-modal-content textarea {
+            width: 100%;
+            height: 120px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #777;
+            border-radius: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none;
+            font-family: monospace;
+            margin-bottom: 15px;
+        }
+
+        h3 { margin-top: 0; color: #4CAF50; }
+        #stats-panel h3 { color: #03A9F4; }
+        #settings-panel h3 { color: #E040FB; }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .stat-input, select {
+            width: 100px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #777;
+            background: #fff;
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+        }
+        select { width: 130px; cursor: pointer; }
+
+        .stat-input:disabled {
+            background: transparent;
+            border: none;
+            color: #FFEB3B;
+            font-size: 16px;
+            text-align: center;
+            appearance: none;
+            -moz-appearance: textfield;
+        }
+
+        #game-area {
+            width: 100vw;
+            height: 100dvh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.3), 0 0 10px rgba(0,0,0,0.5);
+            transform: scale(0);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            -webkit-tap-highlight-color: transparent; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 14px;
+            user-select: none;
+        }
+        @keyframes popIn { to { transform: scale(1); } }
+
+        button.menu-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        button.menu-btn:hover { background: #1976D2; }
+        button.menu-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+        
+        .save-load-btn { background: #FF9800 !important; color: #111 !important; }
+        .save-load-btn:hover { background: #F57C00 !important; }
+
+        .reset-btn { background: #f44336 !important; color: white !important; margin-top: 15px; }
+        .reset-btn:hover { background: #d32f2f !important; }
+
+        .upgrade-box { background: #444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .upgrade-box p { margin: 0 0 10px 0; font-size: 15px; }
+        hr { border: 1px solid #777; margin: 20px 0; }
+
+        /* Mobile Adjustments for Better UX */
+        body.mobile-mode #bottom-nav {
+            bottom: 10px; 
+            padding: 0 8px; 
+            box-sizing: border-box;
+            gap: 6px; 
+        }
+        body.mobile-mode .bottom-btn {
+            flex: 1; 
+            padding: 12px 2px; 
+            font-size: 12px; 
+            border-width: 2px;
+            border-radius: 14px; 
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        }
+        body.mobile-mode .panel {
+            width: 94% !important;
+            inset-inline-start: 3% !important;
+            inset-inline-end: 3% !important;
+            transform: none !important; 
+            bottom: 72px; 
+            max-height: 60vh;
+            padding: 15px;
+        }
+        body.mobile-mode #score-hud {
+            font-size: 20px;
+            padding: 6px 20px;
+            top: 10px;
+            border-radius: 12px;
+        }
+        body.mobile-mode #challenge-hud {
+            font-size: 16px;
+            padding: 5px 12px;
+            top: 48px;
+        }
+        body.mobile-mode #devCodeInput { top: 48px; width: 65px; font-size: 12px; padding: 4px; } 
+        body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnChallengeMode { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <input type="text" id="devCodeInput" placeholder="Code...">
+    <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
+    <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
+    <button id="btnChallengeMode" onclick="toggleChallengeModal()">Challenge ⚡</button>
+
+    <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
+    <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
+
+    <div id="bottom-nav">
+        <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
+        <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
+        <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+    </div>
+
+    <!-- Challenge Mode Modal -->
+    <div id="challenge-modal">
+        <button id="btnCloseChallengeModal" onclick="toggleChallengeModal()">❌</button>
+        <div id="challenge-modal-content">
+            <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
+            <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">Normal 🟢</button>
+            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">Press the Color 🎨</button>
+        </div>
+    </div>
+
+    <!-- דף שני (Button Page Modal) -->
+    <div id="button-page-modal">
+        <button id="btnCloseButtonPage" onclick="toggleButtonPage()">❌</button>
+        <div id="button-page-content">
+            <h2 id="lblButtonPageTitle">Second Page</h2>
+            
+            <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">עזרה (Helps) 💡</button>
+            
+            <!-- Developer Support Toggle Button -->
+            <button class="modal-menu-btn" id="btnDevSupport" onclick="toggleDevSupport()" style="background: #5865F2;">Developer Support 💬</button>
+
+            <!-- Developer Support Links Container (Hidden by default) -->
+            <div id="dev-support-container" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 2px solid #5865F2; padding-top: 15px;">
+                <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-menu-btn" id="btnDiscord" style="background: #7289DA; margin-top: 0;">Discord Server 🎧</a>
+                <a href="https://benco12345.github.io/site/gamecirclealpha.html" target="_blank" class="modal-menu-btn" id="btnAlphaGame" style="background: #FF5722; margin-top: 0;">Alpha Game 🎮</a>
+            </div>
+
+            <div id="helps-container" style="display: none; margin-top: 20px; border-top: 2px solid #555; padding-top: 15px;">
+                <div class="controls-list">
+                    <div><strong id="lblKeySpace">Spacebar:</strong> <span id="descSpace">Click hovered circle</span></div>
+                    <div><strong id="lblKeyCode">. or / :</strong> <span id="descKeyCode">Start typing code</span></div>
+                    <div><strong>A:</strong> <span id="descKeyA">Open/Close Menu</span></div>
+                    <div><strong>S:</strong> <span id="descKeyS">Open/Close Settings</span></div>
+                    <div><strong>D:</strong> <span id="descKeyD">Open/Close Stats</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Shop Modal -->
+    <div id="sound-shop-modal">
+        <div id="sound-shop-content">
+            <button id="btnCloseSoundShop" onclick="toggleSoundShop()">❌</button>
+            <h2 id="lblSoundShopTitle" style="color: #FFEB('laser', 70)">Buy (70)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectLaser" onclick="selectSoundEffect('laser')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblCoinSound">Coin Sound</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">Buy (120)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectCoin" onclick="selectSoundEffect('coin')" style="display:none;">Select</button>
+                </div>
+            </div>
+
+            <div class="category-title" id="lblCatBgm">Background Music</div>
+            
+            <div class="sound-row">
+                <span id="lblBgmClassic">Classic Loop</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">Buy (100)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectClassicBgm" onclick="selectBgmTrack('classic')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblBgmArcade">Arcade Beat</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">Buy (250)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">Select</button>
+                </div>
+            </div>
+
+            <div class="category-title" id="lblCatVolumeUpgrades">Volume Upgrades</div>
+            
+            <div class="sound-row">
+                <span>200% (x2)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol200" onclick="buyVolumeUpgrade('200', 200)">Buy (200)</button>
+            </div>
+            <div class="sound-row">
+                <span>300% (x3)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol300" onclick="buyVolumeUpgrade('300', 300)">Buy (300)</button>
+            </div>
+            <div class="sound-row">
+                <span>400% (x4)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 450)">Buy (450)</button>
+            </div>
+            <div class="sound-row">
+                <span>500% (x5)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 600)">Buy (600)</button>
+            </div>
+            <div class="sound-row">
+                <span>600% (x6)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 800)">Buy (800)</button>
+            </div>
+            <div class="sound-row">
+                <span>700% (x7)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 1050)">Buy (1050)</button>
+            </div>
+            <div class="sound-row">
+                <span>800% (x8)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1350)">Buy (1350)</button>
+            </div>
+            <div class="sound-row">
+                <span>900% (x9)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1700)">Buy (1700)</button>
+            </div>
+            <div class="sound-row">
+                <span>1000% (x10)</span>
+                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2200)">Buy (2200)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Save GUI Modal -->
+    <div id="textSaveModal" class="text-modal">
+        <div class="text-modal-content">
+            <h3 id="lblExportTitle">Export Save Code</h3>
+            <textarea id="saveCodeTextarea" readonly></textarea>
+            <button class="menu-btn save-load-btn" id="btnCopyClipboard" onclick="copySaveToClipboard()">Copy to Clipboard 📋</button>
+            <button class="menu-btn" onclick="closeTextSaveModal()" style="background:#777; margin-top:5px;">Close ❌</button>
+        </div>
+    </div>
+
+    <!-- Text Load GUI Modal -->
+    <div id="textLoadModal" class="text-modal">
+        <div class="text-modal-content">
+            <h3 id="lblImportTitle">Import Save Code</h3>
+            <textarea id="loadCodeTextarea" placeholder="Paste your save code here..."></textarea>
+            <button class="menu-btn save-load-btn" id="btnApplyLoadCode" onclick="loadGameFromText()">Load Save 🎮</button>
+            <button class="menu-btn" onclick="closeTextLoadModal()" style="background:#777; margin-top:5px;">Close ❌</button>
+        </div>
+    </div>
+
+    <div id="settings-panel" class="panel">
+        <h3 id="lblSettingsTitle">Settings ⚙️</h3>
+        <div class="stat-row">
+            <span id="lblSoundStatus">Sound:</span>
+            <select id="soundToggleSelect" onchange="changeSoundToggle(this.value)">
+                <option value="on" id="optSoundOn">On 🔊</option>
+                <option value="off" id="optSoundOff">Off 🔇</option>
+            </select>
+        </div>
+        <div class="stat-row">
+            <span id="lblSoundVolume">Volume:</span>
+            <select id="soundVolumeSelect" onchange="changeSoundVolume(this.value)">
+                <option value="0.25">25%</option>
+                <option value="0.5">50%</option>
+                <option value="0.75">75%</option>
+                <option value="1.0">100%</option>
+                <option value="2.0" id="optVol200" style="display:none;">200% (x2)</option>
+                <option value="3.0" id="optVol300" style="display:none;">300% (x3)</option>
+                <option value="4.0" id="optVol400" style="display:none;">400% (x4)</option>
+                <option value="5.0" id="optVol500" style="display:none;">500% (x5)</option>
+                <option value="6.0" id="optVol600" style="display:none;">600% (x6)</option>
+                <option value="7.0" id="optVol700" style="display:none;">700% (x7)</option>
+                <option value="8.0" id="optVol800" style="display:none;">800% (x8)</option>
+                <option value="9.0" id="optVol900" style="display:none;">900% (x9)</option>
+                <option value="10.0" id="optVol1000" style="display:none;">1000% (x10)</option>
+            </select>
+        </div>
+        <div class="stat-row">
+            <span id="lblLanguage">Language:</span>
+            <select id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="en" selected>English</option>
+                <option value="he">עברית</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ru">Русский</option>
+                <option value="ar">العربية</option>
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+            </select>
+        </div>
+        <div class="stat-row">
+            <span id="lblDeviceMode">Device Mode:</span>
+            <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
+                <option value="desktop" id="optDesktop">Desktop 💻</option>
+                <option value="mobile" id="optMobile">Mobile 📱</option>
+            </select>
+        </div>
+        <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">Reset Game 🔄</button>
+    </div>
+
+    <div id="stats-panel" class="panel">
+        <h3 id="lblLiveStats">Live Stats</h3>
+        <div class="stat-row">
+            <span id="lblCurrentScore">Current Score:</span>
+            <input type="number" id="editCurrentScore" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblLifetimeScore">Lifetime Score:</span>
+            <input type="number" id="editTotalScore" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblCirclesOnScreen">Circles on Screen:</span>
+            <input type="number" id="editCurrentCircles" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <hr>
+        <h3 id="lblGameVars">Game Variables</h3>
+        <div class="stat-row">
+            <span id="lblStatMaxCircles">Max Circles:</span>
+            <input type="number" id="editMaxCircles" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatPoints">Points / Catch:</span>
+            <input type="number" id="editPoints" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatMinSize">Min Size (px):</span>
+            <input type="number" id="editMinSize" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatSpawnRate">Spawn Rate (ms):</span>
+            <input type="number" id="editSpawnRate" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatLifespan">Lifespan (ms):</span>
+            <input type="number" id="editLifespan" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatAutoAmount">Auto Clicks / Action:</span>
+            <input type="number" id="editAutoAmount" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+        <div class="stat-row">
+            <span id="lblStatAutoInterval">Auto Interval (ms):</span>
+            <input type="number" id="editAutoInterval" class="stat-input" disabled oninput="applyCheatEdits()">
+        </div>
+    </div>
+
+    <div id="menu-panel" class="panel">
+        <h3 id="lblSaveLoad">Save & Load 💾</h3>
+        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
+        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
+        <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
+        
+        <button class="menu-btn save-load-btn" id="btnOpenTextSave" onclick="openTextSaveModal()">Export Code (GUI) 📋</button>
+        <button class="menu-btn save-load-btn" id="btnOpenTextLoad" onclick="openTextLoadModal()">Import Code (GUI) 📥</button>
+
+        <hr>
+        <h3 id="lblUpgrades">Upgrades ⬆️</h3>
+        <div class="upgrade-box">
+            <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
+            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">5</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
+            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">10</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
+            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">15</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
+            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">8</span>)</button>
+        </div>
+        <div class="upgrade-box">
+            <p><strong id="lblLifespan">Circle Lifespan:</strong> <span id="lifespanDisplay">5</span><span id="lblSecLife">s</span></p>
+            <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">Upgrade (Cost: <span id="costLifespan">5</span>)</button>
+        </div>
+        
+        <hr>
+        <button class="menu-btn" id="btnToggleAutoUpgrades" onclick="toggleAutoUpgrades()" style="background: #9C27B0;">Autoclicker 🤖</button>
+        <div id="autoUpgradesContainer" style="display: none; border: 2px solid #9C27B0; padding: 10px; border-radius: 8px; margin-top: 10px;">
+            <div class="upgrade-box">
+                <p><strong id="lblAutoAmount">Clicks per Action:</strong> <span id="autoAmountDisplay">0</span></p>
+                <button class="menu-btn" id="btnAutoAmount" onclick="buyAutoAmount()">Upgrade (Cost: <span id="costAutoAmount">50</span>)</button>
+            </div>
+      <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -578,370 +1054,7 @@
     <div id="sound-shop-modal">
         <div id="sound-shop-content">
             <button id="btnCloseSoundShop" onclick="toggleSoundShop()">❌</button>
-            <h2 id="lblSoundShopTitle" style="color: #FFEB3B; margin-top: 0;">Sound Shop 🎵</h2>
-            
-            <div class="category-title" id="lblCatClickSounds">Click Sound Effects</div>
-            
-            <div class="sound-row">
-                <span id="lblPopSound">Pop Sound</span>
-                <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyPop" onclick="buySoundEffect('pop', 30)">Buy (30)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectPop" onclick="selectSoundEffect('pop')" style="display:none;">Select</button>
-                </div>
-            </div>
-            <div class="sound-row">
-                <span id="lblLaserSound">Laser Sound</span>
-                <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyLaser" onclick="buySoundEffect('laser', 70)">Buy (70)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectLaser" onclick="selectSoundEffect('laser')" style="display:none;">Select</button>
-                </div>
-            </div>
-            <div class="sound-row">
-                <span id="lblCoinSound">Coin Sound</span>
-                <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyCoin" onclick="buySoundEffect('coin', 120)">Buy (120)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectCoin" onclick="selectSoundEffect('coin')" style="display:none;">Select</button>
-                </div>
-            </div>
-
-            <div class="category-title" id="lblCatBgm">Background Music</div>
-            
-            <div class="sound-row">
-                <span id="lblBgmClassic">Classic Loop</span>
-                <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyClassicBgm" onclick="buyBgmTrack('classic', 100)">Buy (100)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectClassicBgm" onclick="selectBgmTrack('classic')" style="display:none;">Select</button>
-                </div>
-            </div>
-            <div class="sound-row">
-                <span id="lblBgmArcade">Arcade Beat</span>
-                <div style="display: flex; gap: 5px;">
-                    <button class="shop-action-btn btn-buy" id="btnBuyArcadeBgm" onclick="buyBgmTrack('arcade', 250)">Buy (250)</button>
-                    <button class="shop-action-btn btn-select" id="btnSelectArcadeBgm" onclick="selectBgmTrack('arcade')" style="display:none;">Select</button>
-                </div>
-            </div>
-
-            <div class="category-title" id="lblCatVolumeUpgrades">Volume Upgrades</div>
-            
-            <div class="sound-row">
-                <span>200% (x2)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol200" onclick="buyVolumeUpgrade('200', 200)">Buy (200)</button>
-            </div>
-            <div class="sound-row">
-                <span>300% (x3)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol300" onclick="buyVolumeUpgrade('300', 300)">Buy (300)</button>
-            </div>
-            <div class="sound-row">
-                <span>400% (x4)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol400" onclick="buyVolumeUpgrade('400', 450)">Buy (450)</button>
-            </div>
-            <div class="sound-row">
-                <span>500% (x5)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol500" onclick="buyVolumeUpgrade('500', 600)">Buy (600)</button>
-            </div>
-            <div class="sound-row">
-                <span>600% (x6)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol600" onclick="buyVolumeUpgrade('600', 800)">Buy (800)</button>
-            </div>
-            <div class="sound-row">
-                <span>700% (x7)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol700" onclick="buyVolumeUpgrade('700', 1050)">Buy (1050)</button>
-            </div>
-            <div class="sound-row">
-                <span>800% (x8)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol800" onclick="buyVolumeUpgrade('800', 1350)">Buy (1350)</button>
-            </div>
-            <div class="sound-row">
-                <span>900% (x9)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol900" onclick="buyVolumeUpgrade('900', 1700)">Buy (1700)</button>
-            </div>
-            <div class="sound-row">
-                <span>1000% (x10)</span>
-                <button class="shop-action-btn btn-buy" id="btnBuyVol1000" onclick="buyVolumeUpgrade('1000', 2200)">Buy (2200)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Text Save GUI Modal -->
-    <div id="textSaveModal" class="text-modal">
-        <div class="text-modal-content">
-            <h3 id="lblExportTitle">Export Save Code</h3>
-            <textarea id="saveCodeTextarea" readonly></textarea>
-            <button class="menu-btn save-load-btn" id="btnCopyClipboard" onclick="copySaveToClipboard()">Copy to Clipboard 📋</button>
-            <button class="menu-btn" onclick="closeTextSaveModal()" style="background:#777; margin-top:5px;">Close ❌</button>
-        </div>
-    </div>
-
-    <!-- Text Load GUI Modal -->
-    <div id="textLoadModal" class="text-modal">
-        <div class="text-modal-content">
-            <h3 id="lblImportTitle">Import Save Code</h3>
-            <textarea id="loadCodeTextarea" placeholder="Paste your save code here..."></textarea>
-            <button class="menu-btn save-load-btn" id="btnApplyLoadCode" onclick="loadGameFromText()">Load Save 🎮</button>
-            <button class="menu-btn" onclick="closeTextLoadModal()" style="background:#777; margin-top:5px;">Close ❌</button>
-        </div>
-    </div>
-
-    <div id="settings-panel" class="panel">
-        <h3 id="lblSettingsTitle">Settings ⚙️</h3>
-        <div class="stat-row">
-            <span id="lblSoundStatus">Sound:</span>
-            <select id="soundToggleSelect" onchange="changeSoundToggle(this.value)">
-                <option value="on" id="optSoundOn">On 🔊</option>
-                <option value="off" id="optSoundOff">Off 🔇</option>
-            </select>
-        </div>
-        <div class="stat-row">
-            <span id="lblSoundVolume">Volume:</span>
-            <select id="soundVolumeSelect" onchange="changeSoundVolume(this.value)">
-                <option value="0.25">25%</option>
-                <option value="0.5">50%</option>
-                <option value="0.75">75%</option>
-                <option value="1.0">100%</option>
-                <option value="2.0" id="optVol200" style="display:none;">200% (x2)</option>
-                <option value="3.0" id="optVol300" style="display:none;">300% (x3)</option>
-                <option value="4.0" id="optVol400" style="display:none;">400% (x4)</option>
-                <option value="5.0" id="optVol500" style="display:none;">500% (x5)</option>
-                <option value="6.0" id="optVol600" style="display:none;">600% (x6)</option>
-                <option value="7.0" id="optVol700" style="display:none;">700% (x7)</option>
-                <option value="8.0" id="optVol800" style="display:none;">800% (x8)</option>
-                <option value="9.0" id="optVol900" style="display:none;">900% (x9)</option>
-                <option value="10.0" id="optVol1000" style="display:none;">1000% (x10)</option>
-            </select>
-        </div>
-        <div class="stat-row">
-            <span id="lblLanguage">Language:</span>
-            <select id="langSelect" onchange="changeLanguage(this.value)">
-                <option value="en" selected>English</option>
-                <option value="he">עברית</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="ru">Русский</option>
-                <option value="ar">العربية</option>
-                <option value="zh">中文</option>
-                <option value="ja">日本語</option>
-            </select>
-        </div>
-        <div class="stat-row">
-            <span id="lblDeviceMode">Device Mode:</span>
-            <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
-                <option value="desktop" id="optDesktop">Desktop 💻</option>
-                <option value="mobile" id="optMobile">Mobile 📱</option>
-            </select>
-        </div>
-        <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">Reset Game 🔄</button>
-    </div>
-
-    <div id="stats-panel" class="panel">
-        <h3 id="lblLiveStats">Live Stats</h3>
-        <div class="stat-row">
-            <span id="lblCurrentScore">Current Score:</span>
-            <input type="number" id="editCurrentScore" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblLifetimeScore">Lifetime Score:</span>
-            <input type="number" id="editTotalScore" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblCirclesOnScreen">Circles on Screen:</span>
-            <input type="number" id="editCurrentCircles" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <hr>
-        <h3 id="lblGameVars">Game Variables</h3>
-        <div class="stat-row">
-            <span id="lblStatMaxCircles">Max Circles:</span>
-            <input type="number" id="editMaxCircles" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatPoints">Points / Catch:</span>
-            <input type="number" id="editPoints" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatMinSize">Min Size (px):</span>
-            <input type="number" id="editMinSize" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatSpawnRate">Spawn Rate (ms):</span>
-            <input type="number" id="editSpawnRate" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatLifespan">Lifespan (ms):</span>
-            <input type="number" id="editLifespan" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatAutoAmount">Auto Clicks / Action:</span>
-            <input type="number" id="editAutoAmount" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-        <div class="stat-row">
-            <span id="lblStatAutoInterval">Auto Interval (ms):</span>
-            <input type="number" id="editAutoInterval" class="stat-input" disabled oninput="applyCheatEdits()">
-        </div>
-    </div>
-
-    <div id="menu-panel" class="panel">
-        <h3 id="lblSaveLoad">Save & Load 💾</h3>
-        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
-        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
-        <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
-        
-        <button class="menu-btn save-load-btn" id="btnOpenTextSave" onclick="openTextSaveModal()">Export Code (GUI) 📋</button>
-        <button class="menu-btn save-load-btn" id="btnOpenTextLoad" onclick="openTextLoadModal()">Import Code (GUI) 📥</button>
-
-        <hr>
-        <h3 id="lblUpgrades">Upgrades ⬆️</h3>
-        <div class="upgrade-box">
-            <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
-            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">5</span>)</button>
-        </div>
-        <div class="upgrade-box">
-            <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
-            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">10</span>)</button>
-        </div>
-        <div class="upgrade-box">
-            <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
-            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">15</span>)</button>
-        </div>
-        <div class="upgrade-box">
-            <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
-            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">8</span>)</button>
-        </div>
-        <div class="upgrade-box">
-            <p><strong id="lblLifespan">Circle Lifespan:</strong> <span id="lifespanDisplay">5</span><span id="lblSecLife">s</span></p>
-            <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">Upgrade (Cost: <span id="costLifespan">5</span>)</button>
-        </div>
-        
-        <hr>
-        <button class="menu-btn" id="btnToggleAutoUpgrades" onclick="toggleAutoUpgrades()" style="background: #9C27B0;">Autoclicker 🤖</button>
-        <div id="autoUpgradesContainer" style="display: none; border: 2px solid #9C27B0; padding: 10px; border-radius: 8px; margin-top: 10px;">
-            <div class="upgrade-box">
-                <p><strong id="lblAutoAmount">Clicks per Action:</strong> <span id="autoAmountDisplay">0</span></p>
-                <button class="menu-btn" id="btnAutoAmount" onclick="buyAutoAmount()">Upgrade (Cost: <span id="costAutoAmount">50</span>)</button>
-            </div>
-            <div class="upgrade-box">
-                <p><strong id="lblAutoInterval">Click Interval:</strong> <span id="autoIntervalDisplay">5.0</span><span id="lblSecAuto">s</span></p>
-                <button class="menu-btn" id="btnAutoInterval" onclick="buyAutoInterval()">Upgrade (Cost: <span id="costAutoInterval">50</span>)</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="game-area"></div>
-
-    <script>
-        const t = {
-            en: {
-                lblScore: "Score: ",
-                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Close ❌",
-                btnStatsOpen: "Stats 📊", btnStatsClose: "Close ❌",
-                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close ❌",
-                lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
-                btnOpenTextSave: "Export Code (GUI) 📋", btnOpenTextLoad: "Import Code (GUI) 📥",
-                lblExportTitle: "Export Save Code", lblImportTitle: "Import Save Code",
-                btnCopyClipboard: "Copy to Clipboard 📋", btnApplyLoadCode: "Load Save 🎮",
-                lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
-                lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
-                lblMinSize: "Minimum Size:", lblPx: "px",
-                lblLifespan: "Circle Lifespan:", infinite: "Infinite", maxLevel: "Max Level!",
-                lblLiveStats: "Live Stats", lblCurrentScore: "Current Score:", lblLifetimeScore: "Lifetime Score:",
-                lblCirclesOnScreen: "Circles on Screen:", lblGameVars: "Game Variables",
-                lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
-                lblStatLifespan: "Lifespan (ms):", lblStatAutoAmount: "Auto Clicks / Action:", lblStatAutoInterval: "Auto Interval (ms):",
-                lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language:",
-                lblSoundStatus: "Sound:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
-                lblSoundVolume: "Volume:",
-                lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
-                btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
-                btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
-                lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
-                lblPopSound: "Pop Sound", lblLaserSound: "Laser Sound", lblCoinSound: "Coin Sound",
-                lblBgmClassic: "Classic Loop", lblBgmArcade: "Arcade Beat",
-                buy: "Buy", selected: "Selected ✅", select: "Select", purchased: "Purchased! ✅",
-                upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
-                alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
-                alertCopied: "Save code copied to clipboard! 📋",
-                btnAbout: "Second Page 📄", 
-                lblButtonPageTitle: "Second Page", 
-                btnOpenHelps: "Helps 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Discord Server 🎧",
-                btnAlphaGame: "Alpha Game 🎮",
-                lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
-                lblKeyCode: ". or / :", descKeyCode: "Start typing code",
-                descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
-                btnChallengeMode: "Challenge ⚡", lblChallengeTitle: "Challenge Mode ⚡",
-                btnModeNormal: "Normal 🟢", btnModePressColor: "Press the Color 🎨",
-                lblPressTheColorInstruction: "Press the color",
-                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:"
-            },
-            he: {
-                lblScore: "ניקוד: ",
-                btnMenuOpen: "תפריט 🛠️", btnMenuClose: "סגור ❌",
-                btnStatsOpen: "סטטיסטיקה 📊", btnStatsClose: "סגור ❌",
-                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגור ❌",
-                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת שמירה (.txt)", btnLoad: "טעינת שמירה (TXT)",
-                btnOpenTextSave: "ייצוא קוד (GUI) 📋", btnOpenTextLoad: "ייבוא קוד (GUI) 📥",
-                lblExportTitle: "ייצוא קוד שמירה", lblImportTitle: "ייבוא קוד שמירה",
-                btnCopyClipboard: "העתק ללוח 📋", btnApplyLoadCode: "טען שמירה 🎮",
-                lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
-                lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
-                lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
-                lblLifespan: "זמן חיי עיגול:", infinite: "אינסוף", maxLevel: "רמה מקסימלית!",
-                lblLiveStats: "סטטיסטיקות", lblCurrentScore: "ניקוד נוכחי:", lblLifetimeScore: "ניקוד כולל:",
-                lblCirclesOnScreen: "עיגולים במסך:", lblGameVars: "משתני המשחק",
-                lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
-                lblStatLifespan: "זמן חיים (ms):", lblStatAutoAmount: "קליקים אוטומטיים/פעולה:", lblStatAutoInterval: "הפרש קליק אוטומטי (ms):",
-                lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
-                lblSoundStatus: "סאונד / Sound:", optSoundOn: "פועל 🔊", optSoundOff: "כבוי 🔇",
-                lblSoundVolume: "עוצמת סאונד / Volume:",
-                lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
-                btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
-                btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
-                lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
-                lblPopSound: "סאונד פופ", lblLaserSound: "סאונד לייזר", lblCoinSound: "סאונד מטבע",
-                lblBgmClassic: "קלאסי (Classic)", lblBgmArcade: "ארקייד (Arcade)",
-                buy: "קנה", selected: "נבחר ✅", select: "בחר", purchased: "נרכש! ✅",
-                upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
-                alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
-                alertCopied: "קוד השמירה הועתק ללוח! 📋",
-                btnAbout: "דף שני 📄", 
-                lblButtonPageTitle: "דף שני", 
-                btnOpenHelps: "עזרה (Helps) 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "שרת דיסקורד 🎧",
-                btnAlphaGame: "משחק אלפא 🎮",
-                lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
-                lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
-                descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
-                btnChallengeMode: "אתגר ⚡", lblChallengeTitle: "מצב אתגר ⚡",
-                btnModeNormal: "רגיל (Normal) 🟢", btnModePressColor: "לחץ על הצבע (Press the color) 🎨",
-                lblPressTheColorInstruction: "לחץ על הצבע",
-                btnToggleAutoUpgrades: "לחיצה אוטומטית (Autoclicker) 🤖", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:"
-            },
-            es: {
-                lblScore: "Puntuación: ",
-                btnMenuOpen: "Menú 🛠️", btnMenuClose: "Cerrar ❌",
-                btnStatsOpen: "Estadísticas 📊", btnStatsClose: "Cerrar ❌",
-                btnSettingsOpen: "Ajustes ⚙️", btnSettingsClose: "Cerrar ❌",
-                lblSaveLoad: "Guardar y Cargar 💾", btnDownload: "Descargar archivo (.txt)", btnLoad: "Cargar desde TXT",
-                btnOpenTextSave: "Exportar código 📋", btnOpenTextLoad: "Importar código 📥",
-                lblExportTitle: "Exportar código", lblImportTitle: "Importar código",
-                btnCopyClipboard: "Copiar al portapapeles 📋", btnApplyLoadCode: "Cargar partida 🎮",
-                lblUpgrades: "Mejoras ⬆️", lblMaxCircles: "Círculos máx:", lblPointsPerCatch: "Puntos por captura:",
-                lblSpawnRate: "Frecuencia:", lblEvery: "Cada ", lblSec: "s",
-                lblMinSize: "Tamaño mín:", lblPx: "px",
-                lblLifespan: "Duración del círculo:", infinite: "Infinito", maxLevel: "¡Nivel Máximo!",
-                lblLiveStats: "Estadísticas en vivo", lblCurrentScore: "Puntuación actual:", lblLifetimeScore: "Puntuación total:",
-                lblCirclesOnScreen: "Círculos en pantalla:", lblGameVars: "Variables del juego",
-                lblStatMaxCircles: "Círculos máx:", lblStatPoints: "Puntos / Captura:", lblStatMinSize: "Tamaño mín (px):", lblStatSpawnRate: "Frecuencia (ms):",
-                lblStatLifespan: "Duración (ms):", lblStatAutoAmount: "Auto Clicks / Acción:", lblStatAutoInterval: "Auto Intervalo (ms):",
-                lblSettingsTitle: "Ajustes ⚙️", lblLanguage: "Idioma:",
-                lblSoundStatus: "Sonido:", optSoundOn: "Activado 🔊", optSoundOff: "Desactivado 🔇",
-                lblSoundVolume: "Volumen:",
-                lblDeviceMode: "Modo de dispositivo:", optDesktop: "Escritorio 💻", optMobile: "Móvil 📱",
-                btnResetGame: "Reiniciar juego 🔄", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
-                btnSoundShop: "Tienda de sonidos 🎵", lblSoundShopTitle: "Tienda de sonidos 🎵",
-                lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
-                lblPopSound: "Sonido Pop", lblLaserSound: "Sonido Láser", lblCoinSound: "Sonido Moneda",
+            <h2 id="lblSoundShopTitle" style="color: #FFEBáser", lblCoinSound: "Sonido Moneda",
                 lblBgmClassic: "Bucle Clásico", lblBgmArcade: "Ritmo Arcade",
                 buy: "Comprar", selected: "Seleccionado ✅", select: "Seleccionar", purchased: "¡Comprado! ✅",
                 upgradeCost: "Costo: ", maxSpeed: "¡Velocidad máxima!", maxSize: "¡Tamaño máximo!",
