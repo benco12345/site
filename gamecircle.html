@@ -19,18 +19,34 @@
             -webkit-touch-callout: none;
         }
 
-        #devCodeInput {
+        #devCodeContainer {
             position: absolute;
             top: 10px;
             right: 10px; 
             z-index: 100;
+            display: flex;
+            gap: 5px;
+        }
+
+        #devCodeInput {
             color: black;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgb(255, 255, 255);
             border: 2px solid black;
             padding: 5px;
             font-weight: bold;
-            width: 80px;
+            width: 120px;
         }
+
+        #btnDevEnter {
+            background: #4CAF50;
+            color: white;
+            border: 2px solid black;
+            padding: 5px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        #btnDevEnter:hover { background: #388E3C; }
 
         #btnAbout {
             position: absolute;
@@ -112,7 +128,7 @@
             font-size: 28px;
             font-weight: bold;
             color: white;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgb(0, 0, 0);
             padding: 10px 30px;
             border-radius: 15px;
             z-index: 50;
@@ -130,7 +146,7 @@
             font-size: 26px;
             font-weight: bold;
             color: #FFEB3B;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgb(0, 0, 0);
             padding: 8px 25px;
             border-radius: 12px;
             z-index: 50;
@@ -190,7 +206,7 @@
             position: absolute;
             bottom: 80px;
             z-index: 999;
-            background: rgba(40, 40, 60, 0.95);
+            background: rgb(40, 40, 60);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -203,18 +219,17 @@
             transition: all 0.3s ease;
         }
 
-        #menu-panel { inset-inline-start: 20px; width: 300px; background: rgba(50, 50, 50, 0.95); }
+        #menu-panel { inset-inline-start: 20px; width: 300px; background: rgb(50, 50, 50); }
         #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        #button-page-modal, #challenge-modal, #animation-shop-modal {
+        #button-page-modal, #challenge-modal, #animation-shop-modal, #sound-shop-modal {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100dvh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
+            background: rgb(0, 0, 0);
             z-index: 3000;
             display: none;
             justify-content: center;
@@ -227,7 +242,7 @@
             pointer-events: auto;
         }
 
-        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop {
+        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop {
             position: absolute;
             top: 20px;
             right: 20px; 
@@ -239,10 +254,10 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover { transform: scale(1.2); }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover, #btnCloseSoundShop:hover { transform: scale(1.2); }
 
-        #button-page-content, #challenge-modal-content, #animation-shop-content {
-            background: rgba(30, 30, 40, 0.95);
+        #button-page-content, #challenge-modal-content, #animation-shop-content, #sound-shop-content {
+            background: rgb(30, 30, 40);
             padding: 40px;
             border-radius: 20px;
             border: 4px solid #2196F3;
@@ -257,6 +272,7 @@
         }
         #challenge-modal-content { border-color: #FF9800; }
         #animation-shop-content { border-color: #9C27B0; }
+        #sound-shop-content { border-color: #E91E63; }
 
         #button-page-content h2, #challenge-modal-content h2 {
             margin-top: 0;
@@ -293,47 +309,6 @@
             text-align: right;
         }
         .controls-list span { color: #4CAF50; }
-
-        #sound-shop-modal {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100dvh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            z-index: 3000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        #sound-shop-content {
-            background: rgba(30, 30, 40, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            border: 4px solid #E91E63;
-            color: white;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
-            width: 85%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        #btnCloseSoundShop {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 30px;
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
 
         .category-title {
             color: #03A9F4;
@@ -384,8 +359,7 @@
             left: 0;
             width: 100vw;
             height: 100dvh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(3px);
+            background: rgb(0, 0, 0);
             z-index: 4000;
             display: none;
             justify-content: center;
@@ -397,7 +371,7 @@
             pointer-events: auto;
         }
         .text-modal-content {
-            background: rgba(40, 40, 50, 0.95);
+            background: rgb(40, 40, 50);
             padding: 25px;
             border-radius: 15px;
             border: 2px solid #FF9800;
@@ -483,6 +457,26 @@
         }
         @keyframes popIn { to { transform: scale(1); } }
 
+        /* --- Circle Spawn Animations --- */
+        .spawn-zoom { animation: spawnZoomAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes spawnZoomAnim {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .spawn-spin { animation: spawnSpinAnim 0.4s ease-out forwards; }
+        @keyframes spawnSpinAnim {
+            0% { transform: scale(0.2) rotate(360deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .spawn-bounce { animation: spawnBounceAnim 0.5s cubic-bezier(0.28, 0.84, 0.42, 1) forwards; }
+        @keyframes spawnBounceAnim {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         /* --- Click Animations VFX --- */
         .vfx-explosion {
             position: absolute;
@@ -501,7 +495,7 @@
         .vfx-shockwave {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(33,150,243,0.5) 60%, transparent 100%);
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(33,150,243,0.7) 60%, transparent 100%);
             transform: translate(-50%, -50%) scale(0.1);
             pointer-events: none;
             animation: vfxShockAnim 0.5s cubic-bezier(0, .9, .3, 1) forwards;
@@ -623,7 +617,9 @@
             padding: 5px 12px;
             top: 55px;
         }
-        body.mobile-mode #devCodeInput { top: 48px; width: 65px; font-size: 12px; padding: 4px; } 
+        body.mobile-mode #devCodeContainer { top: 48px; right: 10px; }
+        body.mobile-mode #devCodeInput { width: 80px; font-size: 12px; padding: 4px; } 
+        body.mobile-mode #btnDevEnter { padding: 4px 6px; font-size: 12px; }
         body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
         body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
         body.mobile-mode #btnAnimationShop { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; width: auto; }
@@ -632,7 +628,11 @@
 </head>
 <body>
 
-    <input type="text" id="devCodeInput" placeholder="Code...">
+    <div id="devCodeContainer">
+        <input type="text" id="devCodeInput" placeholder="Code...">
+        <button id="btnDevEnter" onclick="processDevCode()">Enter ↵</button>
+    </div>
+    
     <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
     <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
     <button id="btnAnimationShop" onclick="toggleAnimationShop()">Anim Shop ✨</button>
@@ -663,6 +663,30 @@
             <button id="btnCloseAnimationShop" onclick="toggleAnimationShop()">❌</button>
             <h2 id="lblAnimShopTitle" style="color: #E040FB; margin-top: 0;">Animation Shop ✨</h2>
             
+            <div class="category-title" id="lblCatSpawnAnim">Circle Spawn Animations</div>
+            
+            <div class="sound-row">
+                <span id="lblSpawnZoom">Zoom Pop</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuySpawnZoom" onclick="buySpawnAnim('zoom', 35)">Buy (35)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectSpawnZoom" onclick="selectSpawnAnim('zoom')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblSpawnSpin">Spin In</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuySpawnSpin" onclick="buySpawnAnim('spin', 75)">Buy (75)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectSpawnSpin" onclick="selectSpawnAnim('spin')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblSpawnBounce">Elastic Bounce</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuySpawnBounce" onclick="buySpawnAnim('bounce', 130)">Buy (130)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectSpawnBounce" onclick="selectSpawnAnim('bounce')" style="display:none;">Select</button>
+                </div>
+            </div>
+
             <div class="category-title" id="lblCatCircleVfx">Circle Pop Effects (VFX)</div>
             
             <div class="sound-row">
@@ -1022,7 +1046,8 @@
                 btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
                 btnAnimationShop: "Anim Shop ✨", lblAnimShopTitle: "Animation Shop ✨",
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
-                lblCatCircleVfx: "Circle Pop Effects (VFX)", lblCatButtonAnim: "Button Click Animations",
+                lblCatSpawnAnim: "Circle Spawn Animations", lblCatCircleVfx: "Circle Pop Effects (VFX)", lblCatButtonAnim: "Button Click Animations",
+                lblSpawnZoom: "Zoom Pop", lblSpawnSpin: "Spin In", lblSpawnBounce: "Elastic Bounce",
                 lblVfxExplosion: "Explosion Ring", lblVfxShockwave: "Shockwave Wave", lblVfxFireworks: "Fireworks Shower",
                 lblBtnAnimPulse: "Pulse Glow", lblBtnAnimShake: "Quick Shake", lblBtnAnimBounce: "Spring Bounce",
                 lblPopSound: "Pop Sound", lblLaserSound: "Laser Sound", lblCoinSound: "Coin Sound",
@@ -1070,7 +1095,8 @@
                 btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
                 btnAnimationShop: "חנות אנימציות ✨", lblAnimShopTitle: "חנות אנימציות ✨",
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
-                lblCatCircleVfx: "אפקטי פיצוץ עיגולים (VFX)", lblCatButtonAnim: "אנימציות לחיצה על כפתורים",
+                lblCatSpawnAnim: "אנימציות הופעת עיגולים", lblCatCircleVfx: "אפקטי פיצוץ עיגולים (VFX)", lblCatButtonAnim: "אנימציות לחיצה על כפתורים",
+                lblSpawnZoom: "התקרבות מהירה", lblSpawnSpin: "סיבוב הופעה", lblSpawnBounce: "קפיצת אלסטיק",
                 lblVfxExplosion: "טבעת פיצוץ", lblVfxShockwave: "גל הדף", lblVfxFireworks: "מטר זיקוקים",
                 lblBtnAnimPulse: "פעימת זוהר", lblBtnAnimShake: "רעידה מהירה", lblBtnAnimBounce: "קפיץ קופצני",
                 lblPopSound: "סאונד פופ", lblLaserSound: "סאונד לייזר", lblCoinSound: "סאונד מטבע",
@@ -1118,7 +1144,8 @@
                 btnSoundShop: "Tienda de sonidos 🎵", lblSoundShopTitle: "Tienda de sonidos 🎵",
                 btnAnimationShop: "Tienda Anim ✨", lblAnimShopTitle: "Tienda de Animaciones ✨",
                 lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
-                lblCatCircleVfx: "Efectos de explosión de círculos", lblCatButtonAnim: "Animaciones de botones",
+                lblCatSpawnAnim: "Animaciones de aparición de círculos", lblCatCircleVfx: "Efectos de explosión de círculos", lblCatButtonAnim: "Animaciones de botones",
+                lblSpawnZoom: "Zoom de Aparición", lblSpawnSpin: "Giro de Aparición", lblSpawnBounce: "Rebote Elástico",
                 lblVfxExplosion: "Anillo de Explosión", lblVfxShockwave: "Onda de Choque", lblVfxFireworks: "Lluvia de Fuegos",
                 lblBtnAnimPulse: "Pulso de Brillo", lblBtnAnimShake: "Sacudida Rápida", lblBtnAnimBounce: "Rebote Elástico",
                 lblPopSound: "Sonido Pop", lblLaserSound: "Sonido Láser", lblCoinSound: "Sonido Moneda",
@@ -1166,7 +1193,8 @@
                 btnSoundShop: "Boutique audio 🎵", lblSoundShopTitle: "Boutique audio 🎵",
                 btnAnimationShop: "Boutique Anim ✨", lblAnimShopTitle: "Boutique d'Animations ✨",
                 lblCatClickSounds: "Effets de clic", lblCatBgm: "Musique de fond", lblCatVolumeUpgrades: "Améliorations de volume",
-                lblCatCircleVfx: "Effets d'explosion de cercles", lblCatButtonAnim: "Animations de boutons",
+                lblCatSpawnAnim: "Animations d'apparition de cercles", lblCatCircleVfx: "Effets d'explosion de cercles", lblCatButtonAnim: "Animations de boutons",
+                lblSpawnZoom: "Zoom d'apparition", lblSpawnSpin: "Rotation d'apparition", lblSpawnBounce: "Rebond Élastique",
                 lblVfxExplosion: "Anneau d'Explosion", lblVfxShockwave: "Onde de Choc", lblVfxFireworks: "Pluie de Feux",
                 lblBtnAnimPulse: "Pulsion Lumineuse", lblBtnAnimShake: "Secousse Rapide", lblBtnAnimBounce: "Rebond Élastique",
                 lblPopSound: "Son Pop", lblLaserSound: "Son Laser", lblCoinSound: "Son Pièce",
@@ -1214,7 +1242,8 @@
                 btnSoundShop: "Sound-Shop 🎵", lblSoundShopTitle: "Sound-Shop 🎵",
                 btnAnimationShop: "Anim-Shop ✨", lblAnimShopTitle: "Animations-Shop ✨",
                 lblCatClickSounds: "Klick-Soundeffekte", lblCatBgm: "Hintergrundmusik", lblCatVolumeUpgrades: "Lautstärke-Upgrades",
-                lblCatCircleVfx: "Kreis-Explosions-Effekte", lblCatButtonAnim: "Button-Klick-Animationen",
+                lblCatSpawnAnim: "Kreis-Spawn-Animationen", lblCatCircleVfx: "Kreis-Explosions-Effekte", lblCatButtonAnim: "Button-Klick-Animationen",
+                lblSpawnZoom: "Zoom-Pop", lblSpawnSpin: "Dreh-Spawn", lblSpawnBounce: "Elastischer Sprung",
                 lblVfxExplosion: "Explosionsring", lblVfxShockwave: "Schockwelle", lblVfxFireworks: "Feuerwerksregen",
                 lblBtnAnimPulse: "Leucht-Puls", lblBtnAnimShake: "Schnelles Beben", lblBtnAnimBounce: "Federnder Sprung",
                 lblPopSound: "Pop-Sound", lblLaserSound: "Laser-Sound", lblCoinSound: "Münz-Sound",
@@ -1262,7 +1291,8 @@
                 btnSoundShop: "Магазин звуков 🎵", lblSoundShopTitle: "Магазин звуков 🎵",
                 btnAnimationShop: "Магазин Аним ✨", lblAnimShopTitle: "Магазин Анимаций ✨",
                 lblCatClickSounds: "Звуки клика", lblCatBgm: "Фоновая музыка", lblCatVolumeUpgrades: "Улучшения громкости",
-                lblCatCircleVfx: "Эффекты взрыва кругов", lblCatButtonAnim: "Анимации кнопок",
+                lblCatSpawnAnim: "Анимации появления кругов", lblCatCircleVfx: "Эффекты взрыва кругов", lblCatButtonAnim: "Анимации кнопок",
+                lblSpawnZoom: "Зум-появление", lblSpawnSpin: "Вращение", lblSpawnBounce: "Упругий прыжок",
                 lblVfxExplosion: "Кольцо Взрыва", lblVfxShockwave: "Ударная Волна", lblVfxFireworks: "Салют",
                 lblBtnAnimPulse: "Пульс Света", lblBtnAnimShake: "Быстрая Тряска", lblBtnAnimBounce: "Пружинящий Прыжок",
                 lblPopSound: "Звук Поп", lblLaserSound: "Звук Лазер", lblCoinSound: "Звук Монета",
@@ -1310,7 +1340,8 @@
                 btnSoundShop: "متجر الأصوات 🎵", lblSoundShopTitle: "متجر الأصوات 🎵",
                 btnAnimationShop: "متجر الحركات ✨", lblAnimShopTitle: "متجر الحركات ✨",
                 lblCatClickSounds: "تأثيرات صوت النقرة", lblCatBgm: "موسيقى الخلفية", lblCatVolumeUpgrades: "ترقيات مستوى الصوت",
-                lblCatCircleVfx: "تأثيرات انفجار الدوائر", lblCatButtonAnim: "حركات الأزرار",
+                lblCatSpawnAnim: "حركات ظهور الدوائر", lblCatCircleVfx: "تأثيرات انفجار الدوائر", lblCatButtonAnim: "حركات الأزرار",
+                lblSpawnZoom: "تكبير الظهور", lblSpawnSpin: "دوران الظهور", lblSpawnBounce: "ارتداد مطاطي",
                 lblVfxExplosion: "حلقة الانفجار", lblVfxShockwave: "موجة الصدمة", lblVfxFireworks: "زخات الألعاب النارية",
                 lblBtnAnimPulse: "نبض الإضاءة", lblBtnAnimShake: "اهتزاز سريع", lblBtnAnimBounce: "ارتداد مطاطي",
                 lblPopSound: "صوت البوب", lblLaserSound: "صوت الليزر", lblCoinSound: "صوت العملة",
@@ -1358,7 +1389,8 @@
                 btnSoundShop: "声音商店 🎵", lblSoundShopTitle: "声音商店 🎵",
                 btnAnimationShop: "特效商店 ✨", lblAnimShopTitle: "动画特效商店 ✨",
                 lblCatClickSounds: "点击音效", lblCatBgm: "背景音乐", lblCatVolumeUpgrades: "音量升级",
-                lblCatCircleVfx: "圆圈消除特效 (VFX)", lblCatButtonAnim: "按钮点击动画",
+                lblCatSpawnAnim: "圆圈生成动画", lblCatCircleVfx: "圆圈消除特效 (VFX)", lblCatButtonAnim: "按钮点击动画",
+                lblSpawnZoom: "缩放弹出", lblSpawnSpin: "旋转出现", lblSpawnBounce: "弹性弹跳",
                 lblVfxExplosion: "爆炸波环", lblVfxShockwave: "冲击波", lblVfxFireworks: "烟花绽放",
                 lblBtnAnimPulse: "发光脉冲", lblBtnAnimShake: "快速震动", lblBtnAnimBounce: "弹性跳跃",
                 lblPopSound: "气泡声", lblLaserSound: "激光声", lblCoinSound: "金币声",
@@ -1406,7 +1438,8 @@
                 btnSoundShop: "サウンドショップ 🎵", lblSoundShopTitle: "サウンドショップ 🎵",
                 btnAnimationShop: "アニメショップ ✨", lblAnimShopTitle: "アニメーションショップ ✨",
                 lblCatClickSounds: "クリック効果音", lblCatBgm: "BGM", lblCatVolumeUpgrades: "音量アップグレード",
-                lblCatCircleVfx: "円消滅エフェクト (VFX)", lblCatButtonAnim: "ボタンクリックアニメーション",
+                lblCatSpawnAnim: "円出現アニメーション", lblCatCircleVfx: "円消滅エフェクト (VFX)", lblCatButtonAnim: "ボタンクリックアニメーション",
+                lblSpawnZoom: "ズームポップ", lblSpawnSpin: "スピンイン", lblSpawnBounce: "弾性バウンス",
                 lblVfxExplosion: "爆発リング", lblVfxShockwave: "衝撃波", lblVfxFireworks: "花火シャワー",
                 lblBtnAnimPulse: "発光パルス", lblBtnAnimShake: "クイックシェイク", lblBtnAnimBounce: "スプリングバウンス",
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
@@ -1457,13 +1490,15 @@
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
             unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+            unlockedSpawnAnim: { zoom: false, spin: false, bounce: false },
             unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
             unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
             activeSound: 'none',
             activeBgm: 'none',
+            activeSpawnAnim: 'none',
             activeVfx: 'none',
             activeBtnAnim: 'none',
-            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
+            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, zoom: 35, spin: 75, bounce: 130, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce_btn: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
         };
 
         let currentCircles = 0;
@@ -1514,6 +1549,13 @@
         const btnSelectClassicBgm = document.getElementById('btnSelectClassicBgm');
         const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
         const btnSelectArcadeBgm = document.getElementById('btnSelectArcadeBgm');
+
+        const btnBuySpawnZoom = document.getElementById('btnBuySpawnZoom');
+        const btnSelectSpawnZoom = document.getElementById('btnSelectSpawnZoom');
+        const btnBuySpawnSpin = document.getElementById('btnBuySpawnSpin');
+        const btnSelectSpawnSpin = document.getElementById('btnSelectSpawnSpin');
+        const btnBuySpawnBounce = document.getElementById('btnBuySpawnBounce');
+        const btnSelectSpawnBounce = document.getElementById('btnSelectSpawnBounce');
 
         const btnBuyVfxExplosion = document.getElementById('btnBuyVfxExplosion');
         const btnSelectVfxExplosion = document.getElementById('btnSelectVfxExplosion');
@@ -1944,6 +1986,22 @@
             }
         }
 
+        function buySpawnAnim(type, cost) {
+            if (state.score >= cost && !state.unlockedSpawnAnim[type]) {
+                state.score -= cost;
+                state.unlockedSpawnAnim[type] = true;
+                state.activeSpawnAnim = type;
+                updateUI();
+            }
+        }
+
+        function selectSpawnAnim(type) {
+            if (state.unlockedSpawnAnim[type]) {
+                state.activeSpawnAnim = (state.activeSpawnAnim === type) ? 'none' : type;
+                updateUI();
+            }
+        }
+
         function buyAnimationEffect(type, cost) {
             if (state.score >= cost && !state.unlockedVfx[type]) {
                 state.score -= cost;
@@ -2055,9 +2113,13 @@
             document.getElementById('lblCatClickSounds').innerText = text.lblCatClickSounds;
             document.getElementById('lblCatBgm').innerText = text.lblCatBgm;
             document.getElementById('lblCatVolumeUpgrades').innerText = text.lblCatVolumeUpgrades;
+            document.getElementById('lblCatSpawnAnim').innerText = text.lblCatSpawnAnim;
             document.getElementById('lblCatCircleVfx').innerText = text.lblCatCircleVfx;
             document.getElementById('lblCatButtonAnim').innerText = text.lblCatButtonAnim;
             
+            document.getElementById('lblSpawnZoom').innerText = text.lblSpawnZoom;
+            document.getElementById('lblSpawnSpin').innerText = text.lblSpawnSpin;
+            document.getElementById('lblSpawnBounce').innerText = text.lblSpawnBounce;
             document.getElementById('lblVfxExplosion').innerText = text.lblVfxExplosion;
             document.getElementById('lblVfxShockwave').innerText = text.lblVfxShockwave;
             document.getElementById('lblVfxFireworks').innerText = text.lblVfxFireworks;
@@ -2144,12 +2206,198 @@
             }
         });
 
+        devCodeInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                processDevCode();
+            }
+        });
+
         document.addEventListener('click', function(e) {
             initAudio();
             if (e.target.tagName === 'BUTTON' || e.target.classList.contains('bottom-btn') || e.target.classList.contains('modal-menu-btn')) {
                 triggerButtonAnimation(e.target);
             }
         }, { once: false });
+
+        function processDevCode() {
+            const val = devCodeInput.value.trim().toUpperCase();
+            
+            if (val === 'CLICK') {
+                const circles = document.querySelectorAll('.circle');
+                if (circles.length > 0) {
+                    let earned = (circles.length * state.pointsPerClick);
+                    if (state.challengeMode === 'press_color') earned *= 3;
+                    state.score += earned;
+                    state.totalScore += earned; 
+                    circles.forEach(circle => {
+                        const rect = circle.getBoundingClientRect();
+                        triggerCircleVfx(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                        circle.remove();
+                    });
+                    currentCircles = 0;
+                    playClickSound();
+                    updateUI();
+                    if (state.challengeMode === 'press_color') {
+                        pickNewTargetColor();
+                        refreshExistingCirclesColors();
+                        ensureTargetCircleExists();
+                    }
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+            
+            if (val.startsWith('ADD SCORE:')) {
+                const amountStr = val.replace('ADD SCORE:', '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.score += amount;
+                    state.totalScore += amount;
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD AUTOCLICKER_ACTION:') || val.startsWith('ADD AUTOCLICKER-ACTION:') || val.startsWith('ADD AUTOCLICKER ACTION:')) {
+                const amountStr = val.replace(/ADD AUTOCLICKER[_-\s]ACTION:/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.autoAmount += amount;
+                    startAutoClicker();
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD LIFESPAN:')) {
+                const amountStr = val.replace('ADD LIFESPAN:', '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount) && state.circleLifespanMs !== 'infinite') {
+                    state.circleLifespanMs += amount;
+                    if (state.circleLifespanMs < 1000) state.circleLifespanMs = 1000;
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD MSIZE:') || val.startsWith('ADD MINSIZE:')) {
+                const amountStr = val.replace(/ADD (MSIZE|MINSIZE):/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.minCircleSize += amount;
+                    if (state.minCircleSize < 10) state.minCircleSize = 10;
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD MCIRCLE:') || val.startsWith('ADD MAXCIRCLES:')) {
+                const amountStr = val.replace(/ADD (MCIRCLE|MAXCIRCLES):/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.maxCircles += amount;
+                    if (state.maxCircles < 1) state.maxCircles = 1;
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD PPC:') || val.startsWith('ADD POINTS:')) {
+                const amountStr = val.replace(/ADD (PPC|POINTS):/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.pointsPerClick += amount;
+                    if (state.pointsPerClick < 1) state.pointsPerClick = 1;
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD SPAWNR:') || val.startsWith('ADD SPAWNRATE:')) {
+                const amountStr = val.replace(/ADD (SPAWNR|SPAWNRATE):/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.spawnRateMs += amount;
+                    if (state.spawnRateMs < 50) state.spawnRateMs = 50;
+                    startGameLoop();
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val.startsWith('ADD AUTOCLICKER_INTERVAL:') || val.startsWith('ADD AUTOCLICKER-INTERVAL:') || val.startsWith('ADD AUTOCLICKER INTERVAL:')) {
+                const amountStr = val.replace(/ADD AUTOCLICKER[_-\s]INTERVAL:/, '').trim();
+                const amount = parseInt(amountStr);
+                if (!isNaN(amount)) {
+                    state.autoIntervalMs += amount;
+                    if (state.autoIntervalMs < 50) state.autoIntervalMs = 50;
+                    startAutoClicker();
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val === 'CHANGE') {
+                editCurrentScore.disabled = false;
+                editTotalScore.disabled = false;
+                editCurrentCircles.disabled = false;
+                editMaxCircles.disabled = false;
+                editPoints.disabled = false;
+                editMinSize.disabled = false;
+                editSpawnRate.disabled = false;
+                editLifespan.disabled = false;
+                editAutoAmount.disabled = false;
+                editAutoInterval.disabled = false;
+                
+                menuPanel.style.display = 'none';
+                settingsPanel.style.display = 'none';
+                buttonPageModal.classList.remove('active');
+                soundShopModal.classList.remove('active');
+                animationShopModal.classList.remove('active');
+                challengeModal.classList.remove('active');
+                statsPanel.style.display = 'block';
+                refreshPanelButtons();
+                
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (val === 'UNCHANGE') {
+                editCurrentScore.disabled = true;
+                editTotalScore.disabled = true;
+                editCurrentCircles.disabled = true;
+                editMaxCircles.disabled = true;
+                editPoints.disabled = true;
+                editMinSize.disabled = true;
+                editSpawnRate.disabled = true;
+                editLifespan.disabled = true;
+                editAutoAmount.disabled = true;
+                editAutoInterval.disabled = true;
+                
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                updateStatsUI(); 
+                return;
+            }
+        }
 
         function toggleButtonPage() {
             if (state.challengeMode === 'press_color') return;
@@ -2287,13 +2535,15 @@
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
                     unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+                    unlockedSpawnAnim: { zoom: false, spin: false, bounce: false },
                     unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
                     unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
                     activeSound: 'none',
                     activeBgm: 'none',
+                    activeSpawnAnim: 'none',
                     activeVfx: 'none',
                     activeBtnAnim: 'none',
-                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
+                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, zoom: 35, spin: 75, bounce: 130, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce_btn: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
                 };
                 soundToggleSelect.value = 'on';
                 soundVolumeSelect.value = '1.0';
@@ -2307,77 +2557,6 @@
                 toggleSettings();
             }
         }
-
-        devCodeInput.addEventListener('input', function() {
-            const val = this.value.toUpperCase();
-            
-            if (val === 'CLICK') {
-                const circles = document.querySelectorAll('.circle');
-                if (circles.length > 0) {
-                    let earned = (circles.length * state.pointsPerClick);
-                    if (state.challengeMode === 'press_color') earned *= 3;
-                    state.score += earned;
-                    state.totalScore += earned; 
-                    circles.forEach(circle => {
-                        const rect = circle.getBoundingClientRect();
-                        triggerCircleVfx(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                        circle.remove();
-                    });
-                    currentCircles = 0;
-                    playClickSound();
-                    updateUI();
-                    if (state.challengeMode === 'press_color') {
-                        pickNewTargetColor();
-                        refreshExistingCirclesColors();
-                        ensureTargetCircleExists();
-                    }
-                }
-                this.value = '';
-                this.blur();
-            }
-            
-            if (val === 'CHANGE') {
-                editCurrentScore.disabled = false;
-                editTotalScore.disabled = false;
-                editCurrentCircles.disabled = false;
-                editMaxCircles.disabled = false;
-                editPoints.disabled = false;
-                editMinSize.disabled = false;
-                editSpawnRate.disabled = false;
-                editLifespan.disabled = false;
-                editAutoAmount.disabled = false;
-                editAutoInterval.disabled = false;
-                
-                menuPanel.style.display = 'none';
-                settingsPanel.style.display = 'none';
-                buttonPageModal.classList.remove('active');
-                soundShopModal.classList.remove('active');
-                animationShopModal.classList.remove('active');
-                challengeModal.classList.remove('active');
-                statsPanel.style.display = 'block';
-                refreshPanelButtons();
-                
-                this.value = '';
-                this.blur();
-            }
-
-            if (val === 'UNCHANGE') {
-                editCurrentScore.disabled = true;
-                editTotalScore.disabled = true;
-                editCurrentCircles.disabled = true;
-                editMaxCircles.disabled = true;
-                editPoints.disabled = true;
-                editMinSize.disabled = true;
-                editSpawnRate.disabled = true;
-                editLifespan.disabled = true;
-                editAutoAmount.disabled = true;
-                editAutoInterval.disabled = true;
-                
-                this.value = '';
-                this.blur();
-                updateStatsUI(); 
-            }
-        });
 
         function applyCheatEdits() {
             let newScore = parseInt(editCurrentScore.value);
@@ -2588,6 +2767,31 @@
             }
 
             // --- Animation Shop UI Management ---
+            const spawnAnimList = ['zoom', 'spin', 'bounce'];
+            const spawnBuyBtns = { zoom: btnBuySpawnZoom, spin: btnBuySpawnSpin, bounce: btnBuySpawnBounce };
+            const spawnSelBtns = { zoom: btnSelectSpawnZoom, spin: btnSelectSpawnSpin, bounce: btnSelectSpawnBounce };
+
+            spawnAnimList.forEach(type => {
+                const bBtn = spawnBuyBtns[type];
+                const sBtn = spawnSelBtns[type];
+                if (!state.unlockedSpawnAnim[type]) {
+                    bBtn.style.display = 'inline-block';
+                    bBtn.disabled = state.score < state.costs[type];
+                    bBtn.innerText = `${text.buy} (${state.costs[type]})`;
+                    sBtn.style.display = 'none';
+                } else {
+                    bBtn.style.display = 'none';
+                    sBtn.style.display = 'inline-block';
+                    if (state.activeSpawnAnim === type) {
+                        sBtn.innerText = text.selected;
+                        sBtn.classList.add('active');
+                    } else {
+                        sBtn.innerText = text.select;
+                        sBtn.classList.remove('active');
+                    }
+                }
+            });
+
             const vfxList = ['explosion', 'shockwave', 'fireworks'];
             const vfxBuyBtns = { explosion: btnBuyVfxExplosion, shockwave: btnBuyVfxShockwave, fireworks: btnBuyVfxFireworks };
             const vfxSelBtns = { explosion: btnSelectVfxExplosion, shockwave: btnSelectVfxShockwave, fireworks: btnSelectVfxFireworks };
@@ -2688,6 +2892,15 @@
             const circle = document.createElement('div');
             circle.classList.add('circle');
             
+            // Apply Spawn Animation Class
+            if (state.activeSpawnAnim === 'zoom') {
+                circle.classList.add('spawn-zoom');
+            } else if (state.activeSpawnAnim === 'spin') {
+                circle.classList.add('spawn-spin');
+            } else if (state.activeSpawnAnim === 'bounce') {
+                circle.classList.add('spawn-bounce');
+            }
+
             const size = Math.floor(Math.random() * 50) + state.minCircleSize;
             circle.style.width = size + 'px';
             circle.style.height = size + 'px';
@@ -2922,10 +3135,12 @@
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
             if (!state.unlockedVolumes) state.unlockedVolumes = { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
+            if (!state.unlockedSpawnAnim) state.unlockedSpawnAnim = { zoom: false, spin: false, bounce: false };
             if (!state.unlockedVfx) state.unlockedVfx = { explosion: false, shockwave: false, fireworks: false };
             if (!state.unlockedBtnAnim) state.unlockedBtnAnim = { pulse: false, shake: false, bounce: false };
             if (!state.activeSound) state.activeSound = 'none';
             if (!state.activeBgm) state.activeBgm = 'none';
+            if (!state.activeSpawnAnim) state.activeSpawnAnim = 'none';
             if (!state.activeVfx) state.activeVfx = 'none';
             if (!state.activeBtnAnim) state.activeBtnAnim = 'none';
 
