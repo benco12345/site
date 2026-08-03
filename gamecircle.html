@@ -334,6 +334,7 @@
             box-sizing: border-box;
         }
         .modal-menu-btn:hover { background: #1976D2; transform: translateY(-2px); }
+        .modal-menu-btn:disabled { background: #555 !important; color: #888 !important; cursor: not-allowed; transform: none !important; box-shadow: none; }
 
         .controls-list {
             font-size: 18px;
@@ -713,7 +714,7 @@
         <div id="challenge-modal-content">
             <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
             <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">🟢 Normal</button>
-            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">🎨 Press the Color</button>
+            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">🎨 Press the Color (100 pts)</button>
         </div>
     </div>
 
@@ -1130,7 +1131,7 @@
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnChallengeMode: "⚡ Challenge", lblChallengeTitle: "Challenge Mode ⚡",
-                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Press the Color",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Press the Color (100 pts)",
                 lblPressTheColorInstruction: "Press the color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:",
                 lblSleepModeLabel: "Sleep Mode:", btnSleepText: "💤 Sleep", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Unsleep"
@@ -1180,7 +1181,7 @@
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
                 btnChallengeMode: "⚡ אתגר", lblChallengeTitle: "מצב אתגר ⚡",
-                btnModeNormal: "🟢 רגיל (Normal)", btnModePressColor: "🎨 לחץ על הצבע (Press the color)",
+                btnModeNormal: "🟢 רגיל (Normal)", btnModePressColor: "🎨 לחץ על הצבע (100 נק') (Press the color)",
                 lblPressTheColorInstruction: "לחץ על הצבע",
                 btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:",
                 lblSleepModeLabel: "מצב שינה:", btnSleepText: "💤 היכנס לשינה", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ העיר אותי (Unsleep)"
@@ -1230,7 +1231,7 @@
                 lblKeyCode: ". o / :", descKeyCode: "Escribir código",
                 descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas",
                 btnChallengeMode: "⚡ Desafío", lblChallengeTitle: "Modo Desafío ⚡",
-                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Presiona el color",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Presiona el color (100 pts)",
                 lblPressTheColorInstruction: "Presiona el color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:",
                 lblSleepModeLabel: "Modo Sueño:", btnSleepText: "💤 Dormir", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Despertar"
@@ -1280,7 +1281,7 @@
                 lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
                 descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats",
                 btnChallengeMode: "⚡ Défi", lblChallengeTitle: "Mode Défi ⚡",
-                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Appuyez sur la couleur",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Appuyez sur la couleur (100 pts)",
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:",
                 lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller"
@@ -1330,7 +1331,7 @@
                 lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
                 descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen",
                 btnChallengeMode: "⚡ Herausforderung", lblChallengeTitle: "Herausforderungsmodus ⚡",
-                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Drücke die Farbe",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Drücke die Farbe (100 Pkt)",
                 lblPressTheColorInstruction: "Drücke die Farbe",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:",
                 lblSleepModeLabel: "Schlafmodus:", btnSleepText: "💤 Schlafen", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Aufwachen"
@@ -1380,7 +1381,7 @@
                 lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
                 descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику",
                 btnChallengeMode: "⚡ Вызов", lblChallengeTitle: "Режим Вызова ⚡",
-                btnModeNormal: "🟢 Нормальный", btnModePressColor: "🎨 Нажми цвет",
+                btnModeNormal: "🟢 Нормальный", btnModePressColor: "🎨 Нажми цвет (100 очк)",
                 lblPressTheColorInstruction: "Нажми цвет",
                 btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:",
                 lblSleepModeLabel: "Спящий режим:", btnSleepText: "💤 Сон", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Пробудить"
@@ -1430,7 +1431,7 @@
                 lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
                 descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات",
                 btnChallengeMode: "⚡ تحدي", lblChallengeTitle: "وضع التحدي ⚡",
-                btnModeNormal: "🟢 عادي", btnModePressColor: "🎨 اضغط على اللون",
+                btnModeNormal: "🟢 عادي", btnModePressColor: "🎨 اضغط على اللون (100 نقطة)",
                 lblPressTheColorInstruction: "اضغط على اللون",
                 btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:",
                 lblSleepModeLabel: "وضع السكون:", btnSleepText: "💤 نوم", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ إيقاظ"
@@ -1480,7 +1481,7 @@
                 lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
                 descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计",
                 btnChallengeMode: "⚡ 挑战", lblChallengeTitle: "挑战模式 ⚡",
-                btnModeNormal: "🟢 普通", btnModePressColor: "🎨 点击颜色",
+                btnModeNormal: "🟢 普通", btnModePressColor: "🎨 点击颜色 (100分)",
                 lblPressTheColorInstruction: "点击颜色",
                 btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:",
                 lblSleepModeLabel: "睡眠模式:", btnSleepText: "💤 睡眠", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 唤醒"
@@ -1530,7 +1531,7 @@
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
                 btnChallengeMode: "⚡ チャレンジ", lblChallengeTitle: "チャレンジモード ⚡",
-                btnModeNormal: "🟢 ノーマル", btnModePressColor: "🎨 色を押す",
+                btnModeNormal: "🟢 ノーマル", btnModePressColor: "🎨 色を押す (100pt)",
                 lblPressTheColorInstruction: "色を押す",
                 btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:",
                 lblSleepModeLabel: "スリープモード:", btnSleepText: "💤 スリープ", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 起きる"
@@ -1607,6 +1608,7 @@
         const challengeModal = document.getElementById('challenge-modal');
         const challengeHud = document.getElementById('challenge-hud');
         const targetColorNameDisplay = document.getElementById('targetColorName');
+        const btnModePressColor = document.getElementById('btnModePressColor');
 
         const bottomNav = document.getElementById('bottom-nav');
         const btnAbout = document.getElementById('btnAbout');
@@ -1794,6 +1796,8 @@
         ];
 
         function setChallengeMode(mode) {
+            if (mode === 'press_color' && state.score < 100) return;
+            
             state.challengeMode = mode;
             challengeModal.classList.remove('active');
 
@@ -2236,7 +2240,7 @@
             btnChallengeMode.innerText = text.btnChallengeMode;
             document.getElementById('lblChallengeTitle').innerText = text.lblChallengeTitle;
             document.getElementById('btnModeNormal').innerText = text.btnModeNormal;
-            document.getElementById('btnModePressColor').innerText = text.btnModePressColor;
+            btnModePressColor.innerText = text.btnModePressColor;
             document.getElementById('lblPressTheColorInstruction').innerText = text.lblPressTheColorInstruction;
             
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
@@ -2733,6 +2737,9 @@
             autoIntervalDisplay.innerText = (state.autoIntervalMs / 1000).toFixed(2);
             
             const text = t[state.language] || t['en'];
+
+            // Disable or enable Press the Color based on score (100 points needed)
+            btnModePressColor.disabled = state.score < 100;
 
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
             btnPoints.disabled = state.score < state.costPoints;
