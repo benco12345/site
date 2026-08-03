@@ -209,6 +209,74 @@
             pointer-events: auto;
         }
 
+        /* --- Sleep Mode Overlay --- */
+        #sleep-mode-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(15, 15, 25, 0.95);
+            z-index: 5000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            user-select: none;
+        }
+        #sleep-mode-overlay.active {
+            display: flex;
+        }
+        .sleep-bot-icon {
+            font-size: 70px;
+            animation: sleepFloat 2s ease-in-out infinite;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(100, 150, 255, 0.6);
+        }
+        @keyframes sleepFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+        .sleep-zzz {
+            font-size: 28px;
+            color: #64B5F6;
+            font-weight: bold;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            animation: zzzFade 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes zzzFade {
+            from { opacity: 0.4; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.1); }
+        }
+        #sleep-mode-overlay h2 {
+            font-size: 32px;
+            color: #FFEB3B;
+            margin: 0 0 25px 0;
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.4);
+        }
+        #btnUnsleep {
+            background: linear-gradient(135deg, #FF9800, #F44336);
+            color: white;
+            border: 3px solid white;
+            padding: 12px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.5);
+            transition: transform 0.2s, filter 0.2s;
+        }
+        #btnUnsleep:hover {
+            transform: scale(1.08);
+            filter: brightness(1.2);
+        }
+        #btnUnsleep:active {
+            transform: scale(0.95);
+        }
+
         #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop {
             position: absolute;
             top: 20px;
@@ -625,6 +693,14 @@
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
     <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
 
+    <!-- Sleep Mode Overlay Screen -->
+    <div id="sleep-mode-overlay">
+        <div class="sleep-bot-icon">🤖💤</div>
+        <div class="sleep-zzz">Z z z . . .</div>
+        <h2 id="lblSleepEnabledText">Sleep Mode Enabled!</h2>
+        <button id="btnUnsleep" onclick="deactivateSleepMode()">⏰ Unsleep</button>
+    </div>
+
     <div id="bottom-nav">
         <button id="menu-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleMenu()">🛠️ Open Menu</button>
         <button id="settings-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleSettings()">⚙️ Settings</button>
@@ -906,6 +982,10 @@
                 <option value="mobile" id="optMobile">📱 Mobile</option>
             </select>
         </div>
+        <div class="stat-row" style="margin-top: 15px;">
+            <span id="lblSleepModeLabel">Sleep Mode:</span>
+            <button class="shop-action-btn btn-select" id="btnActivateSleep" onclick="activateSleepMode()" style="background: #2196F3; width: 130px;">💤 Sleep</button>
+        </div>
         <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">🔄 Reset Game</button>
     </div>
 
@@ -1052,7 +1132,8 @@
                 btnChallengeMode: "⚡ Challenge", lblChallengeTitle: "Challenge Mode ⚡",
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Press the Color",
                 lblPressTheColorInstruction: "Press the color",
-                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:",
+                lblSleepModeLabel: "Sleep Mode:", btnSleepText: "💤 Sleep", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Unsleep"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -1101,7 +1182,8 @@
                 btnChallengeMode: "⚡ אתגר", lblChallengeTitle: "מצב אתגר ⚡",
                 btnModeNormal: "🟢 רגיל (Normal)", btnModePressColor: "🎨 לחץ על הצבע (Press the color)",
                 lblPressTheColorInstruction: "לחץ על הצבע",
-                btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:"
+                btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:",
+                lblSleepModeLabel: "מצב שינה:", btnSleepText: "💤 היכנס לשינה", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ העיר אותי (Unsleep)"
             },
             es: {
                 lblScore: "Puntuación: ",
@@ -1150,7 +1232,8 @@
                 btnChallengeMode: "⚡ Desafío", lblChallengeTitle: "Modo Desafío ⚡",
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Presiona el color",
                 lblPressTheColorInstruction: "Presiona el color",
-                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:",
+                lblSleepModeLabel: "Modo Sueño:", btnSleepText: "💤 Dormir", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Despertar"
             },
             fr: {
                 lblScore: "Score : ",
@@ -1199,7 +1282,8 @@
                 btnChallengeMode: "⚡ Défi", lblChallengeTitle: "Mode Défi ⚡",
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Appuyez sur la couleur",
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
-                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:",
+                lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -1248,7 +1332,8 @@
                 btnChallengeMode: "⚡ Herausforderung", lblChallengeTitle: "Herausforderungsmodus ⚡",
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Drücke die Farbe",
                 lblPressTheColorInstruction: "Drücke die Farbe",
-                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:",
+                lblSleepModeLabel: "Schlafmodus:", btnSleepText: "💤 Schlafen", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Aufwachen"
             },
             ru: {
                 lblScore: "Счет: ",
@@ -1297,7 +1382,8 @@
                 btnChallengeMode: "⚡ Вызов", lblChallengeTitle: "Режим Вызова ⚡",
                 btnModeNormal: "🟢 Нормальный", btnModePressColor: "🎨 Нажми цвет",
                 lblPressTheColorInstruction: "Нажми цвет",
-                btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:"
+                btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:",
+                lblSleepModeLabel: "Спящий режим:", btnSleepText: "💤 Сон", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Пробудить"
             },
             ar: {
                 lblScore: "النقاط: ",
@@ -1346,7 +1432,8 @@
                 btnChallengeMode: "⚡ تحدي", lblChallengeTitle: "وضع التحدي ⚡",
                 btnModeNormal: "🟢 عادي", btnModePressColor: "🎨 اضغط على اللون",
                 lblPressTheColorInstruction: "اضغط على اللون",
-                btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:"
+                btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:",
+                lblSleepModeLabel: "وضع السكون:", btnSleepText: "💤 نوم", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ إيقاظ"
             },
             zh: {
                 lblScore: "得分: ",
@@ -1395,7 +1482,8 @@
                 btnChallengeMode: "⚡ 挑战", lblChallengeTitle: "挑战模式 ⚡",
                 btnModeNormal: "🟢 普通", btnModePressColor: "🎨 点击颜色",
                 lblPressTheColorInstruction: "点击颜色",
-                btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:"
+                btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:",
+                lblSleepModeLabel: "睡眠模式:", btnSleepText: "💤 睡眠", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 唤醒"
             },
             ja: {
                 lblScore: "スコア: ",
@@ -1444,7 +1532,8 @@
                 btnChallengeMode: "⚡ チャレンジ", lblChallengeTitle: "チャレンジモード ⚡",
                 btnModeNormal: "🟢 ノーマル", btnModePressColor: "🎨 色を押す",
                 lblPressTheColorInstruction: "色を押す",
-                btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:"
+                btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:",
+                lblSleepModeLabel: "スリープモード:", btnSleepText: "💤 スリープ", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 起きる"
             }
         };
 
@@ -1523,6 +1612,9 @@
         const btnAbout = document.getElementById('btnAbout');
         const devCodeContainer = document.getElementById('devCodeContainer');
         const topBtnGroup = document.querySelector('.top-btn-group');
+        const sleepModeOverlay = document.getElementById('sleep-mode-overlay');
+        const btnActivateSleep = document.getElementById('btnActivateSleep');
+        const btnUnsleep = document.getElementById('btnUnsleep');
         
         const btnBuyPop = document.getElementById('btnBuyPop');
         const btnSelectPop = document.getElementById('btnSelectPop');
@@ -1655,6 +1747,22 @@
                 }
                 setTimeout(() => vfxElem.remove(), 500);
             }
+        }
+
+        function activateSleepMode() {
+            settingsPanel.style.display = 'none';
+            refreshPanelButtons();
+            if (gameInterval) clearInterval(gameInterval);
+            if (autoClickerInterval) clearInterval(autoClickerInterval);
+            if (bgmInterval) clearInterval(bgmInterval);
+            sleepModeOverlay.classList.add('active');
+        }
+
+        function deactivateSleepMode() {
+            sleepModeOverlay.classList.remove('active');
+            startGameLoop();
+            startAutoClicker();
+            if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
         }
 
         function toggleChallengeModal() {
@@ -2139,6 +2247,11 @@
             document.getElementById('descKeyA').innerText = text.descKeyA;
             document.getElementById('descKeyS').innerText = text.descKeyS;
             document.getElementById('descKeyD').innerText = text.descKeyD;
+
+            document.getElementById('lblSleepModeLabel').innerText = text.lblSleepModeLabel;
+            btnActivateSleep.innerText = text.btnSleepText;
+            document.getElementById('lblSleepEnabledText').innerText = text.lblSleepEnabledText;
+            btnUnsleep.innerText = text.btnUnsleepText;
 
             refreshPanelButtons();
             updateUI(); 
