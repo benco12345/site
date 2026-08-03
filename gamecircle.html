@@ -57,7 +57,7 @@
             color: white;
             border: 2px solid white;
             border-radius: 5px;
-            padding: 5px 12px;
+            padding: 6px 12px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -69,13 +69,13 @@
         #btnSoundShop {
             position: absolute;
             top: 10px;
-            left: 120px; 
+            left: 135px; 
             z-index: 100;
             background: #E91E63;
             color: white;
             border: 2px solid white;
             border-radius: 5px;
-            padding: 5px 12px;
+            padding: 6px 12px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -87,13 +87,13 @@
         #btnAnimationShop {
             position: absolute;
             top: 10px;
-            left: 235px; 
+            left: 265px; 
             z-index: 100;
             background: #9C27B0;
             color: white;
             border: 2px solid white;
             border-radius: 5px;
-            padding: 5px 12px;
+            padding: 6px 12px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -104,14 +104,14 @@
 
         #btnChallengeMode {
             position: absolute;
-            top: 50px;
+            top: 55px;
             left: 10px; 
             z-index: 100;
             background: #FF9800;
             color: white;
             border: 2px solid white;
             border-radius: 5px;
-            padding: 5px 12px;
+            padding: 6px 12px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -140,7 +140,7 @@
 
         #challenge-hud {
             position: absolute;
-            top: 85px;
+            top: 90px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 26px;
@@ -617,34 +617,37 @@
             padding: 5px 12px;
             top: 55px;
         }
-        body.mobile-mode #devCodeContainer { top: 48px; right: 10px; }
+        body.mobile-mode #devCodeContainer { top: 52px; right: 10px; }
         body.mobile-mode #devCodeInput { width: 80px; font-size: 12px; padding: 4px; } 
         body.mobile-mode #btnDevEnter { padding: 4px 6px; font-size: 12px; }
-        body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
-        body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
-        body.mobile-mode #btnAnimationShop { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; width: auto; }
-        body.mobile-mode #btnChallengeMode { top: 82px; left: 10px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnAbout { top: 52px; left: 10px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnSoundShop { top: 52px; left: 95px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnAnimationShop { top: 52px; left: 180px; padding: 5px 8px; font-size: 12px; width: auto; }
+        body.mobile-mode #btnChallengeMode { top: 88px; left: 10px; padding: 5px 8px; font-size: 12px; }
     </style>
 </head>
 <body>
+
+    <!-- Favicon / Game Icon Generator -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23ff3b30%22 stroke=%22white%22 stroke-width=%228%22/><circle cx=%2235%22 cy=%2235%22 r=%2212%22 fill=%22rgba(255,255,255,0.4)%22/></svg>">
 
     <div id="devCodeContainer">
         <input type="text" id="devCodeInput" placeholder="Code...">
         <button id="btnDevEnter" onclick="processDevCode()">Enter ↵</button>
     </div>
     
-    <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
-    <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
-    <button id="btnAnimationShop" onclick="toggleAnimationShop()">Anim Shop ✨</button>
-    <button id="btnChallengeMode" onclick="toggleChallengeModal()">Challenge ⚡</button>
+    <button id="btnAbout" class="main-top-btn" onclick="toggleButtonPage()">📄 Second Page</button>
+    <button id="btnSoundShop" class="main-top-btn" onclick="toggleSoundShop()">🎵 Sound Shop</button>
+    <button id="btnAnimationShop" class="main-top-btn" onclick="toggleAnimationShop()">✨ Anim Shop</button>
+    <button id="btnChallengeMode" class="main-top-btn" onclick="toggleChallengeModal()">⚡ Challenge</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
     <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
 
     <div id="bottom-nav">
-        <button id="menu-toggle-btn" class="bottom-btn" onclick="toggleMenu()">Open Menu 🛠️</button>
-        <button id="settings-toggle-btn" class="bottom-btn" onclick="toggleSettings()">Settings ⚙️</button>
-        <button id="stats-toggle-btn" class="bottom-btn" onclick="toggleStats()">Stats 📊</button>
+        <button id="menu-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleMenu()">🛠️ Open Menu</button>
+        <button id="settings-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleSettings()">⚙️ Settings</button>
+        <button id="stats-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleStats()">📊 Stats</button>
     </div>
 
     <!-- Challenge Mode Modal -->
@@ -652,8 +655,8 @@
         <button id="btnCloseChallengeModal" onclick="toggleChallengeModal()">❌</button>
         <div id="challenge-modal-content">
             <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
-            <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">Normal 🟢</button>
-            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">Press the Color 🎨</button>
+            <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">🟢 Normal</button>
+            <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">🎨 Press the Color</button>
         </div>
     </div>
 
@@ -743,15 +746,15 @@
         <div id="button-page-content">
             <h2 id="lblButtonPageTitle">Second Page</h2>
             
-            <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">עזרה (Helps) 💡</button>
+            <button class="modal-menu-btn" id="btnOpenHelps" onclick="openHelpSubModal()">💡 עזרה (Helps)</button>
             
             <!-- Developer Support Toggle Button -->
-            <button class="modal-menu-btn" id="btnDevSupport" onclick="toggleDevSupport()" style="background: #5865F2;">Developer Support 💬</button>
+            <button class="modal-menu-btn" id="btnDevSupport" onclick="toggleDevSupport()" style="background: #5865F2;">💬 Developer Support</button>
 
             <!-- Developer Support Links Container (Hidden by default) -->
             <div id="dev-support-container" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px; border-top: 2px solid #5865F2; padding-top: 15px;">
-                <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-menu-btn" id="btnDiscord" style="background: #7289DA; margin-top: 0;">Discord Server 🎧</a>
-                <a href="https://benco12345.github.io/site/gamecirclealpha.html" target="_blank" class="modal-menu-btn" id="btnAlphaGame" style="background: #FF5722; margin-top: 0;">Alpha Game 🎮</a>
+                <a href="https://discord.gg/34kzSPSbk" target="_blank" class="modal-menu-btn" id="btnDiscord" style="background: #7289DA; margin-top: 0;">🎧 Discord Server</a>
+                <a href="https://benco12345.github.io/site/gamecirclealpha.html" target="_blank" class="modal-menu-btn" id="btnAlphaGame" style="background: #FF5722; margin-top: 0;">🎮 Alpha Game</a>
             </div>
 
             <div id="helps-container" style="display: none; margin-top: 20px; border-top: 2px solid #555; padding-top: 15px;">
@@ -859,8 +862,8 @@
         <div class="text-modal-content">
             <h3 id="lblExportTitle">Export Save Code</h3>
             <textarea id="saveCodeTextarea" readonly></textarea>
-            <button class="menu-btn save-load-btn" id="btnCopyClipboard" onclick="copySaveToClipboard()">Copy to Clipboard 📋</button>
-            <button class="menu-btn" onclick="closeTextSaveModal()" style="background:#777; margin-top:5px;">Close ❌</button>
+            <button class="menu-btn save-load-btn" id="btnCopyClipboard" onclick="copySaveToClipboard()">📋 Copy to Clipboard</button>
+            <button class="menu-btn" onclick="closeTextSaveModal()" style="background:#777; margin-top:5px;">❌ Close</button>
         </div>
     </div>
 
@@ -869,8 +872,8 @@
         <div class="text-modal-content">
             <h3 id="lblImportTitle">Import Save Code</h3>
             <textarea id="loadCodeTextarea" placeholder="Paste your save code here..."></textarea>
-            <button class="menu-btn save-load-btn" id="btnApplyLoadCode" onclick="loadGameFromText()">Load Save 🎮</button>
-            <button class="menu-btn" onclick="closeTextLoadModal()" style="background:#777; margin-top:5px;">Close ❌</button>
+            <button class="menu-btn save-load-btn" id="btnApplyLoadCode" onclick="loadGameFromText()">🎮 Load Save</button>
+            <button class="menu-btn" onclick="closeTextLoadModal()" style="background:#777; margin-top:5px;">❌ Close</button>
         </div>
     </div>
 
@@ -879,8 +882,8 @@
         <div class="stat-row">
             <span id="lblSoundStatus">Sound:</span>
             <select id="soundToggleSelect" onchange="changeSoundToggle(this.value)">
-                <option value="on" id="optSoundOn">On 🔊</option>
-                <option value="off" id="optSoundOff">Off 🔇</option>
+                <option value="on" id="optSoundOn">🔊 On</option>
+                <option value="off" id="optSoundOff">🔇 Off</option>
             </select>
         </div>
         <div class="stat-row">
@@ -918,11 +921,11 @@
         <div class="stat-row">
             <span id="lblDeviceMode">Device Mode:</span>
             <select id="deviceSelect" onchange="changeDeviceMode(this.value)">
-                <option value="desktop" id="optDesktop">Desktop 💻</option>
-                <option value="mobile" id="optMobile">Mobile 📱</option>
+                <option value="desktop" id="optDesktop">💻 Desktop</option>
+                <option value="mobile" id="optMobile">📱 Mobile</option>
             </select>
         </div>
-        <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">Reset Game 🔄</button>
+        <button class="menu-btn reset-btn" id="btnResetGame" onclick="resetGame()">🔄 Reset Game</button>
     </div>
 
     <div id="stats-panel" class="panel">
@@ -973,46 +976,46 @@
 
     <div id="menu-panel" class="panel">
         <h3 id="lblSaveLoad">Save & Load 💾</h3>
-        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">Download Save File (.txt)</button>
-        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">Load Save from TXT</button>
+        <button class="menu-btn save-load-btn" id="btnDownload" onclick="saveGame()">💾 Download Save File (.txt)</button>
+        <button class="menu-btn save-load-btn" id="btnLoad" onclick="document.getElementById('fileInput').click()">📂 Load Save from TXT</button>
         <input type="file" id="fileInput" style="display: none;" accept=".txt" onchange="loadGame(event)">
         
-        <button class="menu-btn save-load-btn" id="btnOpenTextSave" onclick="openTextSaveModal()">Export Code (GUI) 📋</button>
-        <button class="menu-btn save-load-btn" id="btnOpenTextLoad" onclick="openTextLoadModal()">Import Code (GUI) 📥</button>
+        <button class="menu-btn save-load-btn" id="btnOpenTextSave" onclick="openTextSaveModal()">📋 Export Code (GUI)</button>
+        <button class="menu-btn save-load-btn" id="btnOpenTextLoad" onclick="openTextLoadModal()">📥 Import Code (GUI)</button>
 
         <hr>
         <h3 id="lblUpgrades">Upgrades ⬆️</h3>
         <div class="upgrade-box">
             <p><strong id="lblMaxCircles">Max Circles:</strong> <span id="maxCirclesDisplay">5</span></p>
-            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">Upgrade (Cost: <span id="costMaxCircles">5</span>)</button>
+            <button class="menu-btn" id="btnMaxCircles" onclick="buyMaxCircles()">⬆️ Upgrade (Cost: <span id="costMaxCircles">5</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblPointsPerCatch">Points per Catch:</strong> <span id="pointsPerClickDisplay">1</span></p>
-            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">Upgrade (Cost: <span id="costPoints">10</span>)</button>
+            <button class="menu-btn" id="btnPoints" onclick="buyPoints()">⬆️ Upgrade (Cost: <span id="costPoints">10</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblSpawnRate">Spawn Rate:</strong> <span id="lblEvery">Every </span><span id="spawnSpeedDisplay">1.0</span><span id="lblSec">s</span></p>
-            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">Upgrade (Cost: <span id="costSpeed">15</span>)</button>
+            <button class="menu-btn" id="btnSpeed" onclick="buySpeed()">⬆️ Upgrade (Cost: <span id="costSpeed">15</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblMinSize">Minimum Size:</strong> <span id="minSizeDisplay">40</span><span id="lblPx">px</span></p>
-            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">Upgrade (Cost: <span id="costMinSize">8</span>)</button>
+            <button class="menu-btn" id="btnMinSize" onclick="buyMinSize()">⬆️ Upgrade (Cost: <span id="costMinSize">8</span>)</button>
         </div>
         <div class="upgrade-box">
             <p><strong id="lblLifespan">Circle Lifespan:</strong> <span id="lifespanDisplay">5</span><span id="lblSecLife">s</span></p>
-            <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">Upgrade (Cost: <span id="costLifespan">5</span>)</button>
+            <button class="menu-btn" id="btnLifespan" onclick="buyLifespan()">⬆️ Upgrade (Cost: <span id="costLifespan">5</span>)</button>
         </div>
         
         <hr>
-        <button class="menu-btn" id="btnToggleAutoUpgrades" onclick="toggleAutoUpgrades()" style="background: #9C27B0;">Autoclicker 🤖</button>
+        <button class="menu-btn" id="btnToggleAutoUpgrades" onclick="toggleAutoUpgrades()" style="background: #9C27B0;">🤖 Autoclicker</button>
         <div id="autoUpgradesContainer" style="display: none; border: 2px solid #9C27B0; padding: 10px; border-radius: 8px; margin-top: 10px;">
             <div class="upgrade-box">
                 <p><strong id="lblAutoAmount">Clicks per Action:</strong> <span id="autoAmountDisplay">0</span></p>
-                <button class="menu-btn" id="btnAutoAmount" onclick="buyAutoAmount()">Upgrade (Cost: <span id="costAutoAmount">150</span>)</button>
+                <button class="menu-btn" id="btnAutoAmount" onclick="buyAutoAmount()">⬆️ Upgrade (Cost: <span id="costAutoAmount">150</span>)</button>
             </div>
             <div class="upgrade-box">
                 <p><strong id="lblAutoInterval">Click Interval:</strong> <span id="autoIntervalDisplay">8.0</span><span id="lblSecAuto">s</span></p>
-                <button class="menu-btn" id="btnAutoInterval" onclick="buyAutoInterval()">Upgrade (Cost: <span id="costAutoInterval">150</span>)</button>
+                <button class="menu-btn" id="btnAutoInterval" onclick="buyAutoInterval()">⬆️ Upgrade (Cost: <span id="costAutoInterval">150</span>)</button>
             </div>
         </div>
     </div>
@@ -1023,13 +1026,13 @@
         const t = {
             en: {
                 lblScore: "Score: ",
-                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Close ❌",
-                btnStatsOpen: "Stats 📊", btnStatsClose: "Close ❌",
-                btnSettingsOpen: "Settings ⚙️", btnSettingsClose: "Close ❌",
-                lblSaveLoad: "Save & Load 💾", btnDownload: "Download Save File (.txt)", btnLoad: "Load Save from TXT",
-                btnOpenTextSave: "Export Code (GUI) 📋", btnOpenTextLoad: "Import Code (GUI) 📥",
+                btnMenuOpen: "🛠️ Menu", btnMenuClose: "❌ Close",
+                btnStatsOpen: "📊 Stats", btnStatsClose: "❌ Close",
+                btnSettingsOpen: "⚙️ Settings", btnSettingsClose: "❌ Close",
+                lblSaveLoad: "Save & Load 💾", btnDownload: "💾 Download Save File (.txt)", btnLoad: "📂 Load Save from TXT",
+                btnOpenTextSave: "📋 Export Code (GUI)", btnOpenTextLoad: "📥 Import Code (GUI)",
                 lblExportTitle: "Export Save Code", lblImportTitle: "Import Save Code",
-                btnCopyClipboard: "Copy to Clipboard 📋", btnApplyLoadCode: "Load Save 🎮",
+                btnCopyClipboard: "📋 Copy to Clipboard", btnApplyLoadCode: "🎮 Load Save",
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max Circles:", lblPointsPerCatch: "Points per Catch:",
                 lblSpawnRate: "Spawn Rate:", lblEvery: "Every ", lblSec: "s",
                 lblMinSize: "Minimum Size:", lblPx: "px",
@@ -1039,12 +1042,12 @@
                 lblStatMaxCircles: "Max Circles:", lblStatPoints: "Points / Catch:", lblStatMinSize: "Min Size (px):", lblStatSpawnRate: "Spawn Rate (ms):",
                 lblStatLifespan: "Lifespan (ms):", lblStatAutoAmount: "Auto Clicks / Action:", lblStatAutoInterval: "Auto Interval (ms):",
                 lblSettingsTitle: "Settings ⚙️", lblLanguage: "Language:",
-                lblSoundStatus: "Sound:", optSoundOn: "On 🔊", optSoundOff: "Off 🔇",
+                lblSoundStatus: "Sound:", optSoundOn: "🔊 On", optSoundOff: "🔇 Off",
                 lblSoundVolume: "Volume:",
-                lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
-                btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
-                btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
-                btnAnimationShop: "Anim Shop ✨", lblAnimShopTitle: "Animation Shop ✨",
+                lblDeviceMode: "Device Mode:", optDesktop: "💻 Desktop", optMobile: "📱 Mobile",
+                btnResetGame: "🔄 Reset Game", confirmReset: "Are you sure you want to reset the game?",
+                btnSoundShop: "🎵 Sound Shop", lblSoundShopTitle: "Sound Shop 🎵",
+                btnAnimationShop: "✨ Anim Shop", lblAnimShopTitle: "Animation Shop ✨",
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
                 lblCatSpawnAnim: "Circle Spawn Animations", lblCatCircleVfx: "Circle Pop Effects (VFX)", lblCatButtonAnim: "Button Click Animations",
                 lblSpawnZoom: "Zoom Pop", lblSpawnSpin: "Spin In", lblSpawnBounce: "Elastic Bounce",
@@ -1053,32 +1056,32 @@
                 lblPopSound: "Pop Sound", lblLaserSound: "Laser Sound", lblCoinSound: "Coin Sound",
                 lblBgmClassic: "Classic Loop", lblBgmArcade: "Arcade Beat",
                 buy: "Buy", selected: "Selected ✅", select: "Select", purchased: "Purchased! ✅",
-                upgradeCost: "Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
+                upgradeCost: "⬆️ Upgrade (Cost: ", maxSpeed: "Max Speed!", maxSize: "Max Size!",
                 alertLoadSuccess: "Game loaded successfully! 🎮", alertLoadError: "Error! The save code/file isn't valid.",
                 alertCopied: "Save code copied to clipboard! 📋",
-                btnAbout: "Second Page 📄", 
+                btnAbout: "📄 Second Page", 
                 lblButtonPageTitle: "Second Page", 
-                btnOpenHelps: "Helps 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Discord Server 🎧",
-                btnAlphaGame: "Alpha Game 🎮",
+                btnOpenHelps: "💡 Helps",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Discord Server",
+                btnAlphaGame: "🎮 Alpha Game",
                 lblKeySpace: "Spacebar:", descSpace: "Click hovered circle",
                 lblKeyCode: ". or / :", descKeyCode: "Start typing code",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
-                btnChallengeMode: "Challenge ⚡", lblChallengeTitle: "Challenge Mode ⚡",
-                btnModeNormal: "Normal 🟢", btnModePressColor: "Press the Color 🎨",
+                btnChallengeMode: "⚡ Challenge", lblChallengeTitle: "Challenge Mode ⚡",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Press the Color",
                 lblPressTheColorInstruction: "Press the color",
-                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:"
             },
             he: {
                 lblScore: "ניקוד: ",
-                btnMenuOpen: "תפריט 🛠️", btnMenuClose: "סגור ❌",
-                btnStatsOpen: "סטטיסטיקה 📊", btnStatsClose: "סגור ❌",
-                btnSettingsOpen: "הגדרות ⚙️", btnSettingsClose: "סגור ❌",
-                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "הורדת שמירה (.txt)", btnLoad: "טעינת שמירה (TXT)",
-                btnOpenTextSave: "ייצוא קוד (GUI) 📋", btnOpenTextLoad: "ייבוא קוד (GUI) 📥",
+                btnMenuOpen: "🛠️ תפריט", btnMenuClose: "❌ סגור",
+                btnStatsOpen: "📊 סטטיסטיקה", btnStatsClose: "❌ סגור",
+                btnSettingsOpen: "⚙️ הגדרות", btnSettingsClose: "❌ סגור",
+                lblSaveLoad: "שמירה וטעינה 💾", btnDownload: "💾 הורדת שמירה (.txt)", btnLoad: "📂 טעינת שמירה (TXT)",
+                btnOpenTextSave: "📋 ייצוא קוד (GUI)", btnOpenTextLoad: "📥 ייבוא קוד (GUI)",
                 lblExportTitle: "ייצוא קוד שמירה", lblImportTitle: "ייבוא קוד שמירה",
-                btnCopyClipboard: "העתק ללוח 📋", btnApplyLoadCode: "טען שמירה 🎮",
+                btnCopyClipboard: "📋 העתק ללוח", btnApplyLoadCode: "🎮 טען שמירה",
                 lblUpgrades: "שדרוגים ⬆️", lblMaxCircles: "מקסימום עיגולים:", lblPointsPerCatch: "נקודות לתפיסה:",
                 lblSpawnRate: "קצב יצירה:", lblEvery: "כל ", lblSec: " שניות",
                 lblMinSize: "גודל מינימלי:", lblPx: " פיקסלים",
@@ -1088,12 +1091,12 @@
                 lblStatMaxCircles: "מקסימום עיגולים:", lblStatPoints: "נקודות/תפיסה:", lblStatMinSize: "גודל מינימום (px):", lblStatSpawnRate: "קצב יצירה (ms):",
                 lblStatLifespan: "זמן חיים (ms):", lblStatAutoAmount: "קליקים אוטומטיים/פעולה:", lblStatAutoInterval: "הפרש קליק אוטומטי (ms):",
                 lblSettingsTitle: "הגדרות ⚙️", lblLanguage: "שפה / Language:",
-                lblSoundStatus: "סאונד / Sound:", optSoundOn: "פועל 🔊", optSoundOff: "כבוי 🔇",
+                lblSoundStatus: "סאונד / Sound:", optSoundOn: "🔊 פועל", optSoundOff: "🔇 כבוי",
                 lblSoundVolume: "עוצמת סאונד / Volume:",
-                lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
-                btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
-                btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
-                btnAnimationShop: "חנות אנימציות ✨", lblAnimShopTitle: "חנות אנימציות ✨",
+                lblDeviceMode: "מצב מסך:", optDesktop: "💻 מחשב", optMobile: "📱 טלפון",
+                btnResetGame: "🔄 איפוס משחק", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
+                btnSoundShop: "🎵 חנות סאונד", lblSoundShopTitle: "חנות סאונד 🎵",
+                btnAnimationShop: "✨ חנות אנימציות", lblAnimShopTitle: "חנות אנימציות ✨",
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
                 lblCatSpawnAnim: "אנימציות הופעת עיגולים", lblCatCircleVfx: "אפקטי פיצוץ עיגולים (VFX)", lblCatButtonAnim: "אנימציות לחיצה על כפתורים",
                 lblSpawnZoom: "התקרבות מהירה", lblSpawnSpin: "סיבוב הופעה", lblSpawnBounce: "קפיצת אלסטיק",
@@ -1102,32 +1105,32 @@
                 lblPopSound: "סאונד פופ", lblLaserSound: "סאונד לייזר", lblCoinSound: "סאונד מטבע",
                 lblBgmClassic: "קלאסי (Classic)", lblBgmArcade: "ארקייד (Arcade)",
                 buy: "קנה", selected: "נבחר ✅", select: "בחר", purchased: "נרכש! ✅",
-                upgradeCost: "מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
+                upgradeCost: "⬆️ שדרג (מחיר: ", maxSpeed: "מהירות מקסימלית!", maxSize: "גודל מקסימלי!",
                 alertLoadSuccess: "המשחק נטען בהצלחה! 🎮", alertLoadError: "שגיאה! קוד השמירה או הקובץ אינם תקינים.",
                 alertCopied: "קוד השמירה הועתק ללוח! 📋",
-                btnAbout: "דף שני 📄", 
+                btnAbout: "📄 דף שני", 
                 lblButtonPageTitle: "דף שני", 
-                btnOpenHelps: "עזרה (Helps) 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "שרת דיסקורד 🎧",
-                btnAlphaGame: "משחק אלפא 🎮",
+                btnOpenHelps: "💡 עזרה (Helps)",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 שרת דיסקורד",
+                btnAlphaGame: "🎮 משחק אלפא",
                 lblKeySpace: "מקש רווח:", descSpace: "לוחץ על העיגול שעליו מונח העכבר",
                 lblKeyCode: ". או / :", descKeyCode: "כתיבת קוד בתיבה",
                 descKeyA: "פתיחה/סגירה של סטטיסטיקות", descKeyS: "פתיחה/סגירה של הגדרות", descKeyD: "פתיחה/סגירה של התפריט",
-                btnChallengeMode: "אתגר ⚡", lblChallengeTitle: "מצב אתגר ⚡",
-                btnModeNormal: "רגיל (Normal) 🟢", btnModePressColor: "לחץ על הצבע (Press the color) 🎨",
+                btnChallengeMode: "⚡ אתגר", lblChallengeTitle: "מצב אתגר ⚡",
+                btnModeNormal: "🟢 רגיל (Normal)", btnModePressColor: "🎨 לחץ על הצבע (Press the color)",
                 lblPressTheColorInstruction: "לחץ על הצבע",
-                btnToggleAutoUpgrades: "לחיצה אוטומטית (Autoclicker) 🤖", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:"
+                btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:"
             },
             es: {
                 lblScore: "Puntuación: ",
-                btnMenuOpen: "Menú 🛠️", btnMenuClose: "Cerrar ❌",
-                btnStatsOpen: "Estadísticas 📊", btnStatsClose: "Cerrar ❌",
-                btnSettingsOpen: "Ajustes ⚙️", btnSettingsClose: "Cerrar ❌",
-                lblSaveLoad: "Guardar y Cargar 💾", btnDownload: "Descargar archivo (.txt)", btnLoad: "Cargar desde TXT",
-                btnOpenTextSave: "Exportar código 📋", btnOpenTextLoad: "Importar código 📥",
+                btnMenuOpen: "🛠️ Menú", btnMenuClose: "❌ Cerrar",
+                btnStatsOpen: "📊 Stats", btnStatsClose: "❌ Cerrar",
+                btnSettingsOpen: "⚙️ Ajustes", btnSettingsClose: "❌ Cerrar",
+                lblSaveLoad: "Guardar y Cargar 💾", btnDownload: "💾 Descargar archivo (.txt)", btnLoad: "📂 Cargar desde TXT",
+                btnOpenTextSave: "📋 Exportar código", btnOpenTextLoad: "📥 Importar código",
                 lblExportTitle: "Exportar código", lblImportTitle: "Importar código",
-                btnCopyClipboard: "Copiar al portapapeles 📋", btnApplyLoadCode: "Cargar partida 🎮",
+                btnCopyClipboard: "📋 Copiar al portapapeles", btnApplyLoadCode: "🎮 Cargar partida",
                 lblUpgrades: "Mejoras ⬆️", lblMaxCircles: "Círculos máx:", lblPointsPerCatch: "Puntos por captura:",
                 lblSpawnRate: "Frecuencia:", lblEvery: "Cada ", lblSec: "s",
                 lblMinSize: "Tamaño mín:", lblPx: "px",
@@ -1137,12 +1140,12 @@
                 lblStatMaxCircles: "Círculos máx:", lblStatPoints: "Puntos / Captura:", lblStatMinSize: "Tamaño mín (px):", lblStatSpawnRate: "Frecuencia (ms):",
                 lblStatLifespan: "Duración (ms):", lblStatAutoAmount: "Auto Clicks / Acción:", lblStatAutoInterval: "Auto Intervalo (ms):",
                 lblSettingsTitle: "Ajustes ⚙️", lblLanguage: "Idioma:",
-                lblSoundStatus: "Sonido:", optSoundOn: "Activado 🔊", optSoundOff: "Desactivado 🔇",
+                lblSoundStatus: "Sonido:", optSoundOn: "🔊 Activado", optSoundOff: "🔇 Desactivado",
                 lblSoundVolume: "Volumen:",
-                lblDeviceMode: "Modo de dispositivo:", optDesktop: "Escritorio 💻", optMobile: "Móvil 📱",
-                btnResetGame: "Reiniciar juego 🔄", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
-                btnSoundShop: "Tienda de sonidos 🎵", lblSoundShopTitle: "Tienda de sonidos 🎵",
-                btnAnimationShop: "Tienda Anim ✨", lblAnimShopTitle: "Tienda de Animaciones ✨",
+                lblDeviceMode: "Modo de dispositivo:", optDesktop: "💻 Escritorio", optMobile: "📱 Móvil",
+                btnResetGame: "🔄 Reiniciar juego", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
+                btnSoundShop: "🎵 Tienda sonidos", lblSoundShopTitle: "Tienda de sonidos 🎵",
+                btnAnimationShop: "✨ Tienda Anim", lblAnimShopTitle: "Tienda de Animaciones ✨",
                 lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
                 lblCatSpawnAnim: "Animaciones de aparición de círculos", lblCatCircleVfx: "Efectos de explosión de círculos", lblCatButtonAnim: "Animaciones de botones",
                 lblSpawnZoom: "Zoom de Aparición", lblSpawnSpin: "Giro de Aparición", lblSpawnBounce: "Rebote Elástico",
@@ -1151,32 +1154,32 @@
                 lblPopSound: "Sonido Pop", lblLaserSound: "Sonido Láser", lblCoinSound: "Sonido Moneda",
                 lblBgmClassic: "Bucle Clásico", lblBgmArcade: "Ritmo Arcade",
                 buy: "Comprar", selected: "Seleccionado ✅", select: "Seleccionar", purchased: "¡Comprado! ✅",
-                upgradeCost: "Costo: ", maxSpeed: "¡Velocidad máxima!", maxSize: "¡Tamaño máximo!",
+                upgradeCost: "⬆️ Mejorar (Costo: ", maxSpeed: "¡Velocidad máxima!", maxSize: "¡Tamaño máximo!",
                 alertLoadSuccess: "¡Juego cargado con éxito! 🎮", alertLoadError: "¡Error! El código no es válido.",
                 alertCopied: "¡Código copiado al portapapeles! 📋",
-                btnAbout: "Segundo Página 📄", 
+                btnAbout: "📄 Segundo Página", 
                 lblButtonPageTitle: "Segundo Página", 
-                btnOpenHelps: "Ayuda 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Servidor de Discord 🎧",
-                btnAlphaGame: "Juego Alpha 🎮",
+                btnOpenHelps: "💡 Ayuda",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Servidor de Discord",
+                btnAlphaGame: "🎮 Juego Alpha",
                 lblKeySpace: "Espacio:", descSpace: "Hacer clic en el círculo",
                 lblKeyCode: ". o / :", descKeyCode: "Escribir código",
                 descKeyA: "Abrir/Cerrar Menú", descKeyS: "Abrir/Cerrar Ajustes", descKeyD: "Abrir/Cerrar Estadísticas",
-                btnChallengeMode: "Desafío ⚡", lblChallengeTitle: "Modo Desafío ⚡",
-                btnModeNormal: "Normal 🟢", btnModePressColor: "Presiona el color 🎨",
+                btnChallengeMode: "⚡ Desafío", lblChallengeTitle: "Modo Desafío ⚡",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Presiona el color",
                 lblPressTheColorInstruction: "Presiona el color",
-                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:"
             },
             fr: {
                 lblScore: "Score : ",
-                btnMenuOpen: "Menu 🛠️", btnMenuClose: "Fermer ❌",
-                btnStatsOpen: "Stats 📊", btnStatsClose: "Fermer ❌",
-                btnSettingsOpen: "Paramètres ⚙️", btnSettingsClose: "Fermer ❌",
-                lblSaveLoad: "Sauvegarde 💾", btnDownload: "Télécharger (.txt)", btnLoad: "Charger (TXT)",
-                btnOpenTextSave: "Exporter le code 📋", btnOpenTextLoad: "Importer le code 📥",
+                btnMenuOpen: "🛠️ Menu", btnMenuClose: "❌ Fermer",
+                btnStatsOpen: "📊 Stats", btnStatsClose: "❌ Fermer",
+                btnSettingsOpen: "⚙️ Paramètres", btnSettingsClose: "❌ Fermer",
+                lblSaveLoad: "Sauvegarde 💾", btnDownload: "💾 Télécharger (.txt)", btnLoad: "📂 Charger (TXT)",
+                btnOpenTextSave: "📋 Exporter le code", btnOpenTextLoad: "📥 Importer le code",
                 lblExportTitle: "Exporter", lblImportTitle: "Importer",
-                btnCopyClipboard: "Copier 📋", btnApplyLoadCode: "Charger 🎮",
+                btnCopyClipboard: "📋 Copier", btnApplyLoadCode: "🎮 Charger",
                 lblUpgrades: "Améliorations ⬆️", lblMaxCircles: "Cercles max :", lblPointsPerCatch: "Points par prise :",
                 lblSpawnRate: "Apparition :", lblEvery: "Chaque ", lblSec: "s",
                 lblMinSize: "Taille min :", lblPx: "px",
@@ -1186,12 +1189,12 @@
                 lblStatMaxCircles: "Cercles max :", lblStatPoints: "Points / Prise :", lblStatMinSize: "Taille min (px) :", lblStatSpawnRate: "Apparition (ms) :",
                 lblStatLifespan: "Durée (ms):", lblStatAutoAmount: "Auto Clics / Action :", lblStatAutoInterval: "Auto Intervalle (ms) :",
                 lblSettingsTitle: "Paramètres ⚙️", lblLanguage: "Langue :",
-                lblSoundStatus: "Son :", optSoundOn: "Activé 🔊", optSoundOff: "Désactivé 🔇",
+                lblSoundStatus: "Son :", optSoundOn: "🔊 Activé", optSoundOff: "🔇 Désactivé",
                 lblSoundVolume: "Volume :",
-                lblDeviceMode: "Mode d'appareil :", optDesktop: "Bureau 💻", optMobile: "Mobile 📱",
-                btnResetGame: "Réinitialiser 🔄", confirmReset: "Êtes-vous sûr de vouloir réinitialiser ?",
-                btnSoundShop: "Boutique audio 🎵", lblSoundShopTitle: "Boutique audio 🎵",
-                btnAnimationShop: "Boutique Anim ✨", lblAnimShopTitle: "Boutique d'Animations ✨",
+                lblDeviceMode: "Mode d'appareil :", optDesktop: "💻 Bureau", optMobile: "📱 Mobile",
+                btnResetGame: "🔄 Réinitialiser", confirmReset: "Êtes-vous sûr de vouloir réinitialiser ?",
+                btnSoundShop: "🎵 Boutique audio", lblSoundShopTitle: "Boutique audio 🎵",
+                btnAnimationShop: "✨ Boutique Anim", lblAnimShopTitle: "Boutique d'Animations ✨",
                 lblCatClickSounds: "Effets de clic", lblCatBgm: "Musique de fond", lblCatVolumeUpgrades: "Améliorations de volume",
                 lblCatSpawnAnim: "Animations d'apparition de cercles", lblCatCircleVfx: "Effets d'explosion de cercles", lblCatButtonAnim: "Animations de boutons",
                 lblSpawnZoom: "Zoom d'apparition", lblSpawnSpin: "Rotation d'apparition", lblSpawnBounce: "Rebond Élastique",
@@ -1200,32 +1203,32 @@
                 lblPopSound: "Son Pop", lblLaserSound: "Son Laser", lblCoinSound: "Son Pièce",
                 lblBgmClassic: "Boucle classique", lblBgmArcade: "Rythme Arcade",
                 buy: "Acheter", selected: "Sélectionné ✅", select: "Sélectionner", purchased: "Acheté ! ✅",
-                upgradeCost: "Coût : ", maxSpeed: "Vitesse max !", maxSize: "Taille max !",
+                upgradeCost: "⬆️ Améliorer (Coût : ", maxSpeed: "Vitesse max !", maxSize: "Taille max !",
                 alertLoadSuccess: "Jeu chargé avec succès ! 🎮", alertLoadError: "Erreur ! Le code est invalide.",
                 alertCopied: "Code copié dans le presse-papiers ! 📋",
-                btnAbout: "Deuxième Page 📄", 
+                btnAbout: "📄 Deuxième Page", 
                 lblButtonPageTitle: "Deuxième Page", 
-                btnOpenHelps: "Aide 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Serveur Discord 🎧",
-                btnAlphaGame: "Jeu Alpha 🎮",
+                btnOpenHelps: "💡 Aide",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Serveur Discord",
+                btnAlphaGame: "🎮 Jeu Alpha",
                 lblKeySpace: "Espace :", descSpace: "Cliquer sur le cercle",
                 lblKeyCode: ". ou / :", descKeyCode: "Taper un code",
                 descKeyA: "Ouvrir/Fermer Menu", descKeyS: "Ouvrir/Fermer Paramètres", descKeyD: "Ouvrir/Fermer Stats",
-                btnChallengeMode: "Défi ⚡", lblChallengeTitle: "Mode Défi ⚡",
-                btnModeNormal: "Normal 🟢", btnModePressColor: "Appuyez sur la couleur 🎨",
+                btnChallengeMode: "⚡ Défi", lblChallengeTitle: "Mode Défi ⚡",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Appuyez sur la couleur",
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
-                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:"
             },
             de: {
                 lblScore: "Punkte: ",
-                btnMenuOpen: "Menü 🛠️", btnMenuClose: "Schließen ❌",
-                btnStatsOpen: "Statistiken 📊", btnStatsClose: "Schließen ❌",
-                btnSettingsOpen: "Einstellungen ⚙️", btnSettingsClose: "Schließen ❌",
-                lblSaveLoad: "Speichern & Laden 💾", btnDownload: "Datei herunterladen (.txt)", btnLoad: "Laden (TXT)",
-                btnOpenTextSave: "Code exportieren 📋", btnOpenTextLoad: "Code importieren 📥",
+                btnMenuOpen: "🛠️ Menü", btnMenuClose: "❌ Schließen",
+                btnStatsOpen: "📊 Statistiken", btnStatsClose: "❌ Schließen",
+                btnSettingsOpen: "⚙️ Einstellungen", btnSettingsClose: "❌ Schließen",
+                lblSaveLoad: "Speichern & Laden 💾", btnDownload: "💾 Datei herunterladen (.txt)", btnLoad: "📂 Laden (TXT)",
+                btnOpenTextSave: "📋 Code exportieren", btnOpenTextLoad: "📥 Code importieren",
                 lblExportTitle: "Code exportieren", lblImportTitle: "Code exportieren",
-                btnCopyClipboard: "In Zwischenablage kopieren 📋", btnApplyLoadCode: "Laden 🎮",
+                btnCopyClipboard: "📋 In Zwischenablage kopieren", btnApplyLoadCode: "🎮 Laden",
                 lblUpgrades: "Upgrades ⬆️", lblMaxCircles: "Max. Kreise:", lblPointsPerCatch: "Punkte pro Fang:",
                 lblSpawnRate: "Spawn-Rate:", lblEvery: "Alle ", lblSec: "s",
                 lblMinSize: "Min. Größe:", lblPx: "px",
@@ -1235,12 +1238,12 @@
                 lblStatMaxCircles: "Max. Kreise:", lblStatPoints: "Punkte / Fang:", lblStatMinSize: "Min. Größe (px):", lblStatSpawnRate: "Spawn-Rate (ms):",
                 lblStatLifespan: "Lebensdauer (ms):", lblStatAutoAmount: "Auto Klicks / Aktion:", lblStatAutoInterval: "Auto Intervall (ms):",
                 lblSettingsTitle: "Einstellungen ⚙️", lblLanguage: "Sprache:",
-                lblSoundStatus: "Ton:", optSoundOn: "An 🔊", optSoundOff: "Aus 🔇",
+                lblSoundStatus: "Ton:", optSoundOn: "🔊 An", optSoundOff: "🔇 Aus",
                 lblSoundVolume: "Lautstärke:",
-                lblDeviceMode: "Gerätemodus:", optDesktop: "Desktop 💻", optMobile: "Mobil 📱",
-                btnResetGame: "Spiel zurücksetzen 🔄", confirmReset: "Möchtest du das Spiel wirklich zurücksetzen?",
-                btnSoundShop: "Sound-Shop 🎵", lblSoundShopTitle: "Sound-Shop 🎵",
-                btnAnimationShop: "Anim-Shop ✨", lblAnimShopTitle: "Animations-Shop ✨",
+                lblDeviceMode: "Gerätemodus:", optDesktop: "💻 Desktop", optMobile: "📱 Mobil",
+                btnResetGame: "🔄 Spiel zurücksetzen", confirmReset: "Möchtest du das Spiel wirklich zurücksetzen?",
+                btnSoundShop: "🎵 Sound-Shop", lblSoundShopTitle: "Sound-Shop 🎵",
+                btnAnimationShop: "✨ Anim-Shop", lblAnimShopTitle: "Animations-Shop ✨",
                 lblCatClickSounds: "Klick-Soundeffekte", lblCatBgm: "Hintergrundmusik", lblCatVolumeUpgrades: "Lautstärke-Upgrades",
                 lblCatSpawnAnim: "Kreis-Spawn-Animationen", lblCatCircleVfx: "Kreis-Explosions-Effekte", lblCatButtonAnim: "Button-Klick-Animationen",
                 lblSpawnZoom: "Zoom-Pop", lblSpawnSpin: "Dreh-Spawn", lblSpawnBounce: "Elastischer Sprung",
@@ -1249,32 +1252,32 @@
                 lblPopSound: "Pop-Sound", lblLaserSound: "Laser-Sound", lblCoinSound: "Münz-Sound",
                 lblBgmClassic: "Klassischer Loop", lblBgmArcade: "Arcade-Beat",
                 buy: "Kaufen", selected: "Ausgewählt ✅", select: "Auswählen", purchased: "Gekauft! ✅",
-                upgradeCost: "Kosten: ", maxSpeed: "Höchstgeschwindigkeit!", maxSize: "Maximale Größe!",
+                upgradeCost: "⬆️ Upgrade (Kosten: ", maxSpeed: "Höchstgeschwindigkeit!", maxSize: "Maximale Größe!",
                 alertLoadSuccess: "Spiel erfolgreich geladen! 🎮", alertLoadError: "Fehler! Der Code ist ungültig.",
                 alertCopied: "Code in die Zwischenablage kopiert! 📋",
-                btnAbout: "Zweite Seite 📄", 
+                btnAbout: "📄 Zweite Seite", 
                 lblButtonPageTitle: "Zweite Seite", 
-                btnOpenHelps: "Hilfe 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Discord Server 🎧",
-                btnAlphaGame: "Alpha Spiel 🎮",
+                btnOpenHelps: "💡 Hilfe",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Discord Server",
+                btnAlphaGame: "🎮 Alpha Spiel",
                 lblKeySpace: "Leertaste:", descSpace: "Kreis anklicken",
                 lblKeyCode: ". oder / :", descKeyCode: "Code eingeben",
                 descKeyA: "Menü öffnen/schließen", descKeyS: "Einstellungen öffnen/schließen", descKeyD: "Statistik öffnen/schließen",
-                btnChallengeMode: "Herausforderung ⚡", lblChallengeTitle: "Herausforderungsmodus ⚡",
-                btnModeNormal: "Normal 🟢", btnModePressColor: "Drücke die Farbe 🎨",
+                btnChallengeMode: "⚡ Herausforderung", lblChallengeTitle: "Herausforderungsmodus ⚡",
+                btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Drücke die Farbe",
                 lblPressTheColorInstruction: "Drücke die Farbe",
-                btnToggleAutoUpgrades: "Autoclicker 🤖", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:"
+                btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:"
             },
             ru: {
                 lblScore: "Счет: ",
-                btnMenuOpen: "Меню 🛠️", btnMenuClose: "Закрыть ❌",
-                btnStatsOpen: "Статистика 📊", btnStatsClose: "Закрыть ❌",
-                btnSettingsOpen: "Настройки ⚙️", btnSettingsClose: "Закрыть ❌",
-                lblSaveLoad: "Сохранение 💾", btnDownload: "Скачать файл (.txt)", btnLoad: "Загрузить (TXT)",
-                btnOpenTextSave: "Экспорт кода 📋", btnOpenTextLoad: "Импорт кода 📥",
+                btnMenuOpen: "🛠️ Меню", btnMenuClose: "❌ Закрыть",
+                btnStatsOpen: "📊 Статистика", btnStatsClose: "❌ Закрыть",
+                btnSettingsOpen: "⚙️ Настройки", btnSettingsClose: "❌ Закрыть",
+                lblSaveLoad: "Сохранение 💾", btnDownload: "💾 Скачать файл (.txt)", btnLoad: "📂 Загрузить (TXT)",
+                btnOpenTextSave: "📋 Экспорт кода", btnOpenTextLoad: "📥 Импорт кода",
                 lblExportTitle: "Экспорт кода", lblImportTitle: "Экспорт кода",
-                btnCopyClipboard: "Копировать в буфер 📋", btnApplyLoadCode: "Загрузить 🎮",
+                btnCopyClipboard: "📋 Копировать в буфер", btnApplyLoadCode: "🎮 Загрузить",
                 lblUpgrades: "Улучшения ⬆️", lblMaxCircles: "Макс. кругов:", lblPointsPerCatch: "Очков за пойманный:",
                 lblSpawnRate: "Частота спавна:", lblEvery: "Каждые ", lblSec: "с",
                 lblMinSize: "Мин. размер:", lblPx: "пикс",
@@ -1284,12 +1287,12 @@
                 lblStatMaxCircles: "Макс. кругов:", lblStatPoints: "Очков / Поимка:", lblStatMinSize: "Мин. размер (px):", lblStatSpawnRate: "Частота (ms):",
                 lblStatLifespan: "Жизнь (ms):", lblStatAutoAmount: "Авто кликов / Действие:", lblStatAutoInterval: "Интервал авто (ms):",
                 lblSettingsTitle: "Настройки ⚙️", lblLanguage: "Язык:",
-                lblSoundStatus: "Звук:", optSoundOn: "Вкл 🔊", optSoundOff: "Выкл 🔇",
+                lblSoundStatus: "Звук:", optSoundOn: "🔊 Вкл", optSoundOff: "🔇 Выкл",
                 lblSoundVolume: "Громкость:",
-                lblDeviceMode: "Режим устройства:", optDesktop: "ПК 💻", optMobile: "Телефон 📱",
-                btnResetGame: "Сбросить игру 🔄", confirmReset: "Вы уверены, что хотите сбросить игру?",
-                btnSoundShop: "Магазин звуков 🎵", lblSoundShopTitle: "Магазин звуков 🎵",
-                btnAnimationShop: "Магазин Аним ✨", lblAnimShopTitle: "Магазин Анимаций ✨",
+                lblDeviceMode: "Режим устройства:", optDesktop: "💻 ПК", optMobile: "📱 Телефон",
+                btnResetGame: "🔄 Сбросить игру", confirmReset: "Вы уверены, что хотите сбросить игру?",
+                btnSoundShop: "🎵 Магазин звуков", lblSoundShopTitle: "Магазин звуков 🎵",
+                btnAnimationShop: "✨ Магазин Аним", lblAnimShopTitle: "Магазин Анимаций ✨",
                 lblCatClickSounds: "Звуки клика", lblCatBgm: "Фоновая музыка", lblCatVolumeUpgrades: "Улучшения громкости",
                 lblCatSpawnAnim: "Анимации появления кругов", lblCatCircleVfx: "Эффекты взрыва кругов", lblCatButtonAnim: "Анимации кнопок",
                 lblSpawnZoom: "Зум-появление", lblSpawnSpin: "Вращение", lblSpawnBounce: "Упругий прыжок",
@@ -1298,32 +1301,32 @@
                 lblPopSound: "Звук Поп", lblLaserSound: "Звук Лазер", lblCoinSound: "Звук Монета",
                 lblBgmClassic: "Классический луп", lblBgmArcade: "Аркадный бит",
                 buy: "Купить", selected: "Выбрано ✅", select: "Выбрать", purchased: "Куплено! ✅",
-                upgradeCost: "Цена: ", maxSpeed: "Макс. скорость!", maxSize: "Макс. размер!",
+                upgradeCost: "⬆️ Улучшить (Цена: ", maxSpeed: "Макс. скорость!", maxSize: "Макс. размер!",
                 alertLoadSuccess: "Игра успешно загружена! 🎮", alertLoadError: "Ошибка! Код сохранения недействителен.",
                 alertCopied: "Код скопирован в буфер обмена! 📋",
-                btnAbout: "Вторая Страница 📄", 
+                btnAbout: "📄 Вторая Страница", 
                 lblButtonPageTitle: "Вторая Страница", 
-                btnOpenHelps: "Помощь 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Сервер Discord 🎧",
-                btnAlphaGame: "Альфа-игра 🎮",
+                btnOpenHelps: "💡 Помощь",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Сервер Discord",
+                btnAlphaGame: "🎮 Альфа-игра",
                 lblKeySpace: "Пробел:", descSpace: "Кликнуть на круг",
                 lblKeyCode: ". или / :", descKeyCode: "Начать ввод кода",
                 descKeyA: "Открыть/Закрыть Меню", descKeyS: "Открыть/Закрыть Настройки", descKeyD: "Открыть/Закрыть Статистику",
-                btnChallengeMode: "Вызов ⚡", lblChallengeTitle: "Режим Вызова ⚡",
-                btnModeNormal: "Нормальный 🟢", btnModePressColor: "Нажми цвет 🎨",
+                btnChallengeMode: "⚡ Вызов", lblChallengeTitle: "Режим Вызова ⚡",
+                btnModeNormal: "🟢 Нормальный", btnModePressColor: "🎨 Нажми цвет",
                 lblPressTheColorInstruction: "Нажми цвет",
-                btnToggleAutoUpgrades: "Автокликер 🤖", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:"
+                btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:"
             },
             ar: {
                 lblScore: "النقاط: ",
-                btnMenuOpen: "القائمة 🛠️", btnMenuClose: "إغلاق ❌",
-                btnStatsOpen: "الإحصائيات 📊", btnStatsClose: "إغلاق ❌",
-                btnSettingsOpen: "الإعدادات ⚙️", btnSettingsClose: "إغلاق ❌",
-                lblSaveLoad: "الحفظ والتحميل 💾", btnDownload: "تنزيل ملف الحفظ (.txt)", btnLoad: "تحميل الحفظ (TXT)",
-                btnOpenTextSave: "تصدير الكود 📋", btnOpenTextLoad: "استيراد الكود 📥",
+                btnMenuOpen: "🛠️ القائمة", btnMenuClose: "❌ إغلاق",
+                btnStatsOpen: "📊 الإحصائيات", btnStatsClose: "❌ إغلاق",
+                btnSettingsOpen: "⚙️ الإعدادات", btnSettingsClose: "❌ إغلاق",
+                lblSaveLoad: "الحفظ والتحميل 💾", btnDownload: "💾 تنزيل ملف الحفظ (.txt)", btnLoad: "📂 تحميل الحفظ (TXT)",
+                btnOpenTextSave: "📋 تصدير الكود", btnOpenTextLoad: "📥 استيراد الكود",
                 lblExportTitle: "تصدير الكود", lblImportTitle: "استيراد الكود",
-                btnCopyClipboard: "نسخ للحافظة 📋", btnApplyLoadCode: "تحميل اللعبة 🎮",
+                btnCopyClipboard: "📋 نسخ للحافظة", btnApplyLoadCode: "🎮 تحميل اللعبة",
                 lblUpgrades: "الترقيات ⬆️", lblMaxCircles: "الحد الأقصى للدوائر:", lblPointsPerCatch: "النقاط لكل صيد:",
                 lblSpawnRate: "معدل الظهور:", lblEvery: "كل ", lblSec: "ث",
                 lblMinSize: "الحد الأدنى للحجم:", lblPx: "بكسل",
@@ -1333,12 +1336,12 @@
                 lblStatMaxCircles: "الحد الأقصى للدوائر:", lblStatPoints: "نقاط / صيد:", lblStatMinSize: "الحجم الأدنى (px):", lblStatSpawnRate: "معدل الظهور (ms):",
                 lblStatLifespan: "مدة البقاء (ms):", lblStatAutoAmount: "النقرات التلقائية / الإجراء:", lblStatAutoInterval: "فاصل تلقائي (ms):",
                 lblSettingsTitle: "الإعدادات ⚙️", lblLanguage: "اللغة:",
-                lblSoundStatus: "الصوت:", optSoundOn: "تشغيل 🔊", optSoundOff: "إيقاف 🔇",
+                lblSoundStatus: "الصوت:", optSoundOn: "🔊 تشغيل", optSoundOff: "🔇 إيقاف",
                 lblSoundVolume: "مستوى الصوت:",
-                lblDeviceMode: "وضع الجهاز:", optDesktop: "كمبيوتر 💻", optMobile: "هاتف 📱",
-                btnResetGame: "إعادة ضبط اللعبة 🔄", confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط اللعبة؟",
-                btnSoundShop: "متجر الأصوات 🎵", lblSoundShopTitle: "متجر الأصوات 🎵",
-                btnAnimationShop: "متجر الحركات ✨", lblAnimShopTitle: "متجر الحركات ✨",
+                lblDeviceMode: "وضع الجهاز:", optDesktop: "💻 كمبيوتر", optMobile: "📱 هاتف",
+                btnResetGame: "🔄 إعادة ضبط اللعبة", confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط اللعبة؟",
+                btnSoundShop: "🎵 متجر الأصوات", lblSoundShopTitle: "متجر الأصوات 🎵",
+                btnAnimationShop: "✨ متجر الحركات", lblAnimShopTitle: "متجر الحركات ✨",
                 lblCatClickSounds: "تأثيرات صوت النقرة", lblCatBgm: "موسيقى الخلفية", lblCatVolumeUpgrades: "ترقيات مستوى الصوت",
                 lblCatSpawnAnim: "حركات ظهور الدوائر", lblCatCircleVfx: "تأثيرات انفجار الدوائر", lblCatButtonAnim: "حركات الأزرار",
                 lblSpawnZoom: "تكبير الظهور", lblSpawnSpin: "دوران الظهور", lblSpawnBounce: "ارتداد مطاطي",
@@ -1347,32 +1350,32 @@
                 lblPopSound: "صوت البوب", lblLaserSound: "صوت الليزر", lblCoinSound: "صوت العملة",
                 lblBgmClassic: "حلقة كلاسيكية", lblBgmArcade: "إيقاع أركيد",
                 buy: "شراء", selected: "محدد ✅", select: "تحديد", purchased: "تم الشراء! ✅",
-                upgradeCost: "التكلفة: ", maxSpeed: "السرعة القصوى!", maxSize: "الحجم الأقصى!",
+                upgradeCost: "⬆️ ترقية (التكلفة: ", maxSpeed: "السرعة القصوى!", maxSize: "الحجم الأقصى!",
                 alertLoadSuccess: "تم تحميل اللعبة بنجاح! 🎮", alertLoadError: "خطأ! كود الحفظ غير صالح.",
                 alertCopied: "تم نسخ كود الحفظ إلى الحافظة! 📋",
-                btnAbout: "الصفحة الثانية 📄", 
+                btnAbout: "📄 الصفحة الثانية", 
                 lblButtonPageTitle: "الصفحة الثانية", 
-                btnOpenHelps: "المساعدة 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "خادم ديسكورد 🎧",
-                btnAlphaGame: "لعبة ألفا 🎮",
+                btnOpenHelps: "💡 المساعدة",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 خادم ديسكورد",
+                btnAlphaGame: "🎮 لعبة ألفا",
                 lblKeySpace: "مسافة:", descSpace: "النقر على الدائرة",
                 lblKeyCode: ". أو / :", descKeyCode: "بدء كتابة الكود",
                 descKeyA: "فتح/إغلاق القائمة", descKeyS: "فتح/إغلاق الإعدادات", descKeyD: "فتح/إغلاق الإحصائيات",
-                btnChallengeMode: "تحدي ⚡", lblChallengeTitle: "وضع التحدي ⚡",
-                btnModeNormal: "عادي 🟢", btnModePressColor: "اضغط على اللون 🎨",
+                btnChallengeMode: "⚡ تحدي", lblChallengeTitle: "وضع التحدي ⚡",
+                btnModeNormal: "🟢 عادي", btnModePressColor: "🎨 اضغط على اللون",
                 lblPressTheColorInstruction: "اضغط على اللون",
-                btnToggleAutoUpgrades: "النقر التلقائي 🤖", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:"
+                btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:"
             },
             zh: {
                 lblScore: "得分: ",
-                btnMenuOpen: "菜单 🛠️", btnMenuClose: "关闭 ❌",
-                btnStatsOpen: "统计 📊", btnStatsClose: "关闭 ❌",
-                btnSettingsOpen: "设置 ⚙️", btnSettingsClose: "关闭 ❌",
-                lblSaveLoad: "保存与加载 💾", btnDownload: "下载存档文件 (.txt)", btnLoad: "从TXT加载",
-                btnOpenTextSave: "导出代码 📋", btnOpenTextLoad: "导入代码 📥",
+                btnMenuOpen: "🛠️ 菜单", btnMenuClose: "❌ 关闭",
+                btnStatsOpen: "📊 统计", btnStatsClose: "❌ 关闭",
+                btnSettingsOpen: "⚙️ 设置", btnSettingsClose: "❌ 关闭",
+                lblSaveLoad: "保存与加载 💾", btnDownload: "💾 下载存档文件 (.txt)", btnLoad: "📂 从TXT加载",
+                btnOpenTextSave: "📋 导出代码", btnOpenTextLoad: "📥 导入代码",
                 lblExportTitle: "导出存档代码", lblImportTitle: "导入存档代码",
-                btnCopyClipboard: "复制到剪贴板 📋", btnApplyLoadCode: "加载存档 🎮",
+                btnCopyClipboard: "📋 复制到剪贴板", btnApplyLoadCode: "🎮 加载存档",
                 lblUpgrades: "升级 ⬆️", lblMaxCircles: "最大圆圈数:", lblPointsPerCatch: "每抓得分:",
                 lblSpawnRate: "生成频率:", lblEvery: "每 ", lblSec: "秒",
                 lblMinSize: "最小尺寸:", lblPx: "像素",
@@ -1382,12 +1385,12 @@
                 lblStatMaxCircles: "最大圆圈数:", lblStatPoints: "分数 / 抓取:", lblStatMinSize: "最小尺寸 (px):", lblStatSpawnRate: "生成率 (ms):",
                 lblStatLifespan: "存在时间 (ms):", lblStatAutoAmount: "自动点击数/操作:", lblStatAutoInterval: "自动间隔 (ms):",
                 lblSettingsTitle: "设置 ⚙️", lblLanguage: "语言:",
-                lblSoundStatus: "声音:", optSoundOn: "开启 🔊", optSoundOff: "关闭 🔇",
+                lblSoundStatus: "声音:", optSoundOn: "🔊 开启", optSoundOff: "🔇 关闭",
                 lblSoundVolume: "音量:",
-                lblDeviceMode: "设备模式:", optDesktop: "电脑 💻", optMobile: "手机 📱",
-                btnResetGame: "重置游戏 🔄", confirmReset: "确定要重置游戏吗？",
-                btnSoundShop: "声音商店 🎵", lblSoundShopTitle: "声音商店 🎵",
-                btnAnimationShop: "特效商店 ✨", lblAnimShopTitle: "动画特效商店 ✨",
+                lblDeviceMode: "设备模式:", optDesktop: "💻 电脑", optMobile: "📱 手机",
+                btnResetGame: "🔄 重置游戏", confirmReset: "确定要重置游戏吗？",
+                btnSoundShop: "🎵 声音商店", lblSoundShopTitle: "声音商店 🎵",
+                btnAnimationShop: "✨ 特效商店", lblAnimShopTitle: "动画特效商店 ✨",
                 lblCatClickSounds: "点击音效", lblCatBgm: "背景音乐", lblCatVolumeUpgrades: "音量升级",
                 lblCatSpawnAnim: "圆圈生成动画", lblCatCircleVfx: "圆圈消除特效 (VFX)", lblCatButtonAnim: "按钮点击动画",
                 lblSpawnZoom: "缩放弹出", lblSpawnSpin: "旋转出现", lblSpawnBounce: "弹性弹跳",
@@ -1396,32 +1399,32 @@
                 lblPopSound: "气泡声", lblLaserSound: "激光声", lblCoinSound: "金币声",
                 lblBgmClassic: "经典循环", lblBgmArcade: "街机节奏",
                 buy: "购买", selected: "已选择 ✅", select: "选择", purchased: "已购买！ ✅",
-                upgradeCost: "花费: ", maxSpeed: "最高速度！", maxSize: "最大尺寸！",
+                upgradeCost: "⬆️ 升级 (花费: ", maxSpeed: "最高速度！", maxSize: "最大尺寸！",
                 alertLoadSuccess: "游戏加载成功！ 🎮", alertLoadError: "错误！存档代码无效。",
                 alertCopied: "存档代码已复制到剪贴板！ 📋",
-                btnAbout: "第二页 📄", 
+                btnAbout: "📄 第二页", 
                 lblButtonPageTitle: "第二页", 
-                btnOpenHelps: "帮助 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Discord 服务器 🎧",
-                btnAlphaGame: "Alpha 游戏 🎮",
+                btnOpenHelps: "💡 帮助",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Discord 服务器",
+                btnAlphaGame: "🎮 Alpha 游戏",
                 lblKeySpace: "空格键:", descSpace: "点击悬停的圆圈",
                 lblKeyCode: ". 或 / :", descKeyCode: "开始输入代码",
                 descKeyA: "打开/关闭菜单", descKeyS: "打开/关闭设置", descKeyD: "打开/关闭统计",
-                btnChallengeMode: "挑战 ⚡", lblChallengeTitle: "挑战模式 ⚡",
-                btnModeNormal: "普通 🟢", btnModePressColor: "点击颜色 🎨",
+                btnChallengeMode: "⚡ 挑战", lblChallengeTitle: "挑战模式 ⚡",
+                btnModeNormal: "🟢 普通", btnModePressColor: "🎨 点击颜色",
                 lblPressTheColorInstruction: "点击颜色",
-                btnToggleAutoUpgrades: "自动点击器 🤖", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:"
+                btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:"
             },
             ja: {
                 lblScore: "スコア: ",
-                btnMenuOpen: "メニュー 🛠️", btnMenuClose: "閉じる ❌",
-                btnStatsOpen: "統計 📊", btnStatsClose: "閉じる ❌",
-                btnSettingsOpen: "設定 ⚙️", btnSettingsClose: "閉じる ❌",
-                lblSaveLoad: "セーブとロード 💾", btnDownload: "セーブファイルをダウンロード (.txt)", btnLoad: "TXTからロード",
-                btnOpenTextSave: "コードをエクスポート 📋", btnOpenTextLoad: "コードをインポート 📥",
+                btnMenuOpen: "🛠️ メニュー", btnMenuClose: "❌ 閉じる",
+                btnStatsOpen: "📊 統計", btnStatsClose: "❌ 閉じる",
+                btnSettingsOpen: "⚙️ 設定", btnSettingsClose: "❌ 閉じる",
+                lblSaveLoad: "セーブとロード 💾", btnDownload: "💾 セーブファイルをダウンロード (.txt)", btnLoad: "📂 TXTからロード",
+                btnOpenTextSave: "📋 コードをエクスポート", btnOpenTextLoad: "📥 コードをインポート",
                 lblExportTitle: "セーブコードのエクスポート", lblImportTitle: "セーブコードのインポート",
-                btnCopyClipboard: "クリップボードにコピー 📋", btnApplyLoadCode: "セーブをロード 🎮",
+                btnCopyClipboard: "📋 クリップボードにコピー", btnApplyLoadCode: "🎮 セーブをロード",
                 lblUpgrades: "アップグレード ⬆️", lblMaxCircles: "最大円数:", lblPointsPerCatch: "獲得ポイント/個:",
                 lblSpawnRate: "出現頻度:", lblEvery: "", lblSec: "秒ごと",
                 lblMinSize: "最小サイズ:", lblPx: "px",
@@ -1431,12 +1434,12 @@
                 lblStatMaxCircles: "最大円数:", lblStatPoints: "ポイント/獲得:", lblStatMinSize: "最小サイズ (px):", lblStatSpawnRate: "出現率 (ms):",
                 lblStatLifespan: "寿命 (ms):", lblStatAutoAmount: "オートクリック/回:", lblStatAutoInterval: "オート間隔 (ms):",
                 lblSettingsTitle: "設定 ⚙️", lblLanguage: "言語:",
-                lblSoundStatus: "サウンド:", optSoundOn: "オン 🔊", optSoundOff: "オフ 🔇",
+                lblSoundStatus: "サウンド:", optSoundOn: "🔊 オン", optSoundOff: "🔇 オフ",
                 lblSoundVolume: "音量:",
-                lblDeviceMode: "デバイスモード:", optDesktop: "デスクトップ 💻", optMobile: "モバイル 📱",
-                btnResetGame: "ゲームリセット 🔄", confirmReset: "本当にゲームをリセットしますか？",
-                btnSoundShop: "サウンドショップ 🎵", lblSoundShopTitle: "サウンドショップ 🎵",
-                btnAnimationShop: "アニメショップ ✨", lblAnimShopTitle: "アニメーションショップ ✨",
+                lblDeviceMode: "デバイスモード:", optDesktop: "💻 デスクトップ", optMobile: "📱 モバイル",
+                btnResetGame: "🔄 ゲームリセット", confirmReset: "本当にゲームをリセットしますか？",
+                btnSoundShop: "🎵 サウンドショップ", lblSoundShopTitle: "サウンドショップ 🎵",
+                btnAnimationShop: "✨ アニメショップ", lblAnimShopTitle: "アニメーションショップ ✨",
                 lblCatClickSounds: "クリック効果音", lblCatBgm: "BGM", lblCatVolumeUpgrades: "音量アップグレード",
                 lblCatSpawnAnim: "円出現アニメーション", lblCatCircleVfx: "円消滅エフェクト (VFX)", lblCatButtonAnim: "ボタンクリックアニメーション",
                 lblSpawnZoom: "ズームポップ", lblSpawnSpin: "スピンイン", lblSpawnBounce: "弾性バウンス",
@@ -1445,22 +1448,22 @@
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
                 lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
                 buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
-                upgradeCost: "コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
+                upgradeCost: "⬆️ アップグレード (コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
                 alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
                 alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
-                btnAbout: "2ページ目 📄", 
+                btnAbout: "📄 2ページ目", 
                 lblButtonPageTitle: "2ページ目", 
-                btnOpenHelps: "ヘルプ 💡",
-                btnDevSupport: "Developer Support 💬",
-                btnDiscord: "Discord サーバー 🎧",
-                btnAlphaGame: "Alpha ゲーム 🎮",
+                btnOpenHelps: "💡 ヘルプ",
+                btnDevSupport: "💬 Developer Support",
+                btnDiscord: "🎧 Discord サーバー",
+                btnAlphaGame: "🎮 Alpha ゲーム",
                 lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
-                btnChallengeMode: "チャレンジ ⚡", lblChallengeTitle: "チャレンジモード ⚡",
-                btnModeNormal: "ノーマル 🟢", btnModePressColor: "色を押す 🎨",
+                btnChallengeMode: "⚡ チャレンジ", lblChallengeTitle: "チャレンジモード ⚡",
+                btnModeNormal: "🟢 ノーマル", btnModePressColor: "🎨 色を押す",
                 lblPressTheColorInstruction: "色を押す",
-                btnToggleAutoUpgrades: "オートクリッカー 🤖", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:"
+                btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:"
             }
         };
 
@@ -2133,7 +2136,7 @@
             document.getElementById('lblBgmClassic').innerText = text.lblBgmClassic;
             document.getElementById('lblBgmArcade').innerText = text.lblBgmArcade;
 
-            document.getElementById('btnAbout').innerText = text.btnAbout;
+            btnAbout.innerText = text.btnAbout;
             document.getElementById('lblButtonPageTitle').innerText = text.lblButtonPageTitle;
             document.getElementById('btnOpenHelps').innerText = text.btnOpenHelps;
             
@@ -2141,7 +2144,7 @@
             document.getElementById('btnDiscord').innerText = text.btnDiscord;
             document.getElementById('btnAlphaGame').innerText = text.btnAlphaGame;
 
-            document.getElementById('btnChallengeMode').innerText = text.btnChallengeMode;
+            btnChallengeMode.innerText = text.btnChallengeMode;
             document.getElementById('lblChallengeTitle').innerText = text.lblChallengeTitle;
             document.getElementById('btnModeNormal').innerText = text.btnModeNormal;
             document.getElementById('btnModePressColor').innerText = text.btnModePressColor;
@@ -2214,7 +2217,7 @@
 
         document.addEventListener('click', function(e) {
             initAudio();
-            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('bottom-btn') || e.target.classList.contains('modal-menu-btn')) {
+            if (e.target.classList.contains('main-top-btn')) {
                 triggerButtonAnimation(e.target);
             }
         }, { once: false });
@@ -2680,7 +2683,6 @@
                 btnAutoInterval.innerHTML = `${text.upgradeCost}<span id="costAutoInterval">${state.costAutoInterval}</span>)`;
             }
 
-            // --- Sound Shop UI Management ---
             if (!state.unlockedSounds.pop) {
                 btnBuyPop.style.display = 'inline-block';
                 btnBuyPop.disabled = state.score < state.costs.pop;
@@ -2766,7 +2768,6 @@
                 }
             }
 
-            // --- Animation Shop UI Management ---
             const spawnAnimList = ['zoom', 'spin', 'bounce'];
             const spawnBuyBtns = { zoom: btnBuySpawnZoom, spin: btnBuySpawnSpin, bounce: btnBuySpawnBounce };
             const spawnSelBtns = { zoom: btnSelectSpawnZoom, spin: btnSelectSpawnSpin, bounce: btnSelectSpawnBounce };
@@ -2892,7 +2893,6 @@
             const circle = document.createElement('div');
             circle.classList.add('circle');
             
-            // Apply Spawn Animation Class
             if (state.activeSpawnAnim === 'zoom') {
                 circle.classList.add('spawn-zoom');
             } else if (state.activeSpawnAnim === 'spin') {
@@ -2924,7 +2924,6 @@
             circle.style.left = safeX + 'px';
             circle.style.top = safeY + 'px';
 
-            // Timer display inside the circle (Disabled if Press the Color mode is active)
             let timeLeft = (state.challengeMode === 'press_color' || state.circleLifespanMs === 'infinite') ? null : state.circleLifespanMs;
             if (timeLeft !== null) {
                 circle.innerText = (timeLeft / 1000).toFixed(1) + 's';
@@ -2979,7 +2978,6 @@
             currentCircles++;
             updateStatsUI(); 
 
-            // Lifespan & Countdown Logic (Only if not in Press the Color mode and lifespan is finite)
             if (state.challengeMode !== 'press_color' && state.circleLifespanMs !== 'infinite') {
                 const startTime = Date.now();
                 const totalDuration = state.circleLifespanMs;
