@@ -68,10 +68,28 @@
         }
         #btnSoundShop:hover { background: #C2185B; }
 
-        #btnChallengeMode {
+        #btnAnimationShop {
             position: absolute;
             top: 10px;
             left: 235px; 
+            z-index: 100;
+            background: #9C27B0;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: background 0.2s;
+        }
+        #btnAnimationShop:hover { background: #7B1FA2; }
+
+        #btnChallengeMode {
+            position: absolute;
+            top: 50px;
+            left: 10px; 
             z-index: 100;
             background: #FF9800;
             color: white;
@@ -106,7 +124,7 @@
 
         #challenge-hud {
             position: absolute;
-            top: 75px;
+            top: 85px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 26px;
@@ -145,7 +163,10 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .bottom-btn:active {
+            transform: scale(0.92);
         }
 
         #menu-toggle-btn {
@@ -186,7 +207,7 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        #button-page-modal, #challenge-modal {
+        #button-page-modal, #challenge-modal, #animation-shop-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -198,15 +219,15 @@
             display: none;
             justify-content: center;
             align-items: center;
-            pointer-events: none; /* מתוקן: מונע חסימת לחיצות כאשר החלון סגור */
+            pointer-events: none;
         }
 
-        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active {
+        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active, #animation-shop-modal.active {
             display: flex;
             pointer-events: auto;
         }
 
-        #btnCloseButtonPage, #btnCloseChallengeModal {
+        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop {
             position: absolute;
             top: 20px;
             right: 20px; 
@@ -218,9 +239,9 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover { transform: scale(1.2); }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover { transform: scale(1.2); }
 
-        #button-page-content, #challenge-modal-content {
+        #button-page-content, #challenge-modal-content, #animation-shop-content {
             background: rgba(30, 30, 40, 0.95);
             padding: 40px;
             border-radius: 20px;
@@ -232,8 +253,10 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
         }
         #challenge-modal-content { border-color: #FF9800; }
+        #animation-shop-content { border-color: #9C27B0; }
 
         #button-page-content h2, #challenge-modal-content h2 {
             margin-top: 0;
@@ -460,6 +483,81 @@
         }
         @keyframes popIn { to { transform: scale(1); } }
 
+        /* --- Click Animations VFX --- */
+        .vfx-explosion {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid #ffeb3b;
+            transform: translate(-50%, -50%) scale(0.2);
+            pointer-events: none;
+            animation: vfxExplodeAnim 0.4s ease-out forwards;
+            z-index: 10;
+        }
+        @keyframes vfxExplodeAnim {
+            0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; box-shadow: 0 0 10px #ffeb3b; }
+            100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; box-shadow: 0 0 30px #ff9800; }
+        }
+
+        .vfx-shockwave {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(33,150,243,0.5) 60%, transparent 100%);
+            transform: translate(-50%, -50%) scale(0.1);
+            pointer-events: none;
+            animation: vfxShockAnim 0.5s cubic-bezier(0, .9, .3, 1) forwards;
+            z-index: 10;
+        }
+        @keyframes vfxShockAnim {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(3.5); opacity: 0; }
+        }
+
+        .vfx-fireworks {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+        }
+        .firework-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4081;
+            animation: vfxFireworkAnim 0.5s ease-out forwards;
+        }
+        @keyframes vfxFireworkAnim {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+        }
+
+        /* --- Button Click Animations --- */
+        .anim-pulse { animation: btnPulseAnim 0.3s ease; }
+        @keyframes btnPulseAnim {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); filter: brightness(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .anim-shake { animation: btnShakeAnim 0.3s ease; }
+        @keyframes btnShakeAnim {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-6px) rotate(-3deg); }
+            40% { transform: translateX(6px) rotate(3deg); }
+            60% { transform: translateX(-4px) rotate(-2deg); }
+            80% { transform: translateX(4px) rotate(2deg); }
+            100% { transform: translateX(0); }
+        }
+
+        .anim-bounce { animation: btnBounceAnim 0.4s ease; }
+        @keyframes btnBounceAnim {
+            0% { transform: translateY(0); }
+            30% { transform: translateY(-12px); }
+            50% { transform: translateY(0); }
+            70% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+
         button.menu-btn {
             width: 100%;
             padding: 12px;
@@ -523,12 +621,13 @@
         body.mobile-mode #challenge-hud {
             font-size: 16px;
             padding: 5px 12px;
-            top: 48px;
+            top: 55px;
         }
         body.mobile-mode #devCodeInput { top: 48px; width: 65px; font-size: 12px; padding: 4px; } 
         body.mobile-mode #btnAbout { top: 48px; padding: 5px 8px; font-size: 12px; }
         body.mobile-mode #btnSoundShop { top: 48px; left: 88px; padding: 5px 8px; font-size: 12px; }
-        body.mobile-mode #btnChallengeMode { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; }
+        body.mobile-mode #btnAnimationShop { top: 48px; left: 172px; padding: 5px 8px; font-size: 12px; width: auto; }
+        body.mobile-mode #btnChallengeMode { top: 82px; left: 10px; padding: 5px 8px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -536,6 +635,7 @@
     <input type="text" id="devCodeInput" placeholder="Code...">
     <button id="btnAbout" onclick="toggleButtonPage()">Second Page 📄</button>
     <button id="btnSoundShop" onclick="toggleSoundShop()">Sound Shop 🎵</button>
+    <button id="btnAnimationShop" onclick="toggleAnimationShop()">Anim Shop ✨</button>
     <button id="btnChallengeMode" onclick="toggleChallengeModal()">Challenge ⚡</button>
 
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
@@ -554,6 +654,62 @@
             <h2 id="lblChallengeTitle">Challenge Mode ⚡</h2>
             <button class="modal-menu-btn" id="btnModeNormal" onclick="setChallengeMode('normal')" style="background: #4CAF50;">Normal 🟢</button>
             <button class="modal-menu-btn" id="btnModePressColor" onclick="setChallengeMode('press_color')" style="background: #E91E63;">Press the Color 🎨</button>
+        </div>
+    </div>
+
+    <!-- Animation Shop Modal -->
+    <div id="animation-shop-modal">
+        <div id="animation-shop-content">
+            <button id="btnCloseAnimationShop" onclick="toggleAnimationShop()">❌</button>
+            <h2 id="lblAnimShopTitle" style="color: #E040FB; margin-top: 0;">Animation Shop ✨</h2>
+            
+            <div class="category-title" id="lblCatCircleVfx">Circle Pop Effects (VFX)</div>
+            
+            <div class="sound-row">
+                <span id="lblVfxExplosion">Explosion Ring</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyVfxExplosion" onclick="buyAnimationEffect('explosion', 40)">Buy (40)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectVfxExplosion" onclick="selectAnimationEffect('explosion')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblVfxShockwave">Shockwave Wave</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyVfxShockwave" onclick="buyAnimationEffect('shockwave', 90)">Buy (90)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectVfxShockwave" onclick="selectAnimationEffect('shockwave')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblVfxFireworks">Fireworks Shower</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyVfxFireworks" onclick="buyAnimationEffect('fireworks', 150)">Buy (150)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectVfxFireworks" onclick="selectAnimationEffect('fireworks')" style="display:none;">Select</button>
+                </div>
+            </div>
+
+            <div class="category-title" id="lblCatButtonAnim">Button Click Animations</div>
+            
+            <div class="sound-row">
+                <span id="lblBtnAnimPulse">Pulse Glow</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAnimPulse" onclick="buyButtonAnim('pulse', 50)">Buy (50)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectAnimPulse" onclick="selectButtonAnim('pulse')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblBtnAnimShake">Quick Shake</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAnimShake" onclick="buyButtonAnim('shake', 100)">Buy (100)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectAnimShake" onclick="selectButtonAnim('shake')" style="display:none;">Select</button>
+                </div>
+            </div>
+            <div class="sound-row">
+                <span id="lblBtnAnimBounce">Spring Bounce</span>
+                <div style="display: flex; gap: 5px;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAnimBounce" onclick="buyButtonAnim('bounce', 180)">Buy (180)</button>
+                    <button class="shop-action-btn btn-select" id="btnSelectAnimBounce" onclick="selectButtonAnim('bounce')" style="display:none;">Select</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -864,7 +1020,11 @@
                 lblDeviceMode: "Device Mode:", optDesktop: "Desktop 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Reset Game 🔄", confirmReset: "Are you sure you want to reset the game?",
                 btnSoundShop: "Sound Shop 🎵", lblSoundShopTitle: "Sound Shop 🎵",
+                btnAnimationShop: "Anim Shop ✨", lblAnimShopTitle: "Animation Shop ✨",
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
+                lblCatCircleVfx: "Circle Pop Effects (VFX)", lblCatButtonAnim: "Button Click Animations",
+                lblVfxExplosion: "Explosion Ring", lblVfxShockwave: "Shockwave Wave", lblVfxFireworks: "Fireworks Shower",
+                lblBtnAnimPulse: "Pulse Glow", lblBtnAnimShake: "Quick Shake", lblBtnAnimBounce: "Spring Bounce",
                 lblPopSound: "Pop Sound", lblLaserSound: "Laser Sound", lblCoinSound: "Coin Sound",
                 lblBgmClassic: "Classic Loop", lblBgmArcade: "Arcade Beat",
                 buy: "Buy", selected: "Selected ✅", select: "Select", purchased: "Purchased! ✅",
@@ -908,7 +1068,11 @@
                 lblDeviceMode: "מצב מסך:", optDesktop: "מחשב 💻", optMobile: "טלפון 📱",
                 btnResetGame: "איפוס משחק 🔄", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 btnSoundShop: "חנות סאונד 🎵", lblSoundShopTitle: "חנות סאונד 🎵",
+                btnAnimationShop: "חנות אנימציות ✨", lblAnimShopTitle: "חנות אנימציות ✨",
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
+                lblCatCircleVfx: "אפקטי פיצוץ עיגולים (VFX)", lblCatButtonAnim: "אנימציות לחיצה על כפתורים",
+                lblVfxExplosion: "טבעת פיצוץ", lblVfxShockwave: "גל הדף", lblVfxFireworks: "מטר זיקוקים",
+                lblBtnAnimPulse: "פעימת זוהר", lblBtnAnimShake: "רעידה מהירה", lblBtnAnimBounce: "קפיץ קופצני",
                 lblPopSound: "סאונד פופ", lblLaserSound: "סאונד לייזר", lblCoinSound: "סאונד מטבע",
                 lblBgmClassic: "קלאסי (Classic)", lblBgmArcade: "ארקייד (Arcade)",
                 buy: "קנה", selected: "נבחר ✅", select: "בחר", purchased: "נרכש! ✅",
@@ -952,7 +1116,11 @@
                 lblDeviceMode: "Modo de dispositivo:", optDesktop: "Escritorio 💻", optMobile: "Móvil 📱",
                 btnResetGame: "Reiniciar juego 🔄", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
                 btnSoundShop: "Tienda de sonidos 🎵", lblSoundShopTitle: "Tienda de sonidos 🎵",
+                btnAnimationShop: "Tienda Anim ✨", lblAnimShopTitle: "Tienda de Animaciones ✨",
                 lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
+                lblCatCircleVfx: "Efectos de explosión de círculos", lblCatButtonAnim: "Animaciones de botones",
+                lblVfxExplosion: "Anillo de Explosión", lblVfxShockwave: "Onda de Choque", lblVfxFireworks: "Lluvia de Fuegos",
+                lblBtnAnimPulse: "Pulso de Brillo", lblBtnAnimShake: "Sacudida Rápida", lblBtnAnimBounce: "Rebote Elástico",
                 lblPopSound: "Sonido Pop", lblLaserSound: "Sonido Láser", lblCoinSound: "Sonido Moneda",
                 lblBgmClassic: "Bucle Clásico", lblBgmArcade: "Ritmo Arcade",
                 buy: "Comprar", selected: "Seleccionado ✅", select: "Seleccionar", purchased: "¡Comprado! ✅",
@@ -996,7 +1164,11 @@
                 lblDeviceMode: "Mode d'appareil :", optDesktop: "Bureau 💻", optMobile: "Mobile 📱",
                 btnResetGame: "Réinitialiser 🔄", confirmReset: "Êtes-vous sûr de vouloir réinitialiser ?",
                 btnSoundShop: "Boutique audio 🎵", lblSoundShopTitle: "Boutique audio 🎵",
+                btnAnimationShop: "Boutique Anim ✨", lblAnimShopTitle: "Boutique d'Animations ✨",
                 lblCatClickSounds: "Effets de clic", lblCatBgm: "Musique de fond", lblCatVolumeUpgrades: "Améliorations de volume",
+                lblCatCircleVfx: "Effets d'explosion de cercles", lblCatButtonAnim: "Animations de boutons",
+                lblVfxExplosion: "Anneau d'Explosion", lblVfxShockwave: "Onde de Choc", lblVfxFireworks: "Pluie de Feux",
+                lblBtnAnimPulse: "Pulsion Lumineuse", lblBtnAnimShake: "Secousse Rapide", lblBtnAnimBounce: "Rebond Élastique",
                 lblPopSound: "Son Pop", lblLaserSound: "Son Laser", lblCoinSound: "Son Pièce",
                 lblBgmClassic: "Boucle classique", lblBgmArcade: "Rythme Arcade",
                 buy: "Acheter", selected: "Sélectionné ✅", select: "Sélectionner", purchased: "Acheté ! ✅",
@@ -1040,7 +1212,11 @@
                 lblDeviceMode: "Gerätemodus:", optDesktop: "Desktop 💻", optMobile: "Mobil 📱",
                 btnResetGame: "Spiel zurücksetzen 🔄", confirmReset: "Möchtest du das Spiel wirklich zurücksetzen?",
                 btnSoundShop: "Sound-Shop 🎵", lblSoundShopTitle: "Sound-Shop 🎵",
+                btnAnimationShop: "Anim-Shop ✨", lblAnimShopTitle: "Animations-Shop ✨",
                 lblCatClickSounds: "Klick-Soundeffekte", lblCatBgm: "Hintergrundmusik", lblCatVolumeUpgrades: "Lautstärke-Upgrades",
+                lblCatCircleVfx: "Kreis-Explosions-Effekte", lblCatButtonAnim: "Button-Klick-Animationen",
+                lblVfxExplosion: "Explosionsring", lblVfxShockwave: "Schockwelle", lblVfxFireworks: "Feuerwerksregen",
+                lblBtnAnimPulse: "Leucht-Puls", lblBtnAnimShake: "Schnelles Beben", lblBtnAnimBounce: "Federnder Sprung",
                 lblPopSound: "Pop-Sound", lblLaserSound: "Laser-Sound", lblCoinSound: "Münz-Sound",
                 lblBgmClassic: "Klassischer Loop", lblBgmArcade: "Arcade-Beat",
                 buy: "Kaufen", selected: "Ausgewählt ✅", select: "Auswählen", purchased: "Gekauft! ✅",
@@ -1084,7 +1260,11 @@
                 lblDeviceMode: "Режим устройства:", optDesktop: "ПК 💻", optMobile: "Телефон 📱",
                 btnResetGame: "Сбросить игру 🔄", confirmReset: "Вы уверены, что хотите сбросить игру?",
                 btnSoundShop: "Магазин звуков 🎵", lblSoundShopTitle: "Магазин звуков 🎵",
+                btnAnimationShop: "Магазин Аним ✨", lblAnimShopTitle: "Магазин Анимаций ✨",
                 lblCatClickSounds: "Звуки клика", lblCatBgm: "Фоновая музыка", lblCatVolumeUpgrades: "Улучшения громкости",
+                lblCatCircleVfx: "Эффекты взрыва кругов", lblCatButtonAnim: "Анимации кнопок",
+                lblVfxExplosion: "Кольцо Взрыва", lblVfxShockwave: "Ударная Волна", lblVfxFireworks: "Салют",
+                lblBtnAnimPulse: "Пульс Света", lblBtnAnimShake: "Быстрая Тряска", lblBtnAnimBounce: "Пружинящий Прыжок",
                 lblPopSound: "Звук Поп", lblLaserSound: "Звук Лазер", lblCoinSound: "Звук Монета",
                 lblBgmClassic: "Классический луп", lblBgmArcade: "Аркадный бит",
                 buy: "Купить", selected: "Выбрано ✅", select: "Выбрать", purchased: "Куплено! ✅",
@@ -1128,7 +1308,11 @@
                 lblDeviceMode: "وضع الجهاز:", optDesktop: "كمبيوتر 💻", optMobile: "هاتف 📱",
                 btnResetGame: "إعادة ضبط اللعبة 🔄", confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط اللعبة؟",
                 btnSoundShop: "متجر الأصوات 🎵", lblSoundShopTitle: "متجر الأصوات 🎵",
+                btnAnimationShop: "متجر الحركات ✨", lblAnimShopTitle: "متجر الحركات ✨",
                 lblCatClickSounds: "تأثيرات صوت النقرة", lblCatBgm: "موسيقى الخلفية", lblCatVolumeUpgrades: "ترقيات مستوى الصوت",
+                lblCatCircleVfx: "تأثيرات انفجار الدوائر", lblCatButtonAnim: "حركات الأزرار",
+                lblVfxExplosion: "حلقة الانفجار", lblVfxShockwave: "موجة الصدمة", lblVfxFireworks: "زخات الألعاب النارية",
+                lblBtnAnimPulse: "نبض الإضاءة", lblBtnAnimShake: "اهتزاز سريع", lblBtnAnimBounce: "ارتداد مطاطي",
                 lblPopSound: "صوت البوب", lblLaserSound: "صوت الليزر", lblCoinSound: "صوت العملة",
                 lblBgmClassic: "حلقة كلاسيكية", lblBgmArcade: "إيقاع أركيد",
                 buy: "شراء", selected: "محدد ✅", select: "تحديد", purchased: "تم الشراء! ✅",
@@ -1172,7 +1356,11 @@
                 lblDeviceMode: "设备模式:", optDesktop: "电脑 💻", optMobile: "手机 📱",
                 btnResetGame: "重置游戏 🔄", confirmReset: "确定要重置游戏吗？",
                 btnSoundShop: "声音商店 🎵", lblSoundShopTitle: "声音商店 🎵",
+                btnAnimationShop: "特效商店 ✨", lblAnimShopTitle: "动画特效商店 ✨",
                 lblCatClickSounds: "点击音效", lblCatBgm: "背景音乐", lblCatVolumeUpgrades: "音量升级",
+                lblCatCircleVfx: "圆圈消除特效 (VFX)", lblCatButtonAnim: "按钮点击动画",
+                lblVfxExplosion: "爆炸波环", lblVfxShockwave: "冲击波", lblVfxFireworks: "烟花绽放",
+                lblBtnAnimPulse: "发光脉冲", lblBtnAnimShake: "快速震动", lblBtnAnimBounce: "弹性跳跃",
                 lblPopSound: "气泡声", lblLaserSound: "激光声", lblCoinSound: "金币声",
                 lblBgmClassic: "经典循环", lblBgmArcade: "街机节奏",
                 buy: "购买", selected: "已选择 ✅", select: "选择", purchased: "已购买！ ✅",
@@ -1216,7 +1404,11 @@
                 lblDeviceMode: "デバイスモード:", optDesktop: "デスクトップ 💻", optMobile: "モバイル 📱",
                 btnResetGame: "ゲームリセット 🔄", confirmReset: "本当にゲームをリセットしますか？",
                 btnSoundShop: "サウンドショップ 🎵", lblSoundShopTitle: "サウンドショップ 🎵",
+                btnAnimationShop: "アニメショップ ✨", lblAnimShopTitle: "アニメーションショップ ✨",
                 lblCatClickSounds: "クリック効果音", lblCatBgm: "BGM", lblCatVolumeUpgrades: "音量アップグレード",
+                lblCatCircleVfx: "円消滅エフェクト (VFX)", lblCatButtonAnim: "ボタンクリックアニメーション",
+                lblVfxExplosion: "爆発リング", lblVfxShockwave: "衝撃波", lblVfxFireworks: "花火シャワー",
+                lblBtnAnimPulse: "発光パルス", lblBtnAnimShake: "クイックシェイク", lblBtnAnimBounce: "スプリングバウンス",
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
                 lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
                 buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
@@ -1228,7 +1420,7 @@
                 btnOpenHelps: "ヘルプ 💡",
                 btnDevSupport: "Developer Support 💬",
                 btnDiscord: "Discord サーバー 🎧",
-                btnAlphaGame: "アルファゲーム 🎮",
+                btnAlphaGame: "Alpha ゲーム 🎮",
                 lblKeySpace: "スペースキー:", descSpace: "ホバーした円をクリック",
                 lblKeyCode: ". または / :", descKeyCode: "コード入力を開始",
                 descKeyA: "Open/Close Menu", descKeyS: "Open/Close Settings", descKeyD: "Open/Close Stats",
@@ -1265,9 +1457,13 @@
             unlockedSounds: { pop: false, laser: false, coin: false },
             unlockedBgm: { classic: false, arcade: false },
             unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+            unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
+            unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
             activeSound: 'none',
             activeBgm: 'none',
-            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
+            activeVfx: 'none',
+            activeBtnAnim: 'none',
+            costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
         };
 
         let currentCircles = 0;
@@ -1297,7 +1493,9 @@
         const btnAutoInterval = document.getElementById('btnAutoInterval');
         const btnResetGame = document.getElementById('btnResetGame');
         const btnSoundShop = document.getElementById('btnSoundShop');
+        const btnAnimationShop = document.getElementById('btnAnimationShop');
         const soundShopModal = document.getElementById('sound-shop-modal');
+        const animationShopModal = document.getElementById('animation-shop-modal');
         const challengeModal = document.getElementById('challenge-modal');
         const challengeHud = document.getElementById('challenge-hud');
         const targetColorNameDisplay = document.getElementById('targetColorName');
@@ -1316,6 +1514,20 @@
         const btnSelectClassicBgm = document.getElementById('btnSelectClassicBgm');
         const btnBuyArcadeBgm = document.getElementById('btnBuyArcadeBgm');
         const btnSelectArcadeBgm = document.getElementById('btnSelectArcadeBgm');
+
+        const btnBuyVfxExplosion = document.getElementById('btnBuyVfxExplosion');
+        const btnSelectVfxExplosion = document.getElementById('btnSelectVfxExplosion');
+        const btnBuyVfxShockwave = document.getElementById('btnBuyVfxShockwave');
+        const btnSelectVfxShockwave = document.getElementById('btnSelectVfxShockwave');
+        const btnBuyVfxFireworks = document.getElementById('btnBuyVfxFireworks');
+        const btnSelectVfxFireworks = document.getElementById('btnSelectVfxFireworks');
+
+        const btnBuyAnimPulse = document.getElementById('btnBuyAnimPulse');
+        const btnSelectAnimPulse = document.getElementById('btnSelectAnimPulse');
+        const btnBuyAnimShake = document.getElementById('btnBuyAnimShake');
+        const btnSelectAnimShake = document.getElementById('btnSelectAnimShake');
+        const btnBuyAnimBounce = document.getElementById('btnBuyAnimBounce');
+        const btnSelectAnimBounce = document.getElementById('btnSelectAnimBounce');
 
         const btnBuyVol200 = document.getElementById('btnBuyVol200');
         const btnBuyVol300 = document.getElementById('btnBuyVol300');
@@ -1369,14 +1581,64 @@
         const editAutoAmount = document.getElementById('editAutoAmount');
         const editAutoInterval = document.getElementById('editAutoInterval');
 
+        function triggerButtonAnimation(element) {
+            if (!element || state.activeBtnAnim === 'none') return;
+            element.classList.remove('anim-pulse', 'anim-shake', 'anim-bounce');
+            void element.offsetWidth; // Trigger reflow
+            if (state.activeBtnAnim === 'pulse') {
+                element.classList.add('anim-pulse');
+            } else if (state.activeBtnAnim === 'shake') {
+                element.classList.add('anim-shake');
+            } else if (state.activeBtnAnim === 'bounce') {
+                element.classList.add('anim-bounce');
+            }
+        }
+
+        function triggerCircleVfx(x, y) {
+            if (state.activeVfx === 'none') return;
+            const vfxElem = document.createElement('div');
+            vfxElem.style.left = x + 'px';
+            vfxElem.style.top = y + 'px';
+
+            if (state.activeVfx === 'explosion') {
+                vfxElem.className = 'vfx-explosion';
+                vfxElem.style.width = '60px';
+                vfxElem.style.height = '60px';
+                gameArea.appendChild(vfxElem);
+                setTimeout(() => vfxElem.remove(), 400);
+            } else if (state.activeVfx === 'shockwave') {
+                vfxElem.className = 'vfx-shockwave';
+                vfxElem.style.width = '80px';
+                vfxElem.style.height = '80px';
+                gameArea.appendChild(vfxElem);
+                setTimeout(() => vfxElem.remove(), 500);
+            } else if (state.activeVfx === 'fireworks') {
+                vfxElem.className = 'vfx-fireworks';
+                gameArea.appendChild(vfxElem);
+                for (let i = 0; i < 8; i++) {
+                    const p = document.createElement('div');
+                    p.className = 'firework-particle';
+                    const angle = (i / 8) * Math.PI * 2;
+                    const distance = 50 + Math.random() * 30;
+                    p.style.setProperty('--dx', Math.cos(angle) * distance + 'px');
+                    p.style.setProperty('--dy', Math.sin(angle) * distance + 'px');
+                    p.style.background = ['#ff4081', '#ffeb3b', '#00e676', '#00bcd4'][Math.floor(Math.random() * 4)];
+                    vfxElem.appendChild(p);
+                }
+                setTimeout(() => vfxElem.remove(), 500);
+            }
+        }
+
         function toggleChallengeModal() {
             initAudio();
+            triggerButtonAnimation(btnChallengeMode);
             const isOpen = challengeModal.classList.contains('active');
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             
             if (!isOpen) {
                 challengeModal.classList.add('active');
@@ -1404,11 +1666,13 @@
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
 
             if (mode === 'press_color') {
                 bottomNav.style.display = 'none';
                 btnAbout.style.display = 'none';
                 btnSoundShop.style.display = 'none';
+                btnAnimationShop.style.display = 'none';
                 challengeHud.style.display = 'block';
                 pickNewTargetColor();
                 ensureTargetCircleExists();
@@ -1417,6 +1681,7 @@
                 bottomNav.style.display = 'flex';
                 btnAbout.style.display = 'block';
                 btnSoundShop.style.display = 'block';
+                btnAnimationShop.style.display = 'block';
                 challengeHud.style.display = 'none';
                 refreshExistingCirclesColors();
             }
@@ -1606,17 +1871,38 @@
 
         function toggleSoundShop() {
             initAudio();
+            triggerButtonAnimation(btnSoundShop);
             const isOpen = soundShopModal.classList.contains('active');
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
                 soundShopModal.classList.add('active');
             } else {
                 soundShopModal.classList.remove('active');
+            }
+            refreshPanelButtons();
+        }
+
+        function toggleAnimationShop() {
+            initAudio();
+            triggerButtonAnimation(btnAnimationShop);
+            const isOpen = animationShopModal.classList.contains('active');
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            buttonPageModal.classList.remove('active');
+            soundShopModal.classList.remove('active');
+            challengeModal.classList.remove('active');
+            
+            if (!isOpen) {
+                animationShopModal.classList.add('active');
+            } else {
+                animationShopModal.classList.remove('active');
             }
             refreshPanelButtons();
         }
@@ -1654,6 +1940,38 @@
                 state.activeBgm = (state.activeBgm === type) ? 'none' : type;
                 if (state.soundEnabled) startBgm();
                 else if (bgmInterval) clearInterval(bgmInterval);
+                updateUI();
+            }
+        }
+
+        function buyAnimationEffect(type, cost) {
+            if (state.score >= cost && !state.unlockedVfx[type]) {
+                state.score -= cost;
+                state.unlockedVfx[type] = true;
+                state.activeVfx = type;
+                updateUI();
+            }
+        }
+
+        function selectAnimationEffect(type) {
+            if (state.unlockedVfx[type]) {
+                state.activeVfx = (state.activeVfx === type) ? 'none' : type;
+                updateUI();
+            }
+        }
+
+        function buyButtonAnim(type, cost) {
+            if (state.score >= cost && !state.unlockedBtnAnim[type]) {
+                state.score -= cost;
+                state.unlockedBtnAnim[type] = true;
+                state.activeBtnAnim = type;
+                updateUI();
+            }
+        }
+
+        function selectButtonAnim(type) {
+            if (state.unlockedBtnAnim[type]) {
+                state.activeBtnAnim = (state.activeBtnAnim === type) ? 'none' : type;
                 updateUI();
             }
         }
@@ -1730,11 +2048,23 @@
             document.getElementById('optMobile').innerText = text.optMobile;
             btnResetGame.innerText = text.btnResetGame;
             btnSoundShop.innerText = text.btnSoundShop;
+            btnAnimationShop.innerText = text.btnAnimationShop;
             
             document.getElementById('lblSoundShopTitle').innerText = text.lblSoundShopTitle;
+            document.getElementById('lblAnimShopTitle').innerText = text.lblAnimShopTitle;
             document.getElementById('lblCatClickSounds').innerText = text.lblCatClickSounds;
             document.getElementById('lblCatBgm').innerText = text.lblCatBgm;
             document.getElementById('lblCatVolumeUpgrades').innerText = text.lblCatVolumeUpgrades;
+            document.getElementById('lblCatCircleVfx').innerText = text.lblCatCircleVfx;
+            document.getElementById('lblCatButtonAnim').innerText = text.lblCatButtonAnim;
+            
+            document.getElementById('lblVfxExplosion').innerText = text.lblVfxExplosion;
+            document.getElementById('lblVfxShockwave').innerText = text.lblVfxShockwave;
+            document.getElementById('lblVfxFireworks').innerText = text.lblVfxFireworks;
+            document.getElementById('lblBtnAnimPulse').innerText = text.lblBtnAnimPulse;
+            document.getElementById('lblBtnAnimShake').innerText = text.lblBtnAnimShake;
+            document.getElementById('lblBtnAnimBounce').innerText = text.lblBtnAnimBounce;
+
             document.getElementById('lblPopSound').innerText = text.lblPopSound;
             document.getElementById('lblLaserSound').innerText = text.lblLaserSound;
             document.getElementById('lblCoinSound').innerText = text.lblCoinSound;
@@ -1814,17 +2144,22 @@
             }
         });
 
-        document.addEventListener('click', function() {
+        document.addEventListener('click', function(e) {
             initAudio();
-        }, { once: true });
+            if (e.target.tagName === 'BUTTON' || e.target.classList.contains('bottom-btn') || e.target.classList.contains('modal-menu-btn')) {
+                triggerButtonAnimation(e.target);
+            }
+        }, { once: false });
 
         function toggleButtonPage() {
             if (state.challengeMode === 'press_color') return;
+            triggerButtonAnimation(btnAbout);
             const isOpen = buttonPageModal.classList.contains('active');
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
@@ -1837,11 +2172,13 @@
 
         function toggleMenu() {
             if (state.challengeMode === 'press_color') return;
+            triggerButtonAnimation(menuToggleBtn);
             const isOpen = menuPanel.style.display === 'block';
             settingsPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
@@ -1849,11 +2186,13 @@
 
         function toggleStats() {
             if (state.challengeMode === 'press_color') return;
+            triggerButtonAnimation(statsToggleBtn);
             const isOpen = statsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
@@ -1862,11 +2201,13 @@
 
         function toggleSettings() {
             if (state.challengeMode === 'press_color') return;
+            triggerButtonAnimation(settingsToggleBtn);
             const isOpen = settingsPanel.style.display === 'block';
             menuPanel.style.display = 'none';
             statsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             settingsPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
@@ -1946,9 +2287,13 @@
                     unlockedSounds: { pop: false, laser: false, coin: false },
                     unlockedBgm: { classic: false, arcade: false },
                     unlockedVolumes: { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false },
+                    unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
+                    unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
                     activeSound: 'none',
                     activeBgm: 'none',
-                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
+                    activeVfx: 'none',
+                    activeBtnAnim: 'none',
+                    costs: { pop: 30, laser: 70, coin: 120, classic: 100, arcade: 250, explosion: 40, shockwave: 90, fireworks: 150, pulse: 50, shake: 100, bounce: 180, '200': 150, '300': 300, '400': 450, '500': 600, '600': 800, '700': 1050, '800': 1350, '900': 1700, '1000': 2200 }
                 };
                 soundToggleSelect.value = 'on';
                 soundVolumeSelect.value = '1.0';
@@ -1973,7 +2318,11 @@
                     if (state.challengeMode === 'press_color') earned *= 3;
                     state.score += earned;
                     state.totalScore += earned; 
-                    circles.forEach(circle => circle.remove());
+                    circles.forEach(circle => {
+                        const rect = circle.getBoundingClientRect();
+                        triggerCircleVfx(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                        circle.remove();
+                    });
                     currentCircles = 0;
                     playClickSound();
                     updateUI();
@@ -2003,6 +2352,7 @@
                 settingsPanel.style.display = 'none';
                 buttonPageModal.classList.remove('active');
                 soundShopModal.classList.remove('active');
+                animationShopModal.classList.remove('active');
                 challengeModal.classList.remove('active');
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
@@ -2237,6 +2587,57 @@
                 }
             }
 
+            // --- Animation Shop UI Management ---
+            const vfxList = ['explosion', 'shockwave', 'fireworks'];
+            const vfxBuyBtns = { explosion: btnBuyVfxExplosion, shockwave: btnBuyVfxShockwave, fireworks: btnBuyVfxFireworks };
+            const vfxSelBtns = { explosion: btnSelectVfxExplosion, shockwave: btnSelectVfxShockwave, fireworks: btnSelectVfxFireworks };
+
+            vfxList.forEach(type => {
+                const bBtn = vfxBuyBtns[type];
+                const sBtn = vfxSelBtns[type];
+                if (!state.unlockedVfx[type]) {
+                    bBtn.style.display = 'inline-block';
+                    bBtn.disabled = state.score < state.costs[type];
+                    bBtn.innerText = `${text.buy} (${state.costs[type]})`;
+                    sBtn.style.display = 'none';
+                } else {
+                    bBtn.style.display = 'none';
+                    sBtn.style.display = 'inline-block';
+                    if (state.activeVfx === type) {
+                        sBtn.innerText = text.selected;
+                        sBtn.classList.add('active');
+                    } else {
+                        sBtn.innerText = text.select;
+                        sBtn.classList.remove('active');
+                    }
+                }
+            });
+
+            const animList = ['pulse', 'shake', 'bounce'];
+            const animBuyBtns = { pulse: btnBuyAnimPulse, shake: btnBuyAnimShake, bounce: btnBuyAnimBounce };
+            const animSelBtns = { pulse: btnSelectAnimPulse, shake: btnSelectAnimShake, bounce: btnSelectAnimBounce };
+
+            animList.forEach(type => {
+                const bBtn = animBuyBtns[type];
+                const sBtn = animSelBtns[type];
+                if (!state.unlockedBtnAnim[type]) {
+                    bBtn.style.display = 'inline-block';
+                    bBtn.disabled = state.score < state.costs[type];
+                    bBtn.innerText = `${text.buy} (${state.costs[type]})`;
+                    sBtn.style.display = 'none';
+                } else {
+                    bBtn.style.display = 'none';
+                    sBtn.style.display = 'inline-block';
+                    if (state.activeBtnAnim === type) {
+                        sBtn.innerText = text.selected;
+                        sBtn.classList.add('active');
+                    } else {
+                        sBtn.innerText = text.select;
+                        sBtn.classList.remove('active');
+                    }
+                }
+            });
+
             const volLevels = ['200', '300', '400', '500', '600', '700', '800', '900', '1000'];
             const btnMap = { '200': btnBuyVol200, '300': btnBuyVol300, '400': btnBuyVol400, '500': btnBuyVol500, '600': btnBuyVol600, '700': btnBuyVol700, '800': btnBuyVol800, '900': btnBuyVol900, '1000': btnBuyVol1000 };
             const optMap = { '200': optVol200, '300': optVol300, '400': optVol400, '500': optVol500, '600': optVol600, '700': optVol700, '800': optVol800, '900': optVol900, '1000': optVol1000 };
@@ -2324,6 +2725,10 @@
             const handleCircleInteraction = function(e) {
                 if (e) e.preventDefault();
                 playClickSound();
+                
+                const rect = this.getBoundingClientRect();
+                triggerCircleVfx(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
                 let earned = state.pointsPerClick;
                 
                 if (state.challengeMode === 'press_color') {
@@ -2517,8 +2922,12 @@
             if (!state.unlockedSounds) state.unlockedSounds = { pop: false, laser: false, coin: false };
             if (!state.unlockedBgm) state.unlockedBgm = { classic: false, arcade: false };
             if (!state.unlockedVolumes) state.unlockedVolumes = { '200': false, '300': false, '400': false, '500': false, '600': false, '700': false, '800': false, '900': false, '1000': false };
+            if (!state.unlockedVfx) state.unlockedVfx = { explosion: false, shockwave: false, fireworks: false };
+            if (!state.unlockedBtnAnim) state.unlockedBtnAnim = { pulse: false, shake: false, bounce: false };
             if (!state.activeSound) state.activeSound = 'none';
             if (!state.activeBgm) state.activeBgm = 'none';
+            if (!state.activeVfx) state.activeVfx = 'none';
+            if (!state.activeBtnAnim) state.activeBtnAnim = 'none';
 
             gameArea.innerHTML = '';
             currentCircles = 0;
