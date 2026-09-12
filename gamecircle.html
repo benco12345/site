@@ -85,6 +85,9 @@
         #btnChallengeMode { background: #FF9800; }
         #btnChallengeMode:hover { background: #F57C00; }
 
+        #btnAccount { background: #009688; }
+        #btnAccount:hover { background: #00796B; }
+
         #btnExitChallenge {
             position: absolute;
             top: 10px;
@@ -208,7 +211,7 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        #button-page-modal, #challenge-modal, #animation-shop-modal, #sound-shop-modal {
+        #button-page-modal, #challenge-modal, #animation-shop-modal, #sound-shop-modal, #account-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -222,7 +225,7 @@
             pointer-events: none;
         }
 
-        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active, #animation-shop-modal.active {
+        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active, #animation-shop-modal.active, #account-modal.active {
             display: flex;
             pointer-events: auto;
         }
@@ -295,7 +298,7 @@
             transform: scale(0.95);
         }
 
-        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop {
+        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop, #btnCloseAccountModal {
             position: absolute;
             top: 20px;
             right: 20px; 
@@ -307,9 +310,9 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover, #btnCloseSoundShop:hover { transform: scale(1.2); }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover, #btnCloseSoundShop:hover, #btnCloseAccountModal:hover { transform: scale(1.2); }
 
-        #button-page-content, #challenge-modal-content, #animation-shop-content, #sound-shop-content {
+        #button-page-content, #challenge-modal-content, #animation-shop-content, #sound-shop-content, #account-modal-content {
             background: rgb(30, 30, 40);
             padding: 40px;
             border-radius: 20px;
@@ -326,8 +329,9 @@
         #challenge-modal-content { border-color: #FF9800; }
         #animation-shop-content { border-color: #9C27B0; }
         #sound-shop-content { border-color: #E91E63; }
+        #account-modal-content { border-color: #009688; }
 
-        #button-page-content h2, #challenge-modal-content h2 {
+        #button-page-content h2, #challenge-modal-content h2, #account-modal-content h2 {
             margin-top: 0;
             color: #FFEB3B;
             font-size: 32px;
@@ -353,6 +357,19 @@
         }
         .modal-menu-btn:hover { background: #1976D2; transform: translateY(-2px); }
         .modal-menu-btn:disabled { background: #555 !important; color: #888 !important; cursor: not-allowed; transform: none !important; box-shadow: none; }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #222;
+            color: #fff;
+            border: 2px solid #555;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .auth-input:focus { border-color: #009688; outline: none; }
 
         .controls-list {
             font-size: 18px;
@@ -707,6 +724,7 @@
         <button id="btnSoundShop" class="main-top-btn" onclick="toggleSoundShop()">🎵 Sound Shop</button>
         <button id="btnAnimationShop" class="main-top-btn" onclick="toggleAnimationShop()">✨ Anim Shop</button>
         <button id="btnChallengeMode" class="main-top-btn" onclick="toggleChallengeModal()">⚡ Challenge</button>
+        <button id="btnAccount" class="main-top-btn" onclick="toggleAccountModal()">👤 Account</button>
     </div>
 
     <!-- Exit Challenge Button -->
@@ -727,6 +745,26 @@
         <button id="menu-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleMenu()">🛠️ Open Menu</button>
         <button id="settings-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleSettings()">⚙️ Settings</button>
         <button id="stats-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleStats()">📊 Stats</button>
+    </div>
+
+    <!-- Account Modal (Local Built-in Sign In / Sign Up) -->
+    <div id="account-modal">
+        <button id="btnCloseAccountModal" onclick="toggleAccountModal()">❌</button>
+        <div id="account-modal-content">
+            <h2 id="lblAccountTitle">Local Account 👤</h2>
+            <div id="auth-logged-out">
+                <p id="lblAuthDesc" style="color: #aaa; font-size: 14px; margin-bottom: 15px;">Create an account or sign in to save your profile locally in this browser!</p>
+                <input type="text" id="authUsername" class="auth-input" placeholder="Username...">
+                <input type="password" id="authPassword" class="auth-input" placeholder="Password...">
+                <button class="modal-menu-btn" id="btnSignUp" onclick="handleLocalSignUp()" style="background: #4CAF50;">📝 Sign Up</button>
+                <button class="modal-menu-btn" id="btnSignIn" onclick="handleLocalSignIn()" style="background: #2196F3;">🔑 Sign In</button>
+            </div>
+            <div id="auth-logged-in" style="display: none;">
+                <p style="color: #4CAF50; font-size: 16px; font-weight: bold;">Connected Account:</p>
+                <p id="userEmailDisplay" style="color: #FFEB3B; font-size: 18px; font-weight: bold; margin-bottom: 20px;"></p>
+                <button class="modal-menu-btn" id="btnSignOut" onclick="handleLocalSignOut()" style="background: #f44336;">🚪 Sign Out</button>
+            </div>
+        </div>
     </div>
 
     <!-- Challenge Mode Modal -->
@@ -1156,7 +1194,9 @@
                 lblPressTheColorInstruction: "Press the color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:",
                 lblSleepModeLabel: "Sleep Mode:", btnSleepText: "💤 Sleep", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Unsleep",
-                btnExitChallengeText: "🚪 Exit Challenge"
+                btnExitChallengeText: "🚪 Exit Challenge",
+                btnAccount: "👤 Account", lblAccountTitle: "Local Account 👤", lblAuthDesc: "Create an account or sign in to save your profile locally in this browser!",
+                btnSignUp: "📝 Sign Up", btnSignIn: "🔑 Sign In", btnSignOut: "🚪 Sign Out"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -1207,7 +1247,9 @@
                 lblPressTheColorInstruction: "לחץ על הצבע",
                 btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:",
                 lblSleepModeLabel: "מצב שינה:", btnSleepText: "💤 היכנס לשינה", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ העיר אותי (Unsleep)",
-                btnExitChallengeText: "🚪 צא מהאתגר"
+                btnExitChallengeText: "🚪 צא מהאתגר",
+                btnAccount: "👤 חשבון", lblAccountTitle: "חשבון מקומי 👤", lblAuthDesc: "צור חשבון או התחבר כדי לשמור את הפרופיל שלך באופן מקומי בדפדפן זה!",
+                btnSignUp: "📝 הרשמה", btnSignIn: "🔑 התחברות", btnSignOut: "🚪 התנתקות"
             },
             es: {
                 lblScore: "Puntuación: ",
@@ -1258,7 +1300,9 @@
                 lblPressTheColorInstruction: "Presiona el color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:",
                 lblSleepModeLabel: "Modo Sueño:", btnSleepText: "💤 Dormir", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Despertar",
-                btnExitChallengeText: "🚪 Salir del Desafío"
+                btnExitChallengeText: "🚪 Salir del Desafío",
+                btnAccount: "👤 Cuenta", lblAccountTitle: "Cuenta Local 👤", lblAuthDesc: "¡Crea una cuenta o inicia sesión para guardar tu perfil localmente!",
+                btnSignUp: "📝 Registrarse", btnSignIn: "🔑 Iniciar sesión", btnSignOut: "🚪 Cerrar sesión"
             },
             fr: {
                 lblScore: "Score : ",
@@ -1309,7 +1353,9 @@
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:",
                 lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller",
-                btnExitChallengeText: "🚪 Quitter le Défi"
+                btnExitChallengeText: "🚪 Quitter le Défi",
+                btnAccount: "👤 Compte", lblAccountTitle: "Compte Local 👤", lblAuthDesc: "Créez un compte ou connectez-vous localement !",
+                btnSignUp: "📝 S'inscrire", btnSignIn: "🔑 Se connecter", btnSignOut: "🚪 Se déconnecter"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -1360,7 +1406,9 @@
                 lblPressTheColorInstruction: "Drücke die Farbe",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:",
                 lblSleepModeLabel: "Schlafmodus:", btnSleepText: "💤 Schlafen", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Aufwachen",
-                btnExitChallengeText: "🚪 Herausforderung verlassen"
+                btnExitChallengeText: "🚪 Herausforderung verlassen",
+                btnAccount: "👤 Konto", lblAccountTitle: "Lokales Konto 👤", lblAuthDesc: "Erstelle ein Konto oder melde dich an, um deinen Fortschritt lokal zu speichern!",
+                btnSignUp: "📝 Registrieren", btnSignIn: "🔑 Anmelden", btnSignOut: "🚪 Abmelden"
             },
             ru: {
                 lblScore: "Счет: ",
@@ -1411,7 +1459,9 @@
                 lblPressTheColorInstruction: "Нажми цвет",
                 btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:",
                 lblSleepModeLabel: "Спящий режим:", btnSleepText: "💤 Сон", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Пробудить",
-                btnExitChallengeText: "🚪 Выйти из вызова"
+                btnExitChallengeText: "🚪 Выйти из вызова",
+                btnAccount: "👤 Аккаунт", lblAccountTitle: "Локальный аккаунт 👤", lblAuthDesc: "Создайте аккаунт или войдите для локального сохранения профиля!",
+                btnSignUp: "📝 Регистрация", btnSignIn: "🔑 Войти", btnSignOut: "🚪 Выйти"
             },
             ar: {
                 lblScore: "النقاط: ",
@@ -1462,7 +1512,9 @@
                 lblPressTheColorInstruction: "اضغط على اللون",
                 btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:",
                 lblSleepModeLabel: "وضع السكون:", btnSleepText: "💤 نوم", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ إيقاظ",
-                btnExitChallengeText: "🚪 الخروج من التحدي"
+                btnExitChallengeText: "🚪 الخروج من التحدي",
+                btnAccount: "👤 الحساب", lblAccountTitle: "حساب محلي 👤", lblAuthDesc: "أنشئ حساباً أو سجل الدخول لحفظ ملفك محلياً!",
+                btnSignUp: "📝 تسجيل جديد", btnSignIn: "🔑 تسجيل الدخول", btnSignOut: "🚪 تسجيل الخروج"
             },
             zh: {
                 lblScore: "得分: ",
@@ -1513,7 +1565,9 @@
                 lblPressTheColorInstruction: "点击颜色",
                 btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:",
                 lblSleepModeLabel: "睡眠模式:", btnSleepText: "💤 睡眠", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 唤醒",
-                btnExitChallengeText: "🚪 退出挑战"
+                btnExitChallengeText: "🚪 退出挑战",
+                btnAccount: "👤 账户", lblAccountTitle: "本地账户 👤", lblAuthDesc: "创建账户或登录以在浏览器中本地保存配置文件！",
+                btnSignUp: "📝 注册", btnSignIn: "🔑 登录", btnSignOut: "🚪 登出"
             },
             ja: {
                 lblScore: "スコア: ",
@@ -1564,7 +1618,9 @@
                 lblPressTheColorInstruction: "色を押す",
                 btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:",
                 lblSleepModeLabel: "スリープモード:", btnSleepText: "💤 スリープ", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 起きる",
-                btnExitChallengeText: "🚪 チャレンジ終了"
+                btnExitChallengeText: "🚪 チャレンジ終了",
+                btnAccount: "👤 アカウント", lblAccountTitle: "ローカルアカウント 👤", lblAuthDesc: "アカウントを作成またはサインインして、ブラウザにローカル保存します！",
+                btnSignUp: "📝 サインアップ", btnSignIn: "🔑 サインイン", btnSignOut: "🚪 サインアウト"
             }
         };
 
@@ -1611,6 +1667,7 @@
         let hoveredCircle = null;
         let audioCtx = null;
         let bgmInterval = null;
+        let currentAccount = null;
 
         const scoreDisplay = document.getElementById('scoreDisplay');
         const maxCirclesDisplay = document.getElementById('maxCirclesDisplay');
@@ -1636,10 +1693,12 @@
         const soundShopModal = document.getElementById('sound-shop-modal');
         const animationShopModal = document.getElementById('animation-shop-modal');
         const challengeModal = document.getElementById('challenge-modal');
+        const accountModal = document.getElementById('account-modal');
         const challengeHud = document.getElementById('challenge-hud');
         const targetColorNameDisplay = document.getElementById('targetColorName');
         const btnModePressColor = document.getElementById('btnModePressColor');
         const btnExitChallenge = document.getElementById('btnExitChallenge');
+        const btnAccount = document.getElementById('btnAccount');
 
         const bottomNav = document.getElementById('bottom-nav');
         const btnAbout = document.getElementById('btnAbout');
@@ -1737,17 +1796,123 @@
         function saveToLocalStorage() {
             try {
                 localStorage.setItem('catchCirclesSave_v1', JSON.stringify(state));
+                if (currentAccount) {
+                    localStorage.setItem('catchCircles_user_' + currentAccount, JSON.stringify(state));
+                }
             } catch(e) {}
         }
 
         function loadFromLocalStorage() {
             try {
-                const saved = localStorage.getItem('catchCirclesSave_v1');
-                if (saved) {
-                    const loadedState = JSON.parse(saved);
-                    state = { ...state, ...loadedState };
+                const activeUser = localStorage.getItem('catchCircles_activeUser');
+                if (activeUser) {
+                    currentAccount = activeUser;
+                    const userSave = localStorage.getItem('catchCircles_user_' + activeUser);
+                    if (userSave) {
+                        state = { ...state, ...JSON.parse(userSave) };
+                    }
+                } else {
+                    const saved = localStorage.getItem('catchCirclesSave_v1');
+                    if (saved) {
+                        const loadedState = JSON.parse(saved);
+                        state = { ...state, ...loadedState };
+                    }
                 }
+                updateAuthUI();
             } catch(e) {}
+        }
+
+        function updateAuthUI() {
+            const loggedOutDiv = document.getElementById('auth-logged-out');
+            const loggedInDiv = document.getElementById('auth-logged-in');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            
+            if (currentAccount) {
+                loggedOutDiv.style.display = 'none';
+                loggedInDiv.style.display = 'block';
+                userEmailDisplay.innerText = currentAccount;
+                btnAccount.style.background = '#4CAF50';
+            } else {
+                loggedOutDiv.style.display = 'block';
+                loggedInDiv.style.display = 'none';
+                userEmailDisplay.innerText = '';
+                btnAccount.style.background = '#009688';
+            }
+        }
+
+        function toggleAccountModal() {
+            initAudio();
+            triggerButtonAnimation(btnAccount);
+            const isOpen = accountModal.classList.contains('active');
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            buttonPageModal.classList.remove('active');
+            soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
+            challengeModal.classList.remove('active');
+            
+            if (!isOpen) {
+                accountModal.classList.add('active');
+            } else {
+                accountModal.classList.remove('active');
+            }
+            refreshPanelButtons();
+        }
+
+        function handleLocalSignUp() {
+            const username = document.getElementById('authUsername').value.trim();
+            const pass = document.getElementById('authPassword').value.trim();
+            if (!username || !pass) return alert("Please enter username and password.");
+            
+            let users = JSON.parse(localStorage.getItem('catchCircles_usersDB') || '{}');
+            if (users[username]) {
+                return alert("Username already exists! Choose another or sign in.");
+            }
+
+            users[username] = { password: pass, gameState: state };
+            localStorage.setItem('catchCircles_usersDB', JSON.stringify(users));
+            
+            currentAccount = username;
+            localStorage.setItem('catchCircles_activeUser', username);
+            updateAuthUI();
+            alert("Account created successfully! 📝");
+            toggleAccountModal();
+        }
+
+        function handleLocalSignIn() {
+            const username = document.getElementById('authUsername').value.trim();
+            const pass = document.getElementById('authPassword').value.trim();
+            if (!username || !pass) return alert("Please enter username and password.");
+            
+            let users = JSON.parse(localStorage.getItem('catchCircles_usersDB') || '{}');
+            if (!users[username] || users[username].password !== pass) {
+                return alert("Invalid username or password!");
+            }
+
+            currentAccount = username;
+            localStorage.setItem('catchCircles_activeUser', username);
+            
+            if (users[username].gameState) {
+                state = { ...state, ...users[username].gameState };
+                gameArea.innerHTML = '';
+                currentCircles = 0;
+                startGameLoop();
+                startAutoClicker();
+                updateUI();
+            }
+
+            updateAuthUI();
+            alert("Signed in successfully! 🔑");
+            toggleAccountModal();
+        }
+
+        function handleLocalSignOut() {
+            currentAccount = null;
+            localStorage.removeItem('catchCircles_activeUser');
+            updateAuthUI();
+            alert("Signed out successfully!");
+            toggleAccountModal();
         }
 
         function triggerButtonAnimation(element) {
@@ -1824,6 +1989,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            accountModal.classList.remove('active');
             
             if (!isOpen) {
                 challengeModal.classList.add('active');
@@ -1854,6 +2020,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            accountModal.classList.remove('active');
 
             if (mode === 'press_color') {
                 bottomNav.style.display = 'none';
@@ -2067,6 +2234,7 @@
             buttonPageModal.classList.remove('active');
             animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             
             if (!isOpen) {
                 soundShopModal.classList.add('active');
@@ -2086,6 +2254,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             
             if (!isOpen) {
                 animationShopModal.classList.add('active');
@@ -2201,6 +2370,9 @@
             const text = t[lang] || t['en'];
 
             document.getElementById('lblScore').innerText = text.lblScore;
+            document.getElementById('btnMenuOpen').innerText = text.btnMenuOpen;
+            document.getElementById('btnStatsOpen').innerText = text.btnStatsOpen;
+            document.getElementById('btnSettingsOpen').innerText = text.btnSettingsOpen;
             document.getElementById('lblSaveLoad').innerText = text.lblSaveLoad;
             document.getElementById('btnDownload').innerText = text.btnDownload;
             document.getElementById('btnLoad').innerText = text.btnLoad;
@@ -2253,6 +2425,7 @@
             btnResetGame.innerText = text.btnResetGame;
             btnSoundShop.innerText = text.btnSoundShop;
             btnAnimationShop.innerText = text.btnAnimationShop;
+            btnAccount.innerText = text.btnAccount;
             
             document.getElementById('lblSoundShopTitle').innerText = text.lblSoundShopTitle;
             document.getElementById('lblAnimShopTitle').innerText = text.lblAnimShopTitle;
@@ -2307,6 +2480,12 @@
             btnActivateSleep.innerText = text.btnSleepText;
             document.getElementById('lblSleepEnabledText').innerText = text.lblSleepEnabledText;
             btnUnsleep.innerText = text.btnUnsleepText;
+
+            document.getElementById('lblAccountTitle').innerText = text.lblAccountTitle;
+            document.getElementById('lblAuthDesc').innerText = text.lblAuthDesc;
+            document.getElementById('btnSignUp').innerText = text.btnSignUp;
+            document.getElementById('btnSignIn').innerText = text.btnSignIn;
+            document.getElementById('btnSignOut').innerText = text.btnSignOut;
 
             refreshPanelButtons();
             updateUI(); 
@@ -2526,6 +2705,7 @@
                 soundShopModal.classList.remove('active');
                 animationShopModal.classList.remove('active');
                 challengeModal.classList.remove('active');
+                accountModal.classList.remove('active');
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
                 
@@ -2563,6 +2743,7 @@
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             
             if (!isOpen) {
                 buttonPageModal.classList.add('active');
@@ -2582,6 +2763,7 @@
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
@@ -2596,6 +2778,7 @@
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
             refreshPanelButtons();
@@ -2611,6 +2794,7 @@
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
+            accountModal.classList.remove('active');
             settingsPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
         }
