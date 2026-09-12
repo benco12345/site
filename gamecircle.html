@@ -85,6 +85,24 @@
         #btnChallengeMode { background: #FF9800; }
         #btnChallengeMode:hover { background: #F57C00; }
 
+        #btnExitChallenge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2000;
+            background: #f44336;
+            color: white;
+            border: 2px solid white;
+            padding: 8px 16px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        #btnExitChallenge:hover { background: #d32f2f; }
+
         #score-hud {
             position: absolute;
             top: 25px;
@@ -691,6 +709,9 @@
         <button id="btnChallengeMode" class="main-top-btn" onclick="toggleChallengeModal()">⚡ Challenge</button>
     </div>
 
+    <!-- Exit Challenge Button -->
+    <button id="btnExitChallenge" onclick="setChallengeMode('normal')">🚪 Exit Challenge</button>
+
     <div id="score-hud"><span id="lblScore">Score: </span><span id="scoreDisplay">0</span></div>
     <div id="challenge-hud"><span id="lblPressTheColorInstruction">Press the color</span>: <span id="targetColorName" style="text-transform: uppercase;">RED</span></div>
 
@@ -1134,7 +1155,8 @@
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Press the Color (100 pts)",
                 lblPressTheColorInstruction: "Press the color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clicks per Action:", lblAutoInterval: "Click Interval:",
-                lblSleepModeLabel: "Sleep Mode:", btnSleepText: "💤 Sleep", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Unsleep"
+                lblSleepModeLabel: "Sleep Mode:", btnSleepText: "💤 Sleep", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Unsleep",
+                btnExitChallengeText: "🚪 Exit Challenge"
             },
             he: {
                 lblScore: "ניקוד: ",
@@ -1184,7 +1206,8 @@
                 btnModeNormal: "🟢 רגיל (Normal)", btnModePressColor: "🎨 לחץ על הצבע (100 נק') (Press the color)",
                 lblPressTheColorInstruction: "לחץ על הצבע",
                 btnToggleAutoUpgrades: "🤖 לחיצה אוטומטית (Autoclicker)", lblAutoAmount: "כמות לחיצות:", lblAutoInterval: "זמן בין לחיצות:",
-                lblSleepModeLabel: "מצב שינה:", btnSleepText: "💤 היכנס לשינה", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ העיר אותי (Unsleep)"
+                lblSleepModeLabel: "מצב שינה:", btnSleepText: "💤 היכנס לשינה", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ העיר אותי (Unsleep)",
+                btnExitChallengeText: "🚪 צא מהאתגר"
             },
             es: {
                 lblScore: "Puntuación: ",
@@ -1234,7 +1257,8 @@
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Presiona el color (100 pts)",
                 lblPressTheColorInstruction: "Presiona el color",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics por acción:", lblAutoInterval: "Intervalo de clic:",
-                lblSleepModeLabel: "Modo Sueño:", btnSleepText: "💤 Dormir", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Despertar"
+                lblSleepModeLabel: "Modo Sueño:", btnSleepText: "💤 Dormir", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Despertar",
+                btnExitChallengeText: "🚪 Salir del Desafío"
             },
             fr: {
                 lblScore: "Score : ",
@@ -1284,7 +1308,8 @@
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Appuyez sur la couleur (100 pts)",
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:",
-                lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller"
+                lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller",
+                btnExitChallengeText: "🚪 Quitter le Défi"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -1334,7 +1359,8 @@
                 btnModeNormal: "🟢 Normal", btnModePressColor: "🎨 Drücke die Farbe (100 Pkt)",
                 lblPressTheColorInstruction: "Drücke die Farbe",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Klicks pro Aktion:", lblAutoInterval: "Klick-Intervall:",
-                lblSleepModeLabel: "Schlafmodus:", btnSleepText: "💤 Schlafen", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Aufwachen"
+                lblSleepModeLabel: "Schlafmodus:", btnSleepText: "💤 Schlafen", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Aufwachen",
+                btnExitChallengeText: "🚪 Herausforderung verlassen"
             },
             ru: {
                 lblScore: "Счет: ",
@@ -1384,7 +1410,8 @@
                 btnModeNormal: "🟢 Нормальный", btnModePressColor: "🎨 Нажми цвет (100 очк)",
                 lblPressTheColorInstruction: "Нажми цвет",
                 btnToggleAutoUpgrades: "🤖 Автокликер", lblAutoAmount: "Кликов за раз:", lblAutoInterval: "Интервал кликов:",
-                lblSleepModeLabel: "Спящий режим:", btnSleepText: "💤 Сон", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Пробудить"
+                lblSleepModeLabel: "Спящий режим:", btnSleepText: "💤 Сон", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Пробудить",
+                btnExitChallengeText: "🚪 Выйти из вызова"
             },
             ar: {
                 lblScore: "النقاط: ",
@@ -1434,7 +1461,8 @@
                 btnModeNormal: "🟢 عادي", btnModePressColor: "🎨 اضغط على اللون (100 نقطة)",
                 lblPressTheColorInstruction: "اضغط على اللون",
                 btnToggleAutoUpgrades: "🤖 النقر التلقائي", lblAutoAmount: "النقرات لكل إجراء:", lblAutoInterval: "الفاصل الزمني:",
-                lblSleepModeLabel: "وضع السكون:", btnSleepText: "💤 نوم", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ إيقاظ"
+                lblSleepModeLabel: "وضع السكون:", btnSleepText: "💤 نوم", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ إيقاظ",
+                btnExitChallengeText: "🚪 الخروج من التحدي"
             },
             zh: {
                 lblScore: "得分: ",
@@ -1484,7 +1512,8 @@
                 btnModeNormal: "🟢 普通", btnModePressColor: "🎨 点击颜色 (100分)",
                 lblPressTheColorInstruction: "点击颜色",
                 btnToggleAutoUpgrades: "🤖 自动点击器", lblAutoAmount: "每次点击数量:", lblAutoInterval: "点击间隔:",
-                lblSleepModeLabel: "睡眠模式:", btnSleepText: "💤 睡眠", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 唤醒"
+                lblSleepModeLabel: "睡眠模式:", btnSleepText: "💤 睡眠", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 唤醒",
+                btnExitChallengeText: "🚪 退出挑战"
             },
             ja: {
                 lblScore: "スコア: ",
@@ -1534,7 +1563,8 @@
                 btnModeNormal: "🟢 ノーマル", btnModePressColor: "🎨 色を押す (100pt)",
                 lblPressTheColorInstruction: "色を押す",
                 btnToggleAutoUpgrades: "🤖 オートクリッカー", lblAutoAmount: "1回のアクションでのクリック数:", lblAutoInterval: "クリック間隔:",
-                lblSleepModeLabel: "スリープモード:", btnSleepText: "💤 スリープ", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 起きる"
+                lblSleepModeLabel: "スリープモード:", btnSleepText: "💤 スリープ", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ 起きる",
+                btnExitChallengeText: "🚪 チャレンジ終了"
             }
         };
 
@@ -1609,6 +1639,7 @@
         const challengeHud = document.getElementById('challenge-hud');
         const targetColorNameDisplay = document.getElementById('targetColorName');
         const btnModePressColor = document.getElementById('btnModePressColor');
+        const btnExitChallenge = document.getElementById('btnExitChallenge');
 
         const bottomNav = document.getElementById('bottom-nav');
         const btnAbout = document.getElementById('btnAbout');
@@ -1702,6 +1733,22 @@
         const editLifespan = document.getElementById('editLifespan');
         const editAutoAmount = document.getElementById('editAutoAmount');
         const editAutoInterval = document.getElementById('editAutoInterval');
+
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('catchCirclesSave_v1', JSON.stringify(state));
+            } catch(e) {}
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('catchCirclesSave_v1');
+                if (saved) {
+                    const loadedState = JSON.parse(saved);
+                    state = { ...state, ...loadedState };
+                }
+            } catch(e) {}
+        }
 
         function triggerButtonAnimation(element) {
             if (!element || state.activeBtnAnim === 'none') return;
@@ -1813,6 +1860,7 @@
                 topBtnGroup.style.display = 'none';
                 devCodeContainer.style.display = 'none';
                 challengeHud.style.display = 'block';
+                btnExitChallenge.style.display = 'block';
                 pickNewTargetColor();
                 ensureTargetCircleExists();
                 refreshExistingCirclesColors();
@@ -1821,8 +1869,10 @@
                 topBtnGroup.style.display = 'flex';
                 devCodeContainer.style.display = 'flex';
                 challengeHud.style.display = 'none';
+                btnExitChallenge.style.display = 'none';
                 refreshExistingCirclesColors();
             }
+            saveToLocalStorage();
             refreshPanelButtons();
         }
 
@@ -1879,10 +1929,8 @@
         }
 
         function triggerAutoClick() {
+            if (state.challengeMode !== 'normal') return; // Do not autoclick in challenge mode
             let circles = Array.from(document.querySelectorAll('.circle'));
-            if (state.challengeMode === 'press_color') {
-                circles = circles.filter(c => c.dataset.colorName === state.targetColorName);
-            }
             let limit = Math.min(circles.length, state.autoAmount);
             for(let i=0; i<limit; i++) {
                 if(circles[i] && circles[i].click) {
@@ -2000,11 +2048,13 @@
             } else {
                 if (bgmInterval) clearInterval(bgmInterval);
             }
+            saveToLocalStorage();
         }
 
         function changeSoundVolume(val) {
             state.soundVolume = parseFloat(val);
             soundVolumeSelect.value = val;
+            saveToLocalStorage();
         }
 
         function toggleSoundShop() {
@@ -2242,6 +2292,7 @@
             document.getElementById('btnModeNormal').innerText = text.btnModeNormal;
             btnModePressColor.innerText = text.btnModePressColor;
             document.getElementById('lblPressTheColorInstruction').innerText = text.lblPressTheColorInstruction;
+            btnExitChallenge.innerText = text.btnExitChallengeText;
             
             document.getElementById('lblKeySpace').innerText = text.lblKeySpace;
             document.getElementById('descSpace').innerText = text.descSpace;
@@ -2259,6 +2310,7 @@
 
             refreshPanelButtons();
             updateUI(); 
+            saveToLocalStorage();
         }
 
         function autoDetectDevice() {
@@ -2275,6 +2327,7 @@
             } else {
                 document.body.classList.remove('mobile-mode');
             }
+            saveToLocalStorage();
         }
 
         document.addEventListener('keydown', function(event) {
@@ -2656,6 +2709,7 @@
                 startAutoClicker();
                 updateUI();
                 toggleSettings();
+                saveToLocalStorage();
             }
         }
 
@@ -2717,10 +2771,12 @@
         }
 
         function initGame() {
+            loadFromLocalStorage();
             autoDetectDevice(); 
             changeLanguage(state.language);
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
+            setChallengeMode(state.challengeMode);
             startGameLoop();
             startAutoClicker();
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
@@ -2738,7 +2794,6 @@
             
             const text = t[state.language] || t['en'];
 
-            // Disable or enable Press the Color based on score (100 points needed)
             btnModePressColor.disabled = state.score < 100;
 
             btnMaxCircles.disabled = state.score < state.costMaxCircles;
@@ -2963,6 +3018,7 @@
             });
 
             updateStatsUI(isTyping);
+            saveToLocalStorage();
         }
 
         function updateStatsUI(isTyping = false) {
@@ -3257,6 +3313,7 @@
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
             else if (bgmInterval) clearInterval(bgmInterval);
 
+            saveToLocalStorage();
             alert((t[state.language] || t['en']).alertLoadSuccess);
         }
 
