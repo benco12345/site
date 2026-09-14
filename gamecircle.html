@@ -21,6 +21,50 @@
             -webkit-touch-callout: none;
         }
 
+        /* --- No-Script Notice Styles --- */
+        .no-script-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(20, 20, 30, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .no-script-card {
+            background: rgb(40, 40, 50);
+            padding: 35px;
+            border-radius: 20px;
+            border: 4px solid #f44336;
+            max-width: 450px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .no-script-card h2 {
+            color: #FFEB3B;
+            margin-top: 0;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .no-script-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        .no-script-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
         #devCodeContainer {
             position: absolute;
             top: 10px;
@@ -696,6 +740,17 @@
     </style>
 </head>
 <body>
+
+    <!-- JavaScript Disabled Notice -->
+    <noscript>
+        <div class="no-script-overlay">
+            <div class="no-script-card">
+                <div class="no-script-icon">⚠️</div>
+                <h2>JavaScript Required</h2>
+                <p>Oops! JavaScript is turned off or blocked in your browser. This game requires JavaScript to run, track your score, and save your progress. Please enable JavaScript in your browser settings and reload the page.</p>
+            </div>
+        </div>
+    </noscript>
 
     <div id="devCodeContainer">
         <input type="text" id="devCodeInput" placeholder="Code...">
@@ -2714,7 +2769,6 @@
                 updateUI();
                 toggleSettings();
                 
-                // Completely clear saved data so it's as if they never played before
                 try {
                     localStorage.removeItem('catchCirclesSave_v1');
                 } catch(e) {}
