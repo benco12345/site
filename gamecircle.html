@@ -65,6 +65,54 @@
             margin-bottom: 10px;
         }
 
+        /* --- Start Game Screen Overlay --- */
+        #start-game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(15, 15, 25, 0.95);
+            z-index: 6000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            user-select: none;
+        }
+        #start-game-overlay h1 {
+            font-size: 42px;
+            color: #FFEB3B;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 15px rgba(255, 235, 59, 0.5);
+        }
+        #start-game-overlay p {
+            font-size: 18px;
+            color: #ccc;
+            margin: 0 0 30px 0;
+        }
+        #btnStartGame {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            border: 3px solid white;
+            padding: 16px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(76, 175, 80, 0.6);
+            transition: transform 0.2s, filter 0.2s;
+        }
+        #btnStartGame:hover {
+            transform: scale(1.08);
+            filter: brightness(1.2);
+        }
+        #btnStartGame:active {
+            transform: scale(0.95);
+        }
+
         #devCodeContainer {
             position: absolute;
             top: 10px;
@@ -751,6 +799,13 @@
             </div>
         </div>
     </noscript>
+
+    <!-- Start Game Screen Overlay -->
+    <div id="start-game-overlay" style="display: flex;">
+        <h1>Catch the Circles</h1>
+        <p>Click the button below to start spawning circles and playing!</p>
+        <button id="btnStartGame" onclick="startGameSession()">Start game</button>
+    </div>
 
     <div id="devCodeContainer">
         <input type="text" id="devCodeInput" placeholder="Code...">
@@ -1602,7 +1657,7 @@
                 lblPopSound: "ポップ音", lblLaserSound: "レーザー音", lblCoinSound: "コイン音",
                 lblBgmClassic: "クラシックループ", lblBgmArcade: "アーケードビート",
                 buy: "購入", selected: "選択中 ✅", select: "選択", purchased: "購入済み！ ✅",
-                upgradeCost: "⬆️ アップグレード (コスト: ", maxSpeed: "最高速度！", maxSize: "最大サイズ！",
+                upgradeCost: "⬆️ アップグレード (コスト: ", maxSpeed: "最高速度！", maxSize: "Maximale Größe!",
                 alertLoadSuccess: "ゲームが正常にロードされました！ 🎮", alertLoadError: "エラー！セーブコードが無効です。",
                 alertCopied: "セーブコードをクリップボードにコピーしました！ 📋",
                 btnAbout: "📄 2ページ目", 
@@ -1661,7 +1716,7 @@
         };
 
         let currentCircles = 0;
-        let gameInterval;
+        let gameInterval = null;
         let autoClickerInterval = null;
         let hoveredCircle = null;
         let audioCtx = null;
@@ -1695,6 +1750,7 @@
         const targetColorNameDisplay = document.getElementById('targetColorName');
         const btnModePressColor = document.getElementById('btnModePressColor');
         const btnExitChallenge = document.getElementById('btnExitChallenge');
+        const startGameOverlay = document.getElementById('start-game-overlay');
 
         const bottomNav = document.getElementById('bottom-nav');
         const btnAbout = document.getElementById('btnAbout');
@@ -1803,6 +1859,14 @@
                     state = { ...state, ...loadedState };
                 }
             } catch(e) {}
+        }
+
+        function startGameSession() {
+            initAudio();
+            startGameOverlay.style.display = 'none';
+            startGameLoop();
+            startAutoClicker();
+            if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
         }
 
         function triggerButtonAnimation(element) {
@@ -2762,10 +2826,13 @@
                 soundVolumeSelect.value = '1.0';
                 gameArea.innerHTML = '';
                 currentCircles = 0;
+                if (gameInterval) clearInterval(gameInterval);
                 if (bgmInterval) clearInterval(bgmInterval);
                 setChallengeMode('normal');
-                startGameLoop();
-                startAutoClicker();
+                
+                // Show start game overlay again on reset
+                startGameOverlay.style.display = 'flex';
+                
                 updateUI();
                 toggleSettings();
                 
@@ -2839,9 +2906,11 @@
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             setChallengeMode(state.challengeMode);
-            startGameLoop();
-            startAutoClicker();
-            if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
+            
+            // Explicitly force the start screen overlay to show on every page load/refresh
+            startGameOverlay.style.display = 'flex';
+            
+            updateUI();
         }
 
         function updateUI(isTyping = false) {
@@ -3097,7 +3166,9 @@
         }
 
         function startGameLoop() {
-            clearInterval(gameInterval);
+            if (gameInterval) clearInterval(gameInterval);
+            spawnCircle(true);
+            
             gameInterval = setInterval(() => {
                 spawnCircle(false);
                 if (state.challengeMode === 'press_color') {
@@ -3370,8 +3441,8 @@
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             
-            startGameLoop();
-            startAutoClicker();
+            // Show start screen overlay when loading a save file too
+            startGameOverlay.style.display = 'flex';
             
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
             else if (bgmInterval) clearInterval(bgmInterval);
