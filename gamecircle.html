@@ -3168,14 +3168,12 @@
             startGameOverlay.style.display = 'flex';
             
             setInterval(() => {
-                let updated = false;
                 for (let k in state.abilityTimers) {
                     if (state.abilityTimers[k] > 0) {
                         state.abilityTimers[k]--;
-                        updated = true;
                     }
                 }
-                updateUI(); // Always update UI so buttons re-enable when timers reach 0
+                updateUI(); // Keep UI updated every second so buttons unlock properly
             }, 1000);
 
             updateUI();
