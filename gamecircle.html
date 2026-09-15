@@ -177,6 +177,9 @@
         #btnChallengeMode { background: #FF9800; }
         #btnChallengeMode:hover { background: #F57C00; }
 
+        #btnAbilitiesShop { background: #00BCD4; }
+        #btnAbilitiesShop:hover { background: #0097A7; }
+
         #btnExitChallenge {
             position: absolute;
             top: 10px;
@@ -300,7 +303,7 @@
         #settings-panel { left: 50%; transform: translateX(-50%); width: 320px; }
         #stats-panel { inset-inline-end: 20px; width: 300px; }
         
-        #button-page-modal, #challenge-modal, #animation-shop-modal, #sound-shop-modal {
+        #button-page-modal, #challenge-modal, #animation-shop-modal, #sound-shop-modal, #abilities-shop-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -314,9 +317,52 @@
             pointer-events: none;
         }
 
-        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active, #animation-shop-modal.active {
+        #button-page-modal.active, #challenge-modal.active, #sound-shop-modal.active, #animation-shop-modal.active, #abilities-shop-modal.active {
             display: flex;
             pointer-events: auto;
+        }
+
+        /* --- Active Abilities Bar --- */
+        #abilities-hud-bar {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            pointer-events: auto;
+        }
+        .ability-hud-btn {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 2px solid #00BCD4;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s, filter 0.2s;
+            display: none;
+            position: relative;
+        }
+        .ability-hud-btn:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+        .ability-hud-btn:active {
+            transform: scale(0.95);
+        }
+        .ability-hud-btn:disabled {
+            background: rgba(50, 50, 50, 0.8);
+            border-color: #555;
+            color: #888;
+            cursor: not-allowed;
+            transform: none !important;
+            filter: none !important;
         }
 
         /* --- Sleep Mode Overlay --- */
@@ -387,7 +433,7 @@
             transform: scale(0.95);
         }
 
-        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop {
+        #btnCloseButtonPage, #btnCloseChallengeModal, #btnCloseAnimationShop, #btnCloseSoundShop, #btnCloseAbilitiesShop {
             position: absolute;
             top: 20px;
             right: 20px; 
@@ -399,9 +445,9 @@
             transition: transform 0.2s;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover, #btnCloseSoundShop:hover { transform: scale(1.2); }
+        #btnCloseButtonPage:hover, #btnCloseChallengeModal:hover, #btnCloseAnimationShop:hover, #btnCloseSoundShop:hover, #btnCloseAbilitiesShop:hover { transform: scale(1.2); }
 
-        #button-page-content, #challenge-modal-content, #animation-shop-content, #sound-shop-content {
+        #button-page-content, #challenge-modal-content, #animation-shop-content, #sound-shop-content, #abilities-shop-content {
             background: rgb(30, 30, 40);
             padding: 40px;
             border-radius: 20px;
@@ -418,6 +464,7 @@
         #challenge-modal-content { border-color: #FF9800; }
         #animation-shop-content { border-color: #9C27B0; }
         #sound-shop-content { border-color: #E91E63; }
+        #abilities-shop-content { border-color: #00BCD4; }
 
         #button-page-content h2, #challenge-modal-content h2 {
             margin-top: 0;
@@ -785,6 +832,9 @@
             padding: 4px 10px;
             top: 105px;
         }
+        body.mobile-mode #abilities-hud-bar {
+            bottom: 65px;
+        }
     </style>
 </head>
 <body>
@@ -817,6 +867,15 @@
         <button id="btnSoundShop" class="main-top-btn" onclick="toggleSoundShop()">🎵 Sound Shop</button>
         <button id="btnAnimationShop" class="main-top-btn" onclick="toggleAnimationShop()">✨ Anim Shop</button>
         <button id="btnChallengeMode" class="main-top-btn" onclick="toggleChallengeModal()">⚡ Challenge</button>
+        <button id="btnAbilitiesShop" class="main-top-btn" onclick="toggleAbilitiesShop()">⚡ Abilities</button>
+    </div>
+
+    <!-- Active Abilities Bar (HUD) -->
+    <div id="abilities-hud-bar">
+        <button id="hudAbilityClickAll" class="ability-hud-btn" onclick="useAbility('clickAll')">⚡ Click All</button>
+        <button id="hudAbilityMoreCircles" class="ability-hud-btn" onclick="useAbility('moreCircles')">➕ More Circles</button>
+        <button id="hudAbilityFastSpawn" class="ability-hud-btn" onclick="useAbility('fastSpawn')">🚀 Fast Spawn</button>
+        <button id="hudAbilityMorePoints" class="ability-hud-btn" onclick="useAbility('morePoints')">⭐ Multi Points</button>
     </div>
 
     <!-- Exit Challenge Button -->
@@ -837,6 +896,58 @@
         <button id="menu-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleMenu()">🛠️ Open Menu</button>
         <button id="settings-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleSettings()">⚙️ Settings</button>
         <button id="stats-toggle-btn" class="bottom-btn main-top-btn" onclick="toggleStats()">📊 Stats</button>
+    </div>
+
+    <!-- Abilities Shop Modal -->
+    <div id="abilities-shop-modal">
+        <div id="abilities-shop-content">
+            <button id="btnCloseAbilitiesShop" onclick="toggleAbilitiesShop()">❌</button>
+            <h2 id="lblAbilitiesShopTitle" style="color: #00BCD4; margin-top: 0;">Abilities Shop ⚡</h2>
+            
+            <div class="sound-row">
+                <div>
+                    <span id="lblAbilClickAll">Click All Ability</span><br>
+                    <small id="lblAbilClickAllDesc" style="color: #aaa; font-weight: normal;">Pops all circles on screen (Cooldown: <span id="cdClickAll">30</span>s)</small>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAbilClickAll" onclick="buyAbility('clickAll', 200)">Buy (200)</button>
+                    <button class="shop-action-btn btn-select" id="btnUpgradeAbilClickAll" onclick="upgradeAbilityCooldown('clickAll')" style="display:none; background: #00BCD4;">Reduce Delay (Cost: <span id="costUpgradeClickAll">100</span>)</button>
+                </div>
+            </div>
+
+            <div class="sound-row">
+                <div>
+                    <span id="lblAbilMoreCircles">More Circles Ability</span><br>
+                    <small id="lblAbilMoreCirclesDesc" style="color: #aaa; font-weight: normal;">Spawns multiple circles instantly (Cooldown: <span id="cdMoreCircles">40</span>s)</small>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAbilMoreCircles" onclick="buyAbility('moreCircles', 350)">Buy (350)</button>
+                    <button class="shop-action-btn btn-select" id="btnUpgradeAbilMoreCircles" onclick="upgradeAbilityCooldown('moreCircles')" style="display:none; background: #00BCD4;">Reduce Delay (Cost: <span id="costUpgradeMoreCircles">180</span>)</button>
+                </div>
+            </div>
+
+            <div class="sound-row">
+                <div>
+                    <span id="lblAbilFastSpawn">Fast Spawn Ability</span><br>
+                    <small id="lblAbilFastSpawnDesc" style="color: #aaa; font-weight: normal;">Double spawn speed for 10s (Cooldown: <span id="cdFastSpawn">50</span>s)</small>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAbilFastSpawn" onclick="buyAbility('fastSpawn', 500)">Buy (500)</button>
+                    <button class="shop-action-btn btn-select" id="btnUpgradeAbilFastSpawn" onclick="upgradeAbilityCooldown('fastSpawn')" style="display:none; background: #00BCD4;">Reduce Delay (Cost: <span id="costUpgradeFastSpawn">250</span>)</button>
+                </div>
+            </div>
+
+            <div class="sound-row">
+                <div>
+                    <span id="lblAbilMorePoints">Multi Points Ability</span><br>
+                    <small id="lblAbilMorePointsDesc" style="color: #aaa; font-weight: normal;">Triple points per click for 10s (Cooldown: <span id="cdMorePoints">60</span>s)</small>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-end;">
+                    <button class="shop-action-btn btn-buy" id="btnBuyAbilMorePoints" onclick="buyAbility('morePoints', 750)">Buy (750)</button>
+                    <button class="shop-action-btn btn-select" id="btnUpgradeAbilMorePoints" onclick="upgradeAbilityCooldown('morePoints')" style="display:none; background: #00BCD4;">Reduce Delay (Cost: <span id="costUpgradeMorePoints">350</span>)</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Challenge Mode Modal -->
@@ -1241,6 +1352,7 @@
                 btnResetGame: "🔄 Reset Game", confirmReset: "Are you sure you want to reset the game?",
                 btnSoundShop: "🎵 Sound Shop", lblSoundShopTitle: "Sound Shop 🎵",
                 btnAnimationShop: "✨ Anim Shop", lblAnimShopTitle: "Animation Shop ✨",
+                btnAbilitiesShop: "⚡ Abilities", lblAbilitiesShopTitle: "Abilities Shop ⚡",
                 lblCatClickSounds: "Click Sound Effects", lblCatBgm: "Background Music", lblCatVolumeUpgrades: "Volume Upgrades",
                 lblCatSpawnAnim: "Circle Spawn Animations", lblCatCircleVfx: "Circle Pop Effects (VFX)", lblCatButtonAnim: "Button Click Animations",
                 lblSpawnZoom: "Zoom Pop", lblSpawnSpin: "Spin In", lblSpawnBounce: "Elastic Bounce",
@@ -1292,6 +1404,7 @@
                 btnResetGame: "🔄 איפוס משחק", confirmReset: "האם אתה בטוח שברצונך לאפס את המשחק?",
                 btnSoundShop: "🎵 חנות סאונד", lblSoundShopTitle: "חנות סאונד 🎵",
                 btnAnimationShop: "✨ חנות אנימציות", lblAnimShopTitle: "חנות אנימציות ✨",
+                btnAbilitiesShop: "⚡ יכולות", lblAbilitiesShopTitle: "חנות יכולות ⚡",
                 lblCatClickSounds: "אפקטי קול לחיצה", lblCatBgm: "מוזיקת רקע", lblCatVolumeUpgrades: "שדרוגי עוצמה (חוזק מוזיקה)",
                 lblCatSpawnAnim: "אנימציות הופעת עיגולים", lblCatCircleVfx: "אפקטי פיצוץ עיגולים (VFX)", lblCatButtonAnim: "אנימציות לחיצה על כפתורים",
                 lblSpawnZoom: "התקרבות מהירה", lblSpawnSpin: "סיבוב הופעה", lblSpawnBounce: "קפיצת אלסטיק",
@@ -1343,6 +1456,7 @@
                 btnResetGame: "🔄 Reiniciar juego", confirmReset: "¿Estás seguro de que quieres reiniciar el juego?",
                 btnSoundShop: "🎵 Tienda sonidos", lblSoundShopTitle: "Tienda de sonidos 🎵",
                 btnAnimationShop: "✨ Tienda Anim", lblAnimShopTitle: "Tienda de Animaciones ✨",
+                btnAbilitiesShop: "⚡ Habilidades", lblAbilitiesShopTitle: "Tienda de Habilidades ⚡",
                 lblCatClickSounds: "Efectos de sonido de clic", lblCatBgm: "Música de fondo", lblCatVolumeUpgrades: "Mejoras de volumen",
                 lblCatSpawnAnim: "Animaciones de aparición de círculos", lblCatCircleVfx: "Efectos de explosión de círculos", lblCatButtonAnim: "Animaciones de botones",
                 lblSpawnZoom: "Zoom de Aparición", lblSpawnSpin: "Giro de Aparición", lblSpawnBounce: "Rebote Elástico",
@@ -1394,6 +1508,7 @@
                 btnResetGame: "🔄 Réinitialiser", confirmReset: "Êtes-vous sûr de vouloir réinitialiser ?",
                 btnSoundShop: "🎵 Boutique audio", lblSoundShopTitle: "Boutique audio 🎵",
                 btnAnimationShop: "✨ Boutique Anim", lblAnimShopTitle: "Boutique d'Animations ✨",
+                btnAbilitiesShop: "⚡ Capacités", lblAbilitiesShopTitle: "Boutique de Capacités ⚡",
                 lblCatClickSounds: "Effets de clic", lblCatBgm: "Musique de fond", lblCatVolumeUpgrades: "Améliorations de volume",
                 lblCatSpawnAnim: "Animations d'apparition de cercles", lblCatCircleVfx: "Effets d'explosion de cercles", lblCatButtonAnim: "Animations de boutons",
                 lblSpawnZoom: "Zoom d'apparition", lblSpawnSpin: "Rotation d'apparition", lblSpawnBounce: "Rebond Élastique",
@@ -1419,7 +1534,7 @@
                 lblPressTheColorInstruction: "Appuyez sur la couleur",
                 btnToggleAutoUpgrades: "🤖 Autoclicker", lblAutoAmount: "Clics par action:", lblAutoInterval: "Intervalle de clic:",
                 lblSleepModeLabel: "Mode Veille:", btnSleepText: "💤 Veille", lblSleepEnabledText: "Sleep Mode Enabled!", btnUnsleepText: "⏰ Réveiller",
-                btnExitChallengeText: "🚪 Quitter le Défi"
+                btnExitChallengeText: "🚪 Qu quitter le Défi"
             },
             de: {
                 lblScore: "Punkte: ",
@@ -1445,6 +1560,7 @@
                 btnResetGame: "🔄 Spiel zurücksetzen", confirmReset: "Möchtest du das Spiel wirklich zurücksetzen?",
                 btnSoundShop: "🎵 Sound-Shop", lblSoundShopTitle: "Sound-Shop 🎵",
                 btnAnimationShop: "✨ Anim-Shop", lblAnimShopTitle: "Animations-Shop ✨",
+                btnAbilitiesShop: "⚡ Fähigkeiten", lblAbilitiesShopTitle: "Fähigkeiten-Shop ⚡",
                 lblCatClickSounds: "Klick-Soundeffekte", lblCatBgm: "Hintergrundmusik", lblCatVolumeUpgrades: "Lautstärke-Upgrades",
                 lblCatSpawnAnim: "Kreis-Spawn-Animationen", lblCatCircleVfx: "Kreis-Explosions-Effekte", lblCatButtonAnim: "Button-Klick-Animationen",
                 lblSpawnZoom: "Zoom-Pop", lblSpawnSpin: "Dreh-Spawn", lblSpawnBounce: "Elastischer Sprung",
@@ -1496,6 +1612,7 @@
                 btnResetGame: "🔄 Сбросить игру", confirmReset: "Вы уверены, что хотите сбросить игру?",
                 btnSoundShop: "🎵 Магазин звуков", lblSoundShopTitle: "Магазин звуков 🎵",
                 btnAnimationShop: "✨ Магазин Аним", lblAnimShopTitle: "Магазин Анимаций ✨",
+                btnAbilitiesShop: "⚡ Способности", lblAbilitiesShopTitle: "Магазин Способностей ⚡",
                 lblCatClickSounds: "Звуки клика", lblCatBgm: "Фоновая музыка", lblCatVolumeUpgrades: "Улучшения громкости",
                 lblCatSpawnAnim: "Анимации появления кругов", lblCatCircleVfx: "Эффекты взрыва кругов", lblCatButtonAnim: "Анимации кнопок",
                 lblSpawnZoom: "Зум-появление", lblSpawnSpin: "Вращение", lblSpawnBounce: "Упругий прыжок",
@@ -1547,6 +1664,7 @@
                 btnResetGame: "🔄 إعادة ضبط اللعبة", confirmReset: "هل أنت متأكد أنك تريد إعادة ضبط اللعبة؟",
                 btnSoundShop: "🎵 متجر الأصوات", lblSoundShopTitle: "متجر الأصوات 🎵",
                 btnAnimationShop: "✨ متجر الحركات", lblAnimShopTitle: "متجر الحركات ✨",
+                btnAbilitiesShop: "⚡ القدرات", lblAbilitiesShopTitle: "متجر القدرات ⚡",
                 lblCatClickSounds: "تأثيرات صوت النقرة", lblCatBgm: "موسيقى الخلفية", lblCatVolumeUpgrades: "ترقيات مستوى الصوت",
                 lblCatSpawnAnim: "حركات ظهور الدوائر", lblCatCircleVfx: "تأثيرات انفجار الدوائر", lblCatButtonAnim: "حركات الأزرار",
                 lblSpawnZoom: "تكبير الظهور", lblSpawnSpin: "دوران الظهور", lblSpawnBounce: "ارتداد مطاطي",
@@ -1598,6 +1716,7 @@
                 btnResetGame: "🔄 重置游戏", confirmReset: "确定要重置游戏吗？",
                 btnSoundShop: "🎵 声音商店", lblSoundShopTitle: "声音商店 🎵",
                 btnAnimationShop: "✨ 特效商店", lblAnimShopTitle: "动画特效商店 ✨",
+                btnAbilitiesShop: "⚡ 能力商店", lblAbilitiesShopTitle: "能力商店 ⚡",
                 lblCatClickSounds: "点击音效", lblCatBgm: "背景音乐", lblCatVolumeUpgrades: "音量升级",
                 lblCatSpawnAnim: "圆圈生成动画", lblCatCircleVfx: "圆圈消除特效 (VFX)", lblCatButtonAnim: "按钮点击动画",
                 lblSpawnZoom: "缩放弹出", lblSpawnSpin: "旋转出现", lblSpawnBounce: "弹性弹跳",
@@ -1649,6 +1768,7 @@
                 btnResetGame: "🔄 ゲームリセット", confirmReset: "本当にゲームをリセットしますか？",
                 btnSoundShop: "🎵 サウンドショップ", lblSoundShopTitle: "サウンドショップ 🎵",
                 btnAnimationShop: "✨ アニメショップ", lblAnimShopTitle: "アニメーションショップ ✨",
+                btnAbilitiesShop: "⚡ 能力ショップ", lblAbilitiesShopTitle: "能力ショップ ⚡",
                 lblCatClickSounds: "クリック効果音", lblCatBgm: "BGM", lblCatVolumeUpgrades: "音量アップグレード",
                 lblCatSpawnAnim: "円出現アニメーション", lblCatCircleVfx: "円消滅エフェクト (VFX)", lblCatButtonAnim: "ボタンクリックアニメーション",
                 lblSpawnZoom: "ズームポップ", lblSpawnSpin: "スピンイン", lblSpawnBounce: "弾性バウンス",
@@ -1707,6 +1827,10 @@
             unlockedSpawnAnim: { zoom: false, spin: false, bounce: false },
             unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
             unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
+            unlockedAbilities: { clickAll: false, moreCircles: false, fastSpawn: false, morePoints: false },
+            abilityCooldowns: { clickAll: 30, moreCircles: 40, fastSpawn: 50, morePoints: 60 },
+            abilityUpgradeCosts: { clickAll: 100, moreCircles: 180, fastSpawn: 250, morePoints: 350 },
+            abilityTimers: { clickAll: 0, moreCircles: 0, fastSpawn: 0, morePoints: 0 },
             activeSound: 'none',
             activeBgm: 'none',
             activeSpawnAnim: 'none',
@@ -1743,8 +1867,10 @@
         const btnResetGame = document.getElementById('btnResetGame');
         const btnSoundShop = document.getElementById('btnSoundShop');
         const btnAnimationShop = document.getElementById('btnAnimationShop');
+        const btnAbilitiesShop = document.getElementById('btnAbilitiesShop');
         const soundShopModal = document.getElementById('sound-shop-modal');
         const animationShopModal = document.getElementById('animation-shop-modal');
+        const abilitiesShopModal = document.getElementById('abilities-shop-modal');
         const challengeModal = document.getElementById('challenge-modal');
         const challengeHud = document.getElementById('challenge-hud');
         const targetColorNameDisplay = document.getElementById('targetColorName');
@@ -1943,6 +2069,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
@@ -1951,6 +2078,95 @@
                 challengeModal.classList.remove('active');
             }
             refreshPanelButtons();
+        }
+
+        function toggleAbilitiesShop() {
+            initAudio();
+            triggerButtonAnimation(btnAbilitiesShop);
+            const isOpen = abilitiesShopModal.classList.contains('active');
+            menuPanel.style.display = 'none';
+            statsPanel.style.display = 'none';
+            settingsPanel.style.display = 'none';
+            buttonPageModal.classList.remove('active');
+            soundShopModal.classList.remove('active');
+            animationShopModal.classList.remove('active');
+            challengeModal.classList.remove('active');
+
+            if (!isOpen) {
+                abilitiesShopModal.classList.add('active');
+            } else {
+                abilitiesShopModal.classList.remove('active');
+            }
+            refreshPanelButtons();
+        }
+
+        function buyAbility(type, cost) {
+            if (state.score >= cost && !state.unlockedAbilities[type]) {
+                state.score -= cost;
+                state.unlockedAbilities[type] = true;
+                playClickSound();
+                updateUI();
+            }
+        }
+
+        function upgradeAbilityCooldown(type) {
+            const cost = state.abilityUpgradeCosts[type];
+            if (state.score >= cost && state.abilityCooldowns[type] > 5) {
+                state.score -= cost;
+                state.abilityCooldowns[type] -= 5;
+                state.abilityUpgradeCosts[type] = Math.floor(state.abilityUpgradeCosts[type] * 1.4);
+                playClickSound();
+                updateUI();
+            }
+        }
+
+        function useAbility(type) {
+            if (!state.unlockedAbilities[type] || state.abilityTimers[type] > 0) return;
+            initAudio();
+
+            if (type === 'clickAll') {
+                const circles = document.querySelectorAll('.circle');
+                let earned = (circles.length * state.pointsPerClick);
+                if (state.challengeMode === 'press_color') earned *= 3;
+                state.score += earned;
+                state.totalScore += earned;
+                circles.forEach(circle => {
+                    const rect = circle.getBoundingClientRect();
+                    triggerCircleVfx(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                    circle.remove();
+                });
+                currentCircles = 0;
+                playClickSound();
+                if (state.challengeMode === 'press_color') {
+                    pickNewTargetColor();
+                    refreshExistingCirclesColors();
+                    ensureTargetCircleExists();
+                }
+            } else if (type === 'moreCircles') {
+                for (let i = 0; i < 5; i++) {
+                    spawnCircle(true);
+                }
+                playClickSound();
+            } else if (type === 'fastSpawn') {
+                let originalRate = state.spawnRateMs;
+                state.spawnRateMs = Math.max(50, Math.floor(state.spawnRateMs / 2));
+                startGameLoop();
+                playClickSound();
+                setTimeout(() => {
+                    state.spawnRateMs = originalRate;
+                    startGameLoop();
+                }, 10000);
+            } else if (type === 'morePoints') {
+                let originalPoints = state.pointsPerClick;
+                state.pointsPerClick *= 3;
+                playClickSound();
+                setTimeout(() => {
+                    state.pointsPerClick = originalPoints;
+                }, 10000);
+            }
+
+            state.abilityTimers[type] = state.abilityCooldowns[type];
+            updateUI();
         }
 
         const availableColors = [
@@ -1974,6 +2190,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
 
             if (mode === 'press_color') {
                 bottomNav.style.display = 'none';
@@ -2186,6 +2403,7 @@
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
@@ -2205,6 +2423,7 @@
             settingsPanel.style.display = 'none';
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
@@ -2376,9 +2595,11 @@
             btnResetGame.innerText = text.btnResetGame;
             btnSoundShop.innerText = text.btnSoundShop;
             btnAnimationShop.innerText = text.btnAnimationShop;
+            btnAbilitiesShop.innerText = text.btnAbilitiesShop;
             
             document.getElementById('lblSoundShopTitle').innerText = text.lblSoundShopTitle;
             document.getElementById('lblAnimShopTitle').innerText = text.lblAnimShopTitle;
+            document.getElementById('lblAbilitiesShopTitle').innerText = text.lblAbilitiesShopTitle;
             document.getElementById('lblCatClickSounds').innerText = text.lblCatClickSounds;
             document.getElementById('lblCatBgm').innerText = text.lblCatBgm;
             document.getElementById('lblCatVolumeUpgrades').innerText = text.lblCatVolumeUpgrades;
@@ -2497,9 +2718,38 @@
         }, { once: false });
 
         function processDevCode() {
-            const val = devCodeInput.value.trim().toUpperCase();
+            const val = devCodeInput.value.trim();
+            const upperVal = val.toUpperCase();
             
-            if (val === 'CLICK') {
+            // Handle delay codes: "delayl ability:-1" or "delay ability:-1"
+            const delayMatch = val.match(/^delayl?\s+([a-zA-Z]+):(-?\d+)$/i);
+            if (delayMatch) {
+                const abilName = delayMatch[1];
+                const changeAmount = parseInt(delayMatch[2]);
+                const isPermanent = val.toLowerCase().startsWith('delayl');
+
+                let targetKey = null;
+                if (abilName.toLowerCase() === 'clickall') targetKey = 'clickAll';
+                else if (abilName.toLowerCase() === 'morecircles') targetKey = 'moreCircles';
+                else if (abilName.toLowerCase() === 'fastspawn') targetKey = 'fastSpawn';
+                else if (abilName.toLowerCase() === 'morepoints') targetKey = 'morePoints';
+
+                if (targetKey && state.abilityCooldowns[targetKey] !== undefined) {
+                    if (isPermanent) {
+                        state.abilityCooldowns[targetKey] += changeAmount;
+                        if (state.abilityCooldowns[targetKey] < 0) state.abilityCooldowns[targetKey] = 0;
+                    } else {
+                        state.abilityTimers[targetKey] += changeAmount;
+                        if (state.abilityTimers[targetKey] < 0) state.abilityTimers[targetKey] = 0;
+                    }
+                    updateUI();
+                }
+                devCodeInput.value = '';
+                devCodeInput.blur();
+                return;
+            }
+
+            if (upperVal === 'CLICK') {
                 const circles = document.querySelectorAll('.circle');
                 if (circles.length > 0) {
                     let earned = (circles.length * state.pointsPerClick);
@@ -2525,8 +2775,8 @@
                 return;
             }
             
-            if (val.startsWith('ADD SCORE:')) {
-                const amountStr = val.replace('ADD SCORE:', '').trim();
+            if (upperVal.startsWith('ADD SCORE:')) {
+                const amountStr = upperVal.replace('ADD SCORE:', '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.score += amount;
@@ -2538,8 +2788,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD AUTOCLICKER_ACTION:') || val.startsWith('ADD AUTOCLICKER-ACTION:') || val.startsWith('ADD AUTOCLICKER ACTION:')) {
-                const amountStr = val.replace(/ADD AUTOCLICKER[_-\s]ACTION:/, '').trim();
+            if (upperVal.startsWith('ADD AUTOCLICKER_ACTION:') || upperVal.startsWith('ADD AUTOCLICKER-ACTION:') || upperVal.startsWith('ADD AUTOCLICKER ACTION:')) {
+                const amountStr = upperVal.replace(/ADD AUTOCLICKER[_-\s]ACTION:/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.autoAmount += amount;
@@ -2551,8 +2801,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD LIFESPAN:')) {
-                const amountStr = val.replace('ADD LIFESPAN:', '').trim();
+            if (upperVal.startsWith('ADD LIFESpan:') || upperVal.startsWith('ADD LIFESPAN:')) {
+                const amountStr = upperVal.replace(/ADD LIFESPAN:/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount) && state.circleLifespanMs !== 'infinite') {
                     state.circleLifespanMs += amount;
@@ -2564,8 +2814,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD MSIZE:') || val.startsWith('ADD MINSIZE:')) {
-                const amountStr = val.replace(/ADD (MSIZE|MINSIZE):/, '').trim();
+            if (upperVal.startsWith('ADD MSIZE:') || upperVal.startsWith('ADD MINSIZE:')) {
+                const amountStr = upperVal.replace(/ADD (MSIZE|MINSIZE):/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.minCircleSize += amount;
@@ -2577,8 +2827,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD MCIRCLE:') || val.startsWith('ADD MAXCIRCLES:')) {
-                const amountStr = val.replace(/ADD (MCIRCLE|MAXCIRCLES):/, '').trim();
+            if (upperVal.startsWith('ADD MCIRCLE:') || upperVal.startsWith('ADD MAXCIRCLES:')) {
+                const amountStr = upperVal.replace(/ADD (MCIRCLE|MAXCIRCLES):/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.maxCircles += amount;
@@ -2590,8 +2840,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD PPC:') || val.startsWith('ADD POINTS:')) {
-                const amountStr = val.replace(/ADD (PPC|POINTS):/, '').trim();
+            if (upperVal.startsWith('ADD PPC:') || upperVal.startsWith('ADD POINTS:')) {
+                const amountStr = upperVal.replace(/ADD (PPC|POINTS):/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.pointsPerClick += amount;
@@ -2603,8 +2853,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD SPAWNR:') || val.startsWith('ADD SPAWNRATE:')) {
-                const amountStr = val.replace(/ADD (SPAWNR|SPAWNRATE):/, '').trim();
+            if (upperVal.startsWith('ADD SPAWNR:') || upperVal.startsWith('ADD SPAWNRATE:')) {
+                const amountStr = upperVal.replace(/ADD (SPAWNR|SPAWNRATE):/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.spawnRateMs += amount;
@@ -2617,8 +2867,8 @@
                 return;
             }
 
-            if (val.startsWith('ADD AUTOCLICKER_INTERVAL:') || val.startsWith('ADD AUTOCLICKER-INTERVAL:') || val.startsWith('ADD AUTOCLICKER INTERVAL:')) {
-                const amountStr = val.replace(/ADD AUTOCLICKER[_-\s]INTERVAL:/, '').trim();
+            if (upperVal.startsWith('ADD AUTOCLICKER_INTERVAL:') || upperVal.startsWith('ADD AUTOCLICKER-INTERVAL:') || upperVal.startsWith('ADD AUTOCLICKER INTERVAL:')) {
+                const amountStr = upperVal.replace(/ADD AUTOCLICKER[_-\s]INTERVAL:/, '').trim();
                 const amount = parseInt(amountStr);
                 if (!isNaN(amount)) {
                     state.autoIntervalMs += amount;
@@ -2631,7 +2881,7 @@
                 return;
             }
 
-            if (val === 'CHANGE') {
+            if (upperVal === 'CHANGE') {
                 editCurrentScore.disabled = false;
                 editTotalScore.disabled = false;
                 editCurrentCircles.disabled = false;
@@ -2648,6 +2898,7 @@
                 buttonPageModal.classList.remove('active');
                 soundShopModal.classList.remove('active');
                 animationShopModal.classList.remove('active');
+                abilitiesShopModal.classList.remove('active');
                 challengeModal.classList.remove('active');
                 statsPanel.style.display = 'block';
                 refreshPanelButtons();
@@ -2657,7 +2908,7 @@
                 return;
             }
 
-            if (val === 'UNCHANGE') {
+            if (upperVal === 'UNCHANGE') {
                 editCurrentScore.disabled = true;
                 editTotalScore.disabled = true;
                 editCurrentCircles.disabled = true;
@@ -2685,6 +2936,7 @@
             settingsPanel.style.display = 'none';
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             
             if (!isOpen) {
@@ -2704,6 +2956,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             menuPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
@@ -2718,6 +2971,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             statsPanel.style.display = isOpen ? 'none' : 'block';
             updateStatsUI();
@@ -2733,6 +2987,7 @@
             buttonPageModal.classList.remove('active');
             soundShopModal.classList.remove('active');
             animationShopModal.classList.remove('active');
+            abilitiesShopModal.classList.remove('active');
             challengeModal.classList.remove('active');
             settingsPanel.style.display = isOpen ? 'none' : 'block';
             refreshPanelButtons();
@@ -2815,6 +3070,10 @@
                     unlockedSpawnAnim: { zoom: false, spin: false, bounce: false },
                     unlockedVfx: { explosion: false, shockwave: false, fireworks: false },
                     unlockedBtnAnim: { pulse: false, shake: false, bounce: false },
+                    unlockedAbilities: { clickAll: false, moreCircles: false, fastSpawn: false, morePoints: false },
+                    abilityCooldowns: { clickAll: 30, moreCircles: 40, fastSpawn: 50, morePoints: 60 },
+                    abilityUpgradeCosts: { clickAll: 100, moreCircles: 180, fastSpawn: 250, morePoints: 350 },
+                    abilityTimers: { clickAll: 0, moreCircles: 0, fastSpawn: 0, morePoints: 0 },
                     activeSound: 'none',
                     activeBgm: 'none',
                     activeSpawnAnim: 'none',
@@ -2830,7 +3089,6 @@
                 if (bgmInterval) clearInterval(bgmInterval);
                 setChallengeMode('normal');
                 
-                // Show start game overlay again on reset
                 startGameOverlay.style.display = 'flex';
                 
                 updateUI();
@@ -2907,9 +3165,19 @@
             soundVolumeSelect.value = state.soundVolume.toString();
             setChallengeMode(state.challengeMode);
             
-            // Explicitly force the start screen overlay to show on every page load/refresh
             startGameOverlay.style.display = 'flex';
             
+            setInterval(() => {
+                let updated = false;
+                for (let k in state.abilityTimers) {
+                    if (state.abilityTimers[k] > 0) {
+                        state.abilityTimers[k]--;
+                        updated = true;
+                    }
+                }
+                updateUI(); // Always update UI so buttons re-enable when timers reach 0
+            }, 1000);
+
             updateUI();
         }
 
@@ -2969,6 +3237,44 @@
             } else {
                 btnAutoInterval.innerHTML = `${text.upgradeCost}<span id="costAutoInterval">${state.costAutoInterval}</span>)`;
             }
+
+            // Abilities Shop UI Updates
+            const abilitiesMap = [
+                { key: 'clickAll', btnBuy: 'btnBuyAbilClickAll', btnUp: 'btnUpgradeAbilClickAll', costBuy: 200, lblCd: 'cdClickAll', lblCostUp: 'costUpgradeClickAll', defaultText: '⚡ Click All' },
+                { key: 'moreCircles', btnBuy: 'btnBuyAbilMoreCircles', btnUp: 'btnUpgradeAbilMoreCircles', costBuy: 350, lblCd: 'cdMoreCircles', lblCostUp: 'costUpgradeMoreCircles', defaultText: '➕ More Circles' },
+                { key: 'fastSpawn', btnBuy: 'btnBuyAbilFastSpawn', btnUp: 'btnUpgradeAbilFastSpawn', costBuy: 500, lblCd: 'cdFastSpawn', lblCostUp: 'costUpgradeFastSpawn', defaultText: '🚀 Fast Spawn' },
+                { key: 'morePoints', btnBuy: 'btnBuyAbilMorePoints', btnUp: 'btnUpgradeAbilMorePoints', costBuy: 750, lblCd: 'cdMorePoints', lblCostUp: 'costUpgradeMorePoints', defaultText: '⭐ Multi Points' }
+            ];
+
+            abilitiesMap.forEach(item => {
+                const bBtn = document.getElementById(item.btnBuy);
+                const uBtn = document.getElementById(item.btnUp);
+                document.getElementById(item.lblCd).innerText = state.abilityCooldowns[item.key];
+                document.getElementById(item.lblCostUp).innerText = state.abilityUpgradeCosts[item.key];
+
+                const hudBtn = document.getElementById('hudAbility' + item.key.charAt(0).toUpperCase() + item.key.slice(1));
+
+                if (!state.unlockedAbilities[item.key]) {
+                    bBtn.style.display = 'inline-block';
+                    bBtn.disabled = state.score < item.costBuy;
+                    bBtn.innerText = `${text.buy} (${item.costBuy})`;
+                    uBtn.style.display = 'none';
+                    hudBtn.style.display = 'none';
+                } else {
+                    bBtn.style.display = 'none';
+                    uBtn.style.display = 'inline-block';
+                    uBtn.disabled = state.score < state.abilityUpgradeCosts[item.key] || state.abilityCooldowns[item.key] <= 5;
+                    hudBtn.style.display = 'block';
+
+                    if (state.abilityTimers[item.key] > 0) {
+                        hudBtn.disabled = true;
+                        hudBtn.innerText = `${item.defaultText} (${state.abilityTimers[item.key]}s)`;
+                    } else {
+                        hudBtn.disabled = false;
+                        hudBtn.innerText = item.defaultText;
+                    }
+                }
+            });
 
             if (!state.unlockedSounds.pop) {
                 btnBuyPop.style.display = 'inline-block';
@@ -3426,6 +3732,10 @@
             if (!state.unlockedSpawnAnim) state.unlockedSpawnAnim = { zoom: false, spin: false, bounce: false };
             if (!state.unlockedVfx) state.unlockedVfx = { explosion: false, shockwave: false, fireworks: false };
             if (!state.unlockedBtnAnim) state.unlockedBtnAnim = { pulse: false, shake: false, bounce: false };
+            if (!state.unlockedAbilities) state.unlockedAbilities = { clickAll: false, moreCircles: false, fastSpawn: false, morePoints: false };
+            if (!state.abilityCooldowns) state.abilityCooldowns = { clickAll: 30, moreCircles: 40, fastSpawn: 50, morePoints: 60 };
+            if (!state.abilityUpgradeCosts) state.abilityUpgradeCosts = { clickAll: 100, moreCircles: 180, fastSpawn: 250, morePoints: 350 };
+            if (!state.abilityTimers) state.abilityTimers = { clickAll: 0, moreCircles: 0, fastSpawn: 0, morePoints: 0 };
             if (!state.activeSound) state.activeSound = 'none';
             if (!state.activeBgm) state.activeBgm = 'none';
             if (!state.activeSpawnAnim) state.activeSpawnAnim = 'none';
@@ -3441,7 +3751,6 @@
             soundToggleSelect.value = state.soundEnabled ? 'on' : 'off';
             soundVolumeSelect.value = state.soundVolume.toString();
             
-            // Show start screen overlay when loading a save file too
             startGameOverlay.style.display = 'flex';
             
             if (state.soundEnabled && state.activeBgm !== 'none') startBgm();
